@@ -86,6 +86,7 @@ namespace ArnGestionPuestoFrontendWPF.Paginas
                     {
                         Store.Operarios.Add(o);
                         BusEventos.OperarioEntra(o);
+                        NavegacionEventos.CargarNuevaPagina(NavegacionEventos.PaginaTarea);
                     }
 
                 }

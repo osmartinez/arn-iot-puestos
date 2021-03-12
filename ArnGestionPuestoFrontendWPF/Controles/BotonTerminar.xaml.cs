@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ArnGestionPuestoFrontendWPF.Ventanas;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -27,8 +28,31 @@ namespace ArnGestionPuestoFrontendWPF.Controles
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Store.Tareas = new List<Entidades.EntidadesDTO.Tarea>();
-            BusEventos.TareasCargadas(Store.Tareas);
+            if (InputManager.Current.MostRecentInputDevice is KeyboardDevice)
+            {
+                e.Handled = true;
+                return;
+            }
+
+            if (Store.Tareas.Any())
+            {
+                if (!Store.Bancada.EsManual)
+                {
+                    FinalizarManual fm = new FinalizarManual();
+                    fm.ShowDialog();
+                }
+                else
+                {
+
+                }
+                Store.Tareas = new List<Entidades.EntidadesDTO.Tarea>();
+                BusEventos.TareasCargadas(Store.Tareas);
+            }
+            else
+            {
+                new Aviso("No hay tarea").Show();
+            }
+
         }
     }
 }

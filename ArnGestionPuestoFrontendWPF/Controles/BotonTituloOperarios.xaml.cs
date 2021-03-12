@@ -22,8 +22,9 @@ namespace ArnGestionPuestoFrontendWPF.Controles
     /// <summary>
     /// Lógica de interacción para BotonTituloOperarios.xaml
     /// </summary>
-    public partial class BotonTituloOperarios : UserControl,INotifyPropertyChanged
+    public partial class BotonTituloOperarios : UserControl, INotifyPropertyChanged
     {
+        private Brush colorOriginal;
         public ObservableCollection<Operarios> Operarios
         {
             get
@@ -44,9 +45,10 @@ namespace ArnGestionPuestoFrontendWPF.Controles
             this.timer.Interval = new TimeSpan(0, 0, 0, 0, 400);
             this.timer.Tick += Timer_Tick; ;
             this.timer.Start();
+            this.colorOriginal = this.BtTituloOperarios.Background;
         }
 
-        
+
         private void BusEventos_OnOperarioSale(object sender, EventosTareas.OperarioSalidaEventArgs e)
         {
             Notifica("Operarios");
@@ -63,17 +65,19 @@ namespace ArnGestionPuestoFrontendWPF.Controles
             {
                 if (this.Operarios.Count <= 0)
                 {
-                    this.Dispatcher.BeginInvoke((Action)(() =>
+
+                    if (this.BtTituloOperarios.Background == this.colorOriginal)
                     {
-                        if (this.BtTituloOperarios.Background == Brushes.Orange)
-                        {
-                            PonerColorCaliente();
-                        }
-                        else
-                        {
-                            PonerColorFrio();
-                        }
-                    }));
+                        PonerColorCaliente();
+                    }
+                    else
+                    {
+                        PonerColorFrio();
+                    }
+                }
+                else
+                {
+                    PonerColorFrio();
                 }
 
             }
@@ -105,7 +109,7 @@ namespace ArnGestionPuestoFrontendWPF.Controles
             {
                 this.Dispatcher.BeginInvoke((Action)(() =>
                 {
-                    this.BtTituloOperarios.Background = Brushes.Orange;
+                    this.BtTituloOperarios.Background = this.colorOriginal;
 
                 }));
             }
@@ -125,6 +129,11 @@ namespace ArnGestionPuestoFrontendWPF.Controles
 
         private void BtTituloOperarios_Click(object sender, RoutedEventArgs e)
         {
+            if (InputManager.Current.MostRecentInputDevice is KeyboardDevice)
+            {
+                e.Handled = true;
+                return;
+            }
             NavegacionEventos.CargarNuevaPagina(NavegacionEventos.PaginaOperarios);
         }
     }

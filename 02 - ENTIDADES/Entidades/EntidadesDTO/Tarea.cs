@@ -28,11 +28,27 @@ namespace Entidades.EntidadesDTO
         public int IdTarea { get; set; }
         public double Productividad { get; set; }
         public int Agrupacion { get; set; }
-        public List<Maquinas> MaquinasEjecucion { get; private set; } = new List<Maquinas>();
 
+        public List<Maquinas> MaquinasEjecucion { get; private set; } = new List<Maquinas>();
         public List<PulsoMaquina> Pulsos { get; private set; } = new List<PulsoMaquina>();
         public List<PulsoMaquina> Saldos { get; private set; } = new List<PulsoMaquina>();
         public List<PulsoMaquina> Correcciones { get; private set; } = new List<PulsoMaquina>();
+        public int Monton { get; set; } = 0;
+
+        public string NombreClienteAcortado
+        {
+            get
+            {
+                if (NombreCliente.Length > 15)
+                {
+                    return NombreCliente.Substring(0, 15);
+                }
+                else
+                {
+                    return NombreCliente;
+                }
+            }
+        }
 
 
         public Tarea(SP_BarquillaBuscarInformacionEnSeccion_Result sp)

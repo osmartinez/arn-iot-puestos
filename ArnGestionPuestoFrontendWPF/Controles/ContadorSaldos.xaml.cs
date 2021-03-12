@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ArnGestionPuestoFrontendWPF.Ventanas;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -22,7 +23,6 @@ namespace ArnGestionPuestoFrontendWPF.Controles
     /// </summary>
     public partial class ContadorSaldos : UserControl,INotifyPropertyChanged
     {
-        private int saldosTemp = 0;
         private DispatcherTimer timerSaldos;
         public int Saldos
         {
@@ -52,20 +52,34 @@ namespace ArnGestionPuestoFrontendWPF.Controles
 
         private void TimerSaldos_Tick(object sender, EventArgs e)
         {
-            if (Store.Tareas.Any())
+            if (Store.Operarios.Any())
             {
-                Store.Tareas.First().Saldos.Add(new Entidades.EntidadesDTO.PulsoMaquina
+                if (Store.Tareas.Any())
                 {
-                    Pares = this.saldosTemp,
-                    Fecha = DateTime.Now,
-                    IdOperario = Store.Operarios.Any() ? Store.Operarios.First().Id : 0,
-                });
-                BusEventos.ParesActualizados(Store.Tareas.First());
+                    Store.Tareas.First().Saldos.Add(new Entidades.EntidadesDTO.PulsoMaquina
+                    {
+                        Pares = this.SaldosEditar,
+                        Fecha = DateTime.Now,
+                        IdOperario = Store.Operarios.Any() ? Store.Operarios.First().Id : 0,
+                    });
+                    BusEventos.ParesActualizados(Store.Tareas.First());
+                }
+                else
+                {
+                    new Aviso("No hay tarea").Show();
+                }
             }
+            else
+            {
+                new Aviso("No hay operarios").Show();
+            }
+          
 
             this.PanelSuma.Visibility = Visibility.Hidden;
             this.SaldosEditar = 0;
             this.timerSaldos.Stop();
+            Notifica("Saldos");
+
         }
 
         private void Notifica(string propertyName = "")

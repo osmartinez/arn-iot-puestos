@@ -20,7 +20,7 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Button Grid.Column="1" Name="BtTitulo" Click="BtTitulo_Click" Style="{StaticResource BotonTituloPuesto}">
-                <TextBlock Text="RETROQ. SEMI. 4A"></TextBlock>
+                <TextBlock Text="{Binding NombrePuesto,Mode=OneWay}"></TextBlock>
             </Button>
             <ctrl:BotonTituloOperarios Grid.Column="2"></ctrl:BotonTituloOperarios>
         </Grid>

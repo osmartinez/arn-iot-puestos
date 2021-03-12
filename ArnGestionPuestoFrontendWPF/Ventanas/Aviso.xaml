@@ -1,0 +1,18 @@
+﻿<Window x:Class="ArnGestionPuestoFrontendWPF.Ventanas.Aviso"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ArnGestionPuestoFrontendWPF.Ventanas"
+        mc:Ignorable="d"
+        Title="Aviso" Height="304.261" Width="715.625" ResizeMode="NoResize" WindowStyle="None" WindowStartupLocation="CenterScreen" Background="Transparent">
+    <Border CornerRadius="20" Background="White">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="1" Text="{Binding Texto, Mode=OneWay}"  VerticalAlignment="Center" FontSize="40" FontWeight="Bold"></TextBlock>
+        </Grid>
+    </Border>
+</Window>

@@ -77,6 +77,15 @@
     <Compile Include="EventosTareas\OperarioSalidaEventArgs.cs" />
     <Compile Include="EventosTareas\ParesActualizadosEventArgs.cs" />
     <Compile Include="Store.cs" />
+    <Compile Include="Ventanas\Aviso.xaml.cs">
+      <DependentUpon>Aviso.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Ventanas\Calculadora.xaml.cs">
+      <DependentUpon>Calculadora.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Ventanas\FinalizarManual.xaml.cs">
+      <DependentUpon>FinalizarManual.xaml</DependentUpon>
+    </Compile>
     <Page Include="Controles\BotonIncidencia.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -145,6 +154,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Ventanas\Aviso.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Ventanas\Calculadora.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Ventanas\FinalizarManual.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="NavegacionEventos.cs" />
@@ -210,6 +231,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <Content Include="Assets\beep_monton.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\beep_error.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

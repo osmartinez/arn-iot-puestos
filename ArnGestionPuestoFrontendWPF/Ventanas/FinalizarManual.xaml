@@ -1,0 +1,70 @@
+﻿<Window x:Class="ArnGestionPuestoFrontendWPF.Ventanas.FinalizarManual"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ArnGestionPuestoFrontendWPF.Ventanas"
+        mc:Ignorable="d"
+        Title="FinalizarManual" Height="469.176" Width="867.756" WindowStartupLocation="CenterScreen">
+    <Grid Margin="2">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="ORDEN FAB." Style="{StaticResource TextBlockVentanaFinalizarManual}"></TextBlock>
+            <TextBox Text="{Binding CodigoOrden,Mode=OneWay}" Grid.ColumnSpan="2" IsReadOnly="True" Grid.Row="0" Grid.Column="1" Style="{StaticResource TextBoxVentanaFinalizarManual}"></TextBox>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="CLIENTE" Style="{StaticResource TextBlockVentanaFinalizarManual}"></TextBlock>
+            <TextBox Text="{Binding NombreCliente,Mode=OneWay}" IsReadOnly="True" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource TextBoxVentanaFinalizarManual}"></TextBox>
+        </Grid>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="TALLA" Style="{StaticResource TextBlockVentanaFinalizarManual}"></TextBlock>
+            <TextBox Text="{Binding Talla,Mode=OneWay}" IsReadOnly="True" Grid.Row="0" Grid.Column="1" Style="{StaticResource TextBoxVentanaFinalizarManual}"></TextBox>
+        </Grid>
+        <Grid Grid.Row="3" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="PARES" Style="{StaticResource TextBlockVentanaFinalizarManual}"></TextBlock>
+            <TextBox Name="TbPares" IsReadOnly="True" Grid.Row="0" Grid.Column="1" Style="{StaticResource TextBoxVentanaFinalizarManual}"></TextBox>
+            <Button Name="BtIntroducirPares" Click="BtIntroducirPares_Click" Grid.Column="2" Style="{StaticResource BotonConfirmarLogin}">
+                <TextBlock Text="Introducir"></TextBlock>
+            </Button>
+        </Grid>
+        <Grid Grid.Row="4" Grid.RowSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Style="{StaticResource BotonBorrarLogin}">
+                <TextBlock Text="Salir"></TextBlock>
+            </Button>
+            <Button Grid.Column="1" Style="{StaticResource BotonNumeroLogin}">
+                <TextBlock Text="Terminar"></TextBlock>
+            </Button>
+        </Grid>
+    </Grid>
+</Window>

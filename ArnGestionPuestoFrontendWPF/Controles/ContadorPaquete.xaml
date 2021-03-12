@@ -15,10 +15,10 @@
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" Text="MONTÓN" FontSize="40" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-                <TextBlock Grid.Row="1" Text="0" FontSize="60" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+                <TextBlock Grid.Row="1" Text="{Binding Monton, Mode=OneWay}" FontSize="60" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
                 <TextBlock Grid.Row="1" Text="/" FontSize="60" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
-                <Button Grid.Row="1" Style="{StaticResource BotonMaxMonton}" FontSize="60" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <TextBlock Text="5"></TextBlock>
+                <Button Name="BtEditarContador" Click="BtEditarContador_Click" Grid.Row="1" Style="{StaticResource BotonMaxMonton}" FontSize="60" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <TextBox x:Name="TbContadorPaquetes" MouseUp="TbContadorPaquetes_MouseUp" Text="{Binding Contador, Mode=OneWay}" IsReadOnly="True" Background="Transparent" BorderThickness="0"></TextBox>
                 </Button>
             </StackPanel>
             <Grid Grid.Row="2">

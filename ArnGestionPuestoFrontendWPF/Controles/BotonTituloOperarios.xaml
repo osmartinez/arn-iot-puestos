@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:ArnGestionPuestoFrontendWPF.Controles"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Button Name="BtTituloOperarios" Click="BtTituloOperarios_Click" Style="{StaticResource BotonTituloOperarios}">
+    <Button Name="BtTituloOperarios" Click="BtTituloOperarios_Click" Style="{StaticResource BotonTituloPuesto}">
         <StackPanel Orientation="Horizontal">
             <TextBlock Text="OPERARIOS ("></TextBlock>
             <TextBlock Text="{Binding Operarios.Count}"></TextBlock>

@@ -48,7 +48,8 @@ namespace ArnGestionPuestoFrontendWPF.Controles
                 {
                     return Convert.ToInt32(tareas.First().CantidadFabricada) 
                         + tareas.First().Pulsos.Sum(x => x.Pares)
-                        - tareas.First().Saldos.Sum(x => x.Pares);
+                        - tareas.First().Saldos.Sum(x => x.Pares)
+                        + tareas.First().Correcciones.Sum(x => x.Pares);
                 }
                 else
                 {

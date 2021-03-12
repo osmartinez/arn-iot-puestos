@@ -13,5 +13,77 @@ namespace ArnGestionPuestoFrontendWPF
         public static Bancadas Bancada { get; set; }
         public static List<Tarea> Tareas { get; set; } = new List<Tarea>();
         public static List<Operarios> Operarios { get; set; } = new List<Operarios>();
+
+        public static string TareasCodigoOrdenToString
+        {
+            get
+            {
+                if (Tareas.Any())
+                {
+                    if (Tareas.Count == 1)
+                    {
+                        return Tareas.First().CodigoOrden;
+                    }
+                    else
+                    {
+                        return string.Format("{0} y {1} más", Tareas.First().CodigoOrden, Tareas.Count - 1);
+                    }
+                }
+                else
+                {
+                    return "<SIN TAREA>";
+                }
+            }
+        }
+        public static string TareasClienteToString
+        {
+            get
+            {
+                if (Tareas.Any())
+                {
+                    if (Tareas.Count == 1)
+                    {
+                        return Tareas.First().NombreClienteAcortado;
+                    }
+                    else
+                    {
+                        return string.Format("{0} y {1} más", Tareas.First().NombreClienteAcortado, Tareas.Count - 1);
+                    }
+                }
+                else
+                {
+                    return "<SIN TAREA>";
+                }
+            }
+        }
+        public static string TareasUtillajeToString
+        {
+            get
+            {
+                if (Tareas.Any())
+                {
+                    return Tareas.First().CodigoUtillaje;
+                }
+                else
+                {
+                    return "<SIN TAREA>";
+                }
+            }
+        }
+        public static string TareasTallaToString
+        {
+            get
+            {
+                if (Tareas.Any())
+                {
+                    return Tareas.First().TallaUtillaje=="00"? Tareas.First().TallaEtiqueta: Tareas.First().TallaUtillaje;
+                }
+                else
+                {
+                    return "<SIN TAREA>";
+                }
+            }
+        }
+
     }
 }
