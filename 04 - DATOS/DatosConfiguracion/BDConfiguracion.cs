@@ -24,7 +24,9 @@ namespace DatosConfiguracion
             Configuracion config = null;
             if (!File.Exists(RUTA))
             {
-                config = new Configuracion();
+                config = new Configuracion { IdBancada = 29 };
+                Guardar(config);
+
             }
             else
             {
@@ -35,11 +37,12 @@ namespace DatosConfiguracion
                 }
                 catch(Exception ex)
                 {
-                    config = new Configuracion();
+                    config = new Configuracion { IdBancada = 29 };
+                    Guardar(config);
+
                 }
             }
 
-            Guardar(config);
 
             return config;
              

@@ -1,0 +1,19 @@
+﻿<Window x:Class="ArnGestionPuestoFrontendWPF.Ventanas.Cargando"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ArnGestionPuestoFrontendWPF.Ventanas"
+        mc:Ignorable="d"
+        Title="Cargando" Height="600" Width="1000" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowState="Maximized">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="2" Name="Texto" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" FontWeight="Bold" Text="CARGANDO APLICACIÓN..."></TextBlock>
+        <ProgressBar Grid.Row="1" Margin="70" IsIndeterminate="True"></ProgressBar>
+        <Image Grid.Row="0" Source="../Assets/arneplant.jpg"></Image>
+    </Grid>
+</Window>

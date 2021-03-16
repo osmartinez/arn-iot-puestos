@@ -29,6 +29,24 @@ namespace Entidades.EntidadesDTO
         public double Productividad { get; set; }
         public int Agrupacion { get; set; }
 
+        public bool Acabada
+        {
+            get
+            {
+                return CantidadFabricadaReal >= CantidadFabricar;
+            }
+        }
+        public int CantidadFabricadaReal
+        {
+            get
+            {
+                return (int)this.CantidadFabricada +
+                    this.Pulsos.Sum(x => x.Pares)
+                    + this.Correcciones.Sum(x => x.Pares)
+                    - this.Saldos.Sum(x => x.Pares);
+            }
+        }
+
         public List<Maquinas> MaquinasEjecucion { get; private set; } = new List<Maquinas>();
         public List<PulsoMaquina> Pulsos { get; private set; } = new List<PulsoMaquina>();
         public List<PulsoMaquina> Saldos { get; private set; } = new List<PulsoMaquina>();

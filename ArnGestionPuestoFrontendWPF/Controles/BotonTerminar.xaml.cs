@@ -36,7 +36,7 @@ namespace ArnGestionPuestoFrontendWPF.Controles
 
             if (Store.Tareas.Any())
             {
-                if (!Store.Bancada.EsManual)
+                if (Store.Bancada.EsManual)
                 {
                     FinalizarManual fm = new FinalizarManual();
                     fm.ShowDialog();

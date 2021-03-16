@@ -1,4 +1,5 @@
 ﻿using ArnGestionPuestoFrontendWPF.Ventanas;
+using BDSQL;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -62,6 +63,7 @@ namespace ArnGestionPuestoFrontendWPF.Controles
                         Fecha = DateTime.Now,
                         IdOperario = Store.Operarios.Any() ? Store.Operarios.First().Id : 0,
                     });
+                    Insert.InsertarSaldos(Store.Tareas.First(), Store.Operarios.Any() ? Store.Operarios.First().Id : 0, this.SaldosEditar);
                     BusEventos.ParesActualizados(Store.Tareas.First());
                 }
                 else

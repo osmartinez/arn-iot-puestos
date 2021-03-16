@@ -10,6 +10,7 @@ using SerialCom;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -52,6 +53,12 @@ namespace ArnGestionPuestoFrontendWPF
             this.DataContext = this;
             try
             {
+                if (!System.Security.Principal.WindowsIdentity.GetCurrent().Name.Contains("omartinez"))
+                {
+                    KillExplorer();
+                    this.WindowStyle = WindowStyle.None;
+
+                }
                 this.PreviewKeyUp += MainWindow_PreviewKeyUp;
                 this.fichajes.OnBarquillaFichada += Fichajes_OnBarquillaFichada;
                 NavegacionEventos.OnNuevaPagina += NavegacionEventos_OnNuevaPagina;
@@ -67,23 +74,48 @@ namespace ArnGestionPuestoFrontendWPF
 
         private void CargarConfiguracion()
         {
+            Cargando loading = new Cargando();
+            if (!System.Security.Principal.WindowsIdentity.GetCurrent().Name.Contains("omartinez"))
+            {
+                loading.Topmost = true;
+                loading.WindowStyle = WindowStyle.None;
+
+            }
+            loading.Show();
+
             BackgroundWorker bw = new BackgroundWorker();
             bw.DoWork += (s, e) =>
             {
-                this.config = BDConfiguracion.Leer();
-                Store.Bancada = BDSQL.Select.ObtenerBancadaPorId(this.config.IdBancada);
+                try
+                {
+                    this.config = BDConfiguracion.Leer();
+                    Store.Bancada = BDSQL.Select.ObtenerBancadaPorId(this.config.IdBancada);
+                }
+                catch (Exception ex)
+                {
+                    Log.Write(ex);
+                }
             };
 
             bw.RunWorkerCompleted += (s, e) =>
             {
-                if (Store.Bancada != null && Store.Bancada.Maquinas.Any())
+                try
                 {
-                    Uart uart = new Uart(Store.Bancada.Maquinas);
-                    uart.OnPulsoGenerado += this.Uart_OnPulsoGenerado;
+                    if (Store.Bancada != null && Store.Bancada.Maquinas.Any())
+                    {
+                        Uart uart = new Uart(Store.Bancada.Maquinas);
+                        uart.OnPulsoGenerado += this.Uart_OnPulsoGenerado;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Bancada no configurada", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                    loading.Close();
                 }
-                else
+                catch (Exception ex)
                 {
-                    MessageBox.Show("Bancada no configurada", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Log.Write(ex);
+                    loading.Close();
                 }
                 Notifica();
             };
@@ -132,6 +164,12 @@ namespace ArnGestionPuestoFrontendWPF
                     }
                     etiqueta = "";
                 }
+
+                if (e.Key == Key.F1)
+                {
+                    Configurar c = new Configurar();
+                    c.ShowDialog();
+                }
             }
             catch (Exception ex)
             {
@@ -147,27 +185,47 @@ namespace ArnGestionPuestoFrontendWPF
                 {
                     if (Store.Tareas.Any())
                     {
-                        foreach (Tarea tarea in Store.Tareas)
+                        Tarea tareaConsumir = null;
+                        foreach (Tarea tarea in Store.Tareas.Where(x => !x.Acabada))
                         {
-                            foreach (var maquina in tarea.MaquinasEjecucion)
+                            tareaConsumir = tarea;
+                            break;
+                        }
+
+                        if(tareaConsumir==null && Store.Tareas.Any())
+                        {
+                            tareaConsumir = Store.Tareas.Last();
+                        }
+
+                        if (tareaConsumir != null)
+                        {
+                            foreach (var maquina in tareaConsumir.MaquinasEjecucion)
                             {
                                 if (maquina.ID == e.Maquina.ID)
                                 {
-                                    tarea.Pulsos.Add(new PulsoMaquina
+                                    tareaConsumir.Pulsos.Add(new PulsoMaquina
                                     {
-                                        Pares = 1,
+                                        Pares = (int)maquina.MaquinasConfiguracionesPins.ProductoPorPulso,
                                         Fecha = DateTime.Now,
                                         IdOperario = Store.Operarios.First().Id,
                                     });
 
-                                    //Insert.InsertarConsumo(tarea.IdTarea, 1, Store.Operarios.First().Id, maquina.ID);
 
-                                    tarea.Monton++;
-                                    if (tarea.Monton == Store.Bancada.BancadasConfiguracionesPins.ContadorPaquetes + 1)
+
+                                    if (maquina.MaquinasConfiguracionesPins.DescontarAutomaticamente)
                                     {
-                                        tarea.Monton = 1;
+                                        Insert.InsertarConsumo(tareaConsumir.IdTarea, (int)maquina.MaquinasConfiguracionesPins.ProductoPorPulso, Store.Operarios.First().Id, maquina.ID);
+
                                     }
-                                    BusEventos.ParesActualizados(tarea);
+
+                                    Insert.InsertarPulso(tareaConsumir, Store.Operarios.First().Id,(int)maquina.MaquinasConfiguracionesPins.ProductoPorPulso);
+
+                                    tareaConsumir.Monton++;
+                                    if (tareaConsumir.Monton == Store.Bancada.BancadasConfiguracionesPins.ContadorPaquetes + 1)
+                                    {
+                                        tareaConsumir.Monton = 1;
+                                    }
+                                    BusEventos.ParesActualizados(tareaConsumir);
                                 }
                             }
                         }
@@ -224,6 +282,27 @@ namespace ArnGestionPuestoFrontendWPF
                 return;
             }
             NavegacionEventos.CargarNuevaPagina(NavegacionEventos.PaginaOperarios);
+
+        }
+
+        private void KillExplorer()
+        {
+            try
+            {
+                // Create a ProcessStartInfo, otherwise Explorer comes back to haunt you.
+                ProcessStartInfo TaskKillPSI = new ProcessStartInfo("taskkill", "/F /IM explorer.exe");
+                // Don't show a window
+                TaskKillPSI.WindowStyle = ProcessWindowStyle.Hidden;
+                // Create and start the process, then wait for it to exit.
+                Process process = new Process();
+                process.StartInfo = TaskKillPSI;
+                process.Start();
+                process.WaitForExit();
+            }
+            catch (Exception ex)
+            {
+                Log.Write(ex);
+            }
 
         }
     }
