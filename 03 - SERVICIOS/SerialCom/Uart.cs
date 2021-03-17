@@ -101,7 +101,7 @@ namespace SerialCom
                         this.timer.Stop();
                     }
                     this.timer = new Timer();
-                    TimeSpan timespan = new TimeSpan(0, 0, 0, 0, 350);
+                    TimeSpan timespan = new TimeSpan(0, 0, 0, 0, 2000);
                     this.timer.Interval = timespan.TotalMilliseconds;
                     this.timer.Elapsed += Timer_Elapsed;
                     this.timer.Start();
@@ -145,6 +145,8 @@ namespace SerialCom
             }catch(Exception ex)
             {
                 Log.Write(ex);
+                realizandoLectura = false;
+
             }
             realizandoLectura = false;
         }
