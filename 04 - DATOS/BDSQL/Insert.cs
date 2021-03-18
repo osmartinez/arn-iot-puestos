@@ -28,7 +28,7 @@ namespace BDSQL
             }
         }
 
-        private static MaquinasRegistrosDatos TranformarTareaAMaquinaRegistroDato(Tarea tarea, int idOperario, int pares, bool piezaIntroducida, int productividad)
+        private static MaquinasRegistrosDatos TranformarTareaAMaquinaRegistroDato(Tarea tarea, int idOperario,int idPuesto, int pares, bool piezaIntroducida, int productividad)
         {
             return new MaquinasRegistrosDatos
             {
@@ -46,35 +46,36 @@ namespace BDSQL
                 PosicionMaquina = 0,
                 Productividad = productividad,
                 Talla = tarea.TallaEtiqueta,
-                TallaUtillaje = tarea.TallaUtillaje
+                TallaUtillaje = tarea.TallaUtillaje,
+                IdPuesto = idPuesto,
             };
         }
 
-        public static void InsertarPulso(Tarea tarea, int idOperario, int pares)
+        public static void InsertarPulso(Tarea tarea, int idOperario,int idPuesto, int pares)
         {
             using (SistemaGlobalPREEntities db = new SistemaGlobalPREEntities())
             {
-                db.MaquinasRegistrosDatos.Add(TranformarTareaAMaquinaRegistroDato(tarea, idOperario, pares, true, 1));
+                db.MaquinasRegistrosDatos.Add(TranformarTareaAMaquinaRegistroDato(tarea, idOperario,idPuesto, pares, true, 1));
                 db.SaveChangesAsync();
 
             }
         }
 
-        public static void InsertarSaldos(Tarea tarea, int idOperario, int pares)
+        public static void InsertarSaldos(Tarea tarea, int idOperario,int idPuesto, int pares)
         {
             using (SistemaGlobalPREEntities db = new SistemaGlobalPREEntities())
             {
-                db.MaquinasRegistrosDatos.Add(TranformarTareaAMaquinaRegistroDato(tarea, idOperario, pares, false, -1));
+                db.MaquinasRegistrosDatos.Add(TranformarTareaAMaquinaRegistroDato(tarea, idOperario,idPuesto, pares, false, -1));
                 db.SaveChangesAsync();
 
             }
         }
 
-        public static void InsertarCorreccion(Tarea tarea, int idOperario, int pares)
+        public static void InsertarCorreccion(Tarea tarea, int idOperario,int idPuesto, int pares)
         {
             using (SistemaGlobalPREEntities db = new SistemaGlobalPREEntities())
             {
-                db.MaquinasRegistrosDatos.Add(TranformarTareaAMaquinaRegistroDato(tarea, idOperario, pares, false, 1));
+                db.MaquinasRegistrosDatos.Add(TranformarTareaAMaquinaRegistroDato(tarea, idOperario,idPuesto, pares, false, 1));
                 db.SaveChangesAsync();
 
             }

@@ -13,7 +13,26 @@ namespace ArnGestionPuestoFrontendWPF
         public static Bancadas Bancada { get; set; }
         public static List<Tarea> Tareas { get; set; } = new List<Tarea>();
         public static List<Operarios> Operarios { get; set; } = new List<Operarios>();
+        public static Tarea TareaConsumir
+        {
+            get
+            {
+                Tarea tareaConsumir = null;
 
+                foreach (Tarea tarea in Store.Tareas.Where(x => !x.Acabada))
+                {
+                    tareaConsumir = tarea;
+                    break;
+                }
+
+                if (tareaConsumir == null && Store.Tareas.Any())
+                {
+                    tareaConsumir = Store.Tareas.Last();
+                }
+
+                return tareaConsumir;
+            }
+        }
         public static string TareasCodigoOrdenToString
         {
             get

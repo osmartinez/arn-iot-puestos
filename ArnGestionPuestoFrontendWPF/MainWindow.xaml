@@ -7,7 +7,7 @@
         xmlns:ctrl="clr-namespace:ArnGestionPuestoFrontendWPF.Controles"
         mc:Ignorable="d"
         xmlns:pages="clr-namespace:ArnGestionPuestoFrontendWPF.Paginas"
-        Title="IOT Puesto" Height="558.793" Width="913.778" WindowStartupLocation="CenterScreen" WindowState="Maximized">
+        Title="IOT Puesto" Height="558.793" Width="913.778" WindowStartupLocation="CenterScreen" WindowState="Maximized" Closing="Window_Closing">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>

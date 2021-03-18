@@ -992,8 +992,11 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="EntidadesConfiguracion\Configuracion.cs" />
+    <Compile Include="EntidadesDTO\MensajeConsumoOrden.cs" />
+    <Compile Include="EntidadesDTO\MensajeConsumoTarea.cs" />
     <Compile Include="EntidadesDTO\PulsoMaquina.cs" />
     <Compile Include="EntidadesDTO\Tarea.cs" />
+    <Compile Include="EntidadesDTO\Topic.cs" />
     <Compile Include="Eventos\BarquillaFichadaEventArgs.cs" />
     <Compile Include="Eventos\PulsoGeneradoEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

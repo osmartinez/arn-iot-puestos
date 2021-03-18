@@ -761,6 +761,7 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
             <PropertyRef Name="Productividad" />
             <PropertyRef Name="IpAutomata" />
             <PropertyRef Name="PosicionMaquina" />
+            <PropertyRef Name="IdPuesto" />
             <PropertyRef Name="IdOperacion" />
             <PropertyRef Name="CodigoOrden" />
             <PropertyRef Name="IdOrden" />
@@ -777,6 +778,7 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
           <Property Name="Productividad" Type="int" Nullable="false" />
           <Property Name="IpAutomata" Type="nvarchar" MaxLength="15" Nullable="false" />
           <Property Name="PosicionMaquina" Type="int" Nullable="false" />
+          <Property Name="IdPuesto" Type="int" Nullable="false" />
           <Property Name="IdOperacion" Type="int" Nullable="false" />
           <Property Name="CodigoOrden" Type="nvarchar" MaxLength="13" Nullable="false" />
           <Property Name="IdOrden" Type="int" Nullable="false" />
@@ -4799,6 +4801,7 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
     [MaquinasRegistrosDatos].[Productividad] AS [Productividad], 
     [MaquinasRegistrosDatos].[IpAutomata] AS [IpAutomata], 
     [MaquinasRegistrosDatos].[PosicionMaquina] AS [PosicionMaquina], 
+    [MaquinasRegistrosDatos].[IdPuesto] AS [IdPuesto], 
     [MaquinasRegistrosDatos].[IdOperacion] AS [IdOperacion], 
     [MaquinasRegistrosDatos].[CodigoOrden] AS [CodigoOrden], 
     [MaquinasRegistrosDatos].[IdOrden] AS [IdOrden], 
@@ -7354,6 +7357,7 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
             <PropertyRef Name="PiezaIntroducida" />
             <PropertyRef Name="Pares" />
             <PropertyRef Name="Fecha" />
+            <PropertyRef Name="IdPuesto" />
           </Key>
           <Property Name="CodigoEtiqueta" Type="String" MaxLength="13" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="IdTarea" Type="Int32" Nullable="false" />
@@ -7370,6 +7374,7 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <Property Name="PiezaIntroducida" Type="Boolean" Nullable="false" />
           <Property Name="Pares" Type="Int32" Nullable="false" />
           <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IdPuesto" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="MaquinasTiposIncidencias">
           <Key>
@@ -15432,6 +15437,7 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <EntitySetMapping Name="MaquinasRegistrosDatos">
             <EntityTypeMapping TypeName="SistemaGlobalPREModel.MaquinasRegistrosDatos">
               <MappingFragment StoreEntitySet="MaquinasRegistrosDatos">
+                <ScalarProperty Name="IdPuesto" ColumnName="IdPuesto" />
                 <ScalarProperty Name="CodigoEtiqueta" ColumnName="CodigoEtiqueta" />
                 <ScalarProperty Name="IdTarea" ColumnName="IdTarea" />
                 <ScalarProperty Name="Productividad" ColumnName="Productividad" />

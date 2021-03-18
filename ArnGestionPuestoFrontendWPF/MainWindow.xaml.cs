@@ -6,6 +6,8 @@ using Entidades.EntidadesDTO;
 using Entidades.Eventos;
 using FichajesLector;
 using Logs;
+using MQTT;
+using Newtonsoft.Json;
 using SerialCom;
 using System;
 using System.Collections.Generic;
@@ -13,6 +15,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -105,6 +108,7 @@ namespace ArnGestionPuestoFrontendWPF
                     {
                         Uart uart = new Uart(Store.Bancada.Maquinas);
                         uart.OnPulsoGenerado += this.Uart_OnPulsoGenerado;
+                        this.IniciarMQTT();
                     }
                     else
                     {
@@ -121,6 +125,52 @@ namespace ArnGestionPuestoFrontendWPF
             };
 
             bw.RunWorkerAsync();
+        }
+
+        private void IniciarMQTT()
+        {
+            ClienteMQTT.Topics.Add(new Topic(1, "/puesto/+/asociarTarea", new Regex(@"^\/puesto\/\s?[0-9]+\/asociarTarea$"), 3, 1, qos: 1));
+            ClienteMQTT.Topics.Add(new Topic(2, "/puesto/+/normal", new Regex(@"^\/puesto\/\s?[0-9]+\/normal$"), 3, 1, qos: 2));
+            ClienteMQTT.Topics.Add(new Topic(3, "/puesto/+/preparar", new Regex(@"^\/puesto\/\s?[0-9]+\/preparar"), 3, 1, qos: 1));
+
+            ClienteMQTT.Topics[1].Callbacks.Add(Normal);
+
+            ClienteMQTT.Iniciar(Store.Bancada.Nombre);
+        }
+
+        private void Normal(string msg, string topicRecibido, Topic topic)
+        {
+            try
+            {
+                MensajeConsumoTarea consumo = JsonConvert.DeserializeObject<MensajeConsumoTarea>(msg);
+                if (consumo == null)
+                {
+                    Log.Write(new Exception("Consumo recibido nulo " + msg));
+                }
+                // si viene de otro puesto y es una tarea que me afecta
+                if (consumo.IdPuesto != Store.Bancada.ID)
+                {
+                    Tarea tareaAfectada = Store.Tareas.FirstOrDefault(x => x.IdTarea == consumo.IdTarea);
+                    if(tareaAfectada != null)
+                    {
+                        if (consumo.PiezaIntroducida)
+                        {
+                            tareaAfectada.Pulsos.Add(new PulsoMaquina
+                            {
+                                Fecha = DateTime.Now,
+                                IdOperario = 0,
+                                IdPuesto = consumo.IdPuesto,
+                                Pares = consumo.ParesConsumidos,
+                            });
+                            BusEventos.ParesActualizados(tareaAfectada);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Write(ex);
+            }
         }
 
         private void Notifica(string propertyName = "")
@@ -185,17 +235,8 @@ namespace ArnGestionPuestoFrontendWPF
                 {
                     if (Store.Tareas.Any())
                     {
-                        Tarea tareaConsumir = null;
-                        foreach (Tarea tarea in Store.Tareas.Where(x => !x.Acabada))
-                        {
-                            tareaConsumir = tarea;
-                            break;
-                        }
 
-                        if(tareaConsumir==null && Store.Tareas.Any())
-                        {
-                            tareaConsumir = Store.Tareas.Last();
-                        }
+                        Tarea tareaConsumir = Store.TareaConsumir;
 
                         if (tareaConsumir != null)
                         {
@@ -218,7 +259,7 @@ namespace ArnGestionPuestoFrontendWPF
 
                                     }
 
-                                    Insert.InsertarPulso(tareaConsumir, Store.Operarios.First().Id,(int)maquina.MaquinasConfiguracionesPins.ProductoPorPulso);
+                                    Insert.InsertarPulso(tareaConsumir, Store.Operarios.First().Id, Store.Bancada.ID, (int)maquina.MaquinasConfiguracionesPins.ProductoPorPulso);
 
                                     tareaConsumir.Monton++;
                                     if (tareaConsumir.Monton == Store.Bancada.BancadasConfiguracionesPins.ContadorPaquetes + 1)
@@ -226,6 +267,24 @@ namespace ArnGestionPuestoFrontendWPF
                                         tareaConsumir.Monton = 1;
                                     }
                                     BusEventos.ParesActualizados(tareaConsumir);
+
+                                    ClienteMQTT.Publicar(string.Format("/ordenFabricacion/{0}/{1}/consumo", tareaConsumir.IdOrden, maquina.CodSeccion),
+                                        JsonConvert.SerializeObject(new MensajeConsumoOrden
+                                        {
+                                            CodigoOrden = tareaConsumir.CodigoOrden,
+                                            IdMaquina = maquina.ID,
+                                            CodSeccion = maquina.CodSeccion,
+                                            CantidadPaquete = (int)tareaConsumir.CantidadEtiqueta
+                                        }), 2);
+
+                                    ClienteMQTT.Publicar(string.Format("/puesto/{0}/normal", Store.Bancada.ID),
+                                    JsonConvert.SerializeObject(new MensajeConsumoTarea
+                                    {
+                                        IdPuesto = Store.Bancada.ID,
+                                        IdTarea = tareaConsumir.IdTarea,
+                                        ParesConsumidos = (int)maquina.MaquinasConfiguracionesPins.ProductoPorPulso,
+                                        PiezaIntroducida = true,
+                                    }), 2);
                                 }
                             }
                         }
@@ -304,6 +363,11 @@ namespace ArnGestionPuestoFrontendWPF
                 Log.Write(ex);
             }
 
+        }
+
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            ClienteMQTT.Cerrar();
         }
     }
 }

@@ -29,5 +29,6 @@ namespace Entidades.EntidadesBD
         public bool PiezaIntroducida { get; set; }
         public int Pares { get; set; }
         public System.DateTime Fecha { get; set; }
+        public int IdPuesto { get; set; }
     }
 }

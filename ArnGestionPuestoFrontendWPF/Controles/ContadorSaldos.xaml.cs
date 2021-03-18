@@ -1,5 +1,8 @@
 ﻿using ArnGestionPuestoFrontendWPF.Ventanas;
 using BDSQL;
+using Entidades.EntidadesDTO;
+using MQTT;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -57,14 +60,27 @@ namespace ArnGestionPuestoFrontendWPF.Controles
             {
                 if (Store.Tareas.Any())
                 {
-                    Store.Tareas.First().Saldos.Add(new Entidades.EntidadesDTO.PulsoMaquina
+                    Tarea tareaConsumir = Store.TareaConsumir;
+                    if(tareaConsumir != null)
                     {
-                        Pares = this.SaldosEditar,
-                        Fecha = DateTime.Now,
-                        IdOperario = Store.Operarios.Any() ? Store.Operarios.First().Id : 0,
-                    });
-                    Insert.InsertarSaldos(Store.Tareas.First(), Store.Operarios.Any() ? Store.Operarios.First().Id : 0, this.SaldosEditar);
-                    BusEventos.ParesActualizados(Store.Tareas.First());
+                        Store.TareaConsumir.Saldos.Add(new Entidades.EntidadesDTO.PulsoMaquina
+                        {
+                            Pares = this.SaldosEditar,
+                            Fecha = DateTime.Now,
+                            IdOperario = Store.Operarios.Any() ? Store.Operarios.First().Id : 0,
+                        });
+                        Insert.InsertarSaldos(Store.TareaConsumir, Store.Operarios.Any() ? Store.Operarios.First().Id : 0, Store.Bancada.ID, this.SaldosEditar);
+                        ClienteMQTT.Publicar(string.Format("/puesto/{0}/normal", Store.Bancada.ID),
+                            JsonConvert.SerializeObject(new MensajeConsumoTarea
+                            {
+                                IdPuesto = Store.Bancada.ID,
+                                IdTarea = Store.TareaConsumir.IdTarea,
+                                ParesConsumidos = (int)this.SaldosEditar,
+                                PiezaIntroducida = false,
+                            }), 2);
+                        BusEventos.ParesActualizados(Store.TareaConsumir);
+                    }
+                    
                 }
                 else
                 {

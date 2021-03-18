@@ -1,5 +1,8 @@
 ﻿using ArnGestionPuestoFrontendWPF.Ventanas;
 using BDSQL;
+using Entidades.EntidadesDTO;
+using MQTT;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -62,15 +65,28 @@ namespace ArnGestionPuestoFrontendWPF.Controles
             {
                 if (Store.Tareas.Any())
                 {
-                    Store.Tareas.First().Correcciones.Add(new Entidades.EntidadesDTO.PulsoMaquina
-                    {
-                        Pares = this.CorreccionEditar,
-                        Fecha = DateTime.Now,
-                        IdOperario = Store.Operarios.Any() ? Store.Operarios.First().Id : 0,
-                    });
-                    Insert.InsertarCorreccion(Store.Tareas.First(), Store.Operarios.Any() ? Store.Operarios.First().Id : 0, this.CorreccionEditar);
+                    Tarea tareaConsumir = Store.TareaConsumir;
 
-                    BusEventos.ParesActualizados(Store.Tareas.First());
+                    if (tareaConsumir != null)
+                    {
+                        tareaConsumir.Correcciones.Add(new Entidades.EntidadesDTO.PulsoMaquina
+                        {
+                            Pares = this.CorreccionEditar,
+                            Fecha = DateTime.Now,
+                            IdOperario = Store.Operarios.Any() ? Store.Operarios.First().Id : 0,
+                        });
+                        Insert.InsertarCorreccion(tareaConsumir, Store.Operarios.Any() ? Store.Operarios.First().Id : 0, Store.Bancada.ID, this.CorreccionEditar);
+                        ClienteMQTT.Publicar(string.Format("/puesto/{0}/normal", Store.Bancada.ID),
+                            JsonConvert.SerializeObject(new MensajeConsumoTarea
+                            {
+                                IdPuesto = Store.Bancada.ID,
+                                IdTarea = Store.TareaConsumir.IdTarea,
+                                ParesConsumidos = (int)this.CorreccionEditar,
+                                PiezaIntroducida = false,
+                            }), 2);
+                        BusEventos.ParesActualizados(tareaConsumir);
+                    }
+
                 }
                 else
                 {
@@ -81,7 +97,6 @@ namespace ArnGestionPuestoFrontendWPF.Controles
             {
                 new Aviso("No hay operarios").Show();
             }
-
 
             this.PanelSuma.Visibility = Visibility.Hidden;
             this.CorreccionEditar = 0;
