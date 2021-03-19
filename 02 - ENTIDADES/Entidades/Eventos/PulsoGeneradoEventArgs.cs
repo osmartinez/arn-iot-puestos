@@ -9,11 +9,11 @@ namespace Entidades.Eventos
 {
     public class PulsoGeneradoEventArgs:EventArgs
     {
-        public Maquinas Maquina { get; private set; }
+        public int IdBancada{ get; private set; }
 
-        public PulsoGeneradoEventArgs(Maquinas maquina)
+        public PulsoGeneradoEventArgs(int idBancada)
         {
-            Maquina = maquina;
+            idBancada = IdBancada;
         }
     }
 }

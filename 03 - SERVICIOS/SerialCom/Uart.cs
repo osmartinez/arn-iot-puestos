@@ -37,14 +37,23 @@ namespace SerialCom
             }
         }
 
-        public Uart(IEnumerable<Maquinas> maquinas)
+
+        public Uart(Bancadas b)
         {
-            this.maquinas = maquinas.ToList();
+            this.maquinas = b.Maquinas.ToList();
             Conectar();
             this.timerReconexion = new Timer();
-            this.timerReconexion.Interval = 20*1000;
+            this.timerReconexion.Interval = 20 * 1000;
             this.timerReconexion.Elapsed += TimerReconexion_Elapsed;
             this.timerReconexion.Start();
+        }
+
+        public void Cerrar()
+        {
+            if (Conectado)
+            {
+                this.client.Disconnect();
+            }
         }
 
         private void TimerReconexion_Elapsed(object sender, ElapsedEventArgs e)
@@ -107,11 +116,11 @@ namespace SerialCom
                     this.timer.Start();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logs.Log.Write(ex);
             }
-            
+
 
             reconectando = false;
         }
@@ -120,7 +129,7 @@ namespace SerialCom
         {
             if (OnPulsoGenerado != null)
             {
-                OnPulsoGenerado(null, new PulsoGeneradoEventArgs(maquina));
+                OnPulsoGenerado(null, new PulsoGeneradoEventArgs(maquina.IdBancada.Value));
             }
         }
 
@@ -131,7 +140,7 @@ namespace SerialCom
                 if (this.Conectado && !realizandoLectura)
                 {
                     realizandoLectura = true;
-                    foreach(Maquinas maq in this.maquinas)
+                    foreach (Maquinas maq in this.maquinas)
                     {
                         int valor = this.LeerPulso(maq.MaquinasConfiguracionesPins.DireccionPulso);
                         if (valor > 0)
@@ -140,9 +149,10 @@ namespace SerialCom
                             PulsoGenerado(maq);
                         }
                     }
-                    
+
                 }
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 Log.Write(ex);
                 realizandoLectura = false;
@@ -173,13 +183,15 @@ namespace SerialCom
         {
             try
             {
+                 //int[] test = this.client.ReadHoldingRegisters(4096, 100);
+                // bool[] inputs = this.client.ReadDiscreteInputs(0, 7);
                 int[] resultado = this.client.ReadHoldingRegisters(ObtenerDireccion(direccionPulso), 1);
                 int valor = resultado[0];
                 return valor;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                Log.Write(ex);
+                //Log.Write(ex);
                 return 0;
             }
 

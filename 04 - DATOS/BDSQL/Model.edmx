@@ -295,7 +295,11 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Nombre" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Descripcion" Type="nvarchar" MaxLength="100" />
           <Property Name="Activa" Type="bit" />
+          <Property Name="IdHermano" Type="int" />
+          <Property Name="EsMaster" Type="bit" Nullable="false" />
+          <Property Name="EsManual" Type="bit" Nullable="false" />
           <Property Name="TiempoDesplazamiento" Type="decimal" Precision="13" Scale="3" />
           <Property Name="TiempoObjetivo" Type="decimal" Precision="13" Scale="3" />
           <Property Name="PorcentajeDesviacion" Type="decimal" Precision="13" Scale="3" />
@@ -306,8 +310,6 @@
           <Property Name="Ritmo" Type="float" />
           <Property Name="CicloSegundos" Type="float" />
           <Property Name="Observaciones" Type="nvarchar" MaxLength="100" />
-          <Property Name="Descripcion" Type="nvarchar" MaxLength="100" />
-          <Property Name="EsManual" Type="bit" Nullable="false" />
           <Property Name="CodigoEtiqueta" Type="nvarchar" MaxLength="13" />
         </EntityType>
         <EntityType Name="BancadasConfiguracionesIncidencias">
@@ -1776,6 +1778,18 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
             </Principal>
             <Dependent Role="ArticulosTallas">
               <PropertyRef Name="IdArticuloTallaDetalleCliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Bancadas_Bancadas">
+          <End Role="Bancadas" Type="Self.Bancadas" Multiplicity="0..1" />
+          <End Role="Bancadas1" Type="Self.Bancadas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bancadas">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Bancadas1">
+              <PropertyRef Name="IdHermano" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4840,6 +4854,10 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
             <End Role="ArticulosTallasDetalleCliente" EntitySet="ArticulosTallasDetalleCliente" />
             <End Role="ArticulosTallas" EntitySet="ArticulosTallas" />
           </AssociationSet>
+          <AssociationSet Name="FK_Bancadas_Bancadas" Association="Self.FK_Bancadas_Bancadas">
+            <End Role="Bancadas" EntitySet="Bancadas" />
+            <End Role="Bancadas1" EntitySet="Bancadas" />
+          </AssociationSet>
           <AssociationSet Name="FK_BancadasConfiguracionesPins_Bancadas" Association="Self.FK_BancadasConfiguracionesPins_Bancadas">
             <End Role="Bancadas" EntitySet="Bancadas" />
             <End Role="BancadasConfiguracionesPins" EntitySet="BancadasConfiguracionesPins" />
@@ -5746,6 +5764,10 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <NavigationProperty Name="OrdenesFabricacionOperacionesTallasCantidad" Relationship="Self.FK_OrdenesFabricacionOperacionesTallasCantidad_Bancadas" FromRole="Bancadas" ToRole="OrdenesFabricacionOperacionesTallasCantidad" />
           <NavigationProperty Name="BancadasConfiguracionesIncidencias" Relationship="Self.FK_PuestosConfiguracionesIncidencias_Bancadas" FromRole="Bancadas" ToRole="BancadasConfiguracionesIncidencias" />
           <NavigationProperty Name="BancadasConfiguracionesPins" Relationship="SistemaGlobalPREModel.FK_BancadasConfiguracionesPins_Bancadas" FromRole="Bancadas" ToRole="BancadasConfiguracionesPins" />
+          <Property Name="IdHermano" Type="Int32" />
+          <Property Name="EsMaster" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Bancadas1" Relationship="SistemaGlobalPREModel.FK_Bancadas_Bancadas" FromRole="Bancadas" ToRole="Bancadas1" />
+          <NavigationProperty Name="Bancadas2" Relationship="SistemaGlobalPREModel.FK_Bancadas_Bancadas" FromRole="Bancadas1" ToRole="Bancadas" />
         </EntityType>
         <EntityType Name="BancadasConfiguracionesIncidencias">
           <Key>
@@ -10954,6 +10976,10 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
             <End Role="Bancadas" EntitySet="Bancadas" />
             <End Role="BancadasConfiguracionesPins" EntitySet="BancadasConfiguracionesPins" />
           </AssociationSet>
+          <AssociationSet Name="FK_Bancadas_Bancadas" Association="SistemaGlobalPREModel.FK_Bancadas_Bancadas">
+            <End Role="Bancadas" EntitySet="Bancadas" />
+            <End Role="Bancadas1" EntitySet="Bancadas" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="SP_AgruparContenedor_Result">
           <Property Type="String" Name="CodigoEtiqueta" Nullable="false" MaxLength="13" />
@@ -13662,6 +13688,18 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Bancadas_Bancadas">
+          <End Type="SistemaGlobalPREModel.Bancadas" Role="Bancadas" Multiplicity="0..1" />
+          <End Type="SistemaGlobalPREModel.Bancadas" Role="Bancadas1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bancadas">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Bancadas1">
+              <PropertyRef Name="IdHermano" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -13975,6 +14013,8 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <EntitySetMapping Name="Bancadas">
             <EntityTypeMapping TypeName="SistemaGlobalPREModel.Bancadas">
               <MappingFragment StoreEntitySet="Bancadas">
+                <ScalarProperty Name="EsMaster" ColumnName="EsMaster" />
+                <ScalarProperty Name="IdHermano" ColumnName="IdHermano" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
                 <ScalarProperty Name="Activa" ColumnName="Activa" />

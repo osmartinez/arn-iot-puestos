@@ -283,6 +283,7 @@
         <AssociationConnector Association="SistemaGlobalPREModel.TalleresUtillaje" ManuallyRouted="false" />
         <AssociationConnector Association="SistemaGlobalPREModel.UsuariosADPowerBI" ManuallyRouted="false" />
         <AssociationConnector Association="SistemaGlobalPREModel.FK_BancadasConfiguracionesPins_Bancadas" />
+        <AssociationConnector Association="SistemaGlobalPREModel.FK_Bancadas_Bancadas" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

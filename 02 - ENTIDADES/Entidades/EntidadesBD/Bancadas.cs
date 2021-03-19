@@ -22,6 +22,7 @@ namespace Entidades.EntidadesBD
             this.IncidenciasBancadasRegistros = new HashSet<IncidenciasBancadasRegistros>();
             this.Maquinas = new HashSet<Maquinas>();
             this.OrdenesFabricacionOperacionesTallasCantidad = new HashSet<OrdenesFabricacionOperacionesTallasCantidad>();
+            this.Bancadas1 = new HashSet<Bancadas>();
         }
     
         public int ID { get; set; }
@@ -40,6 +41,8 @@ namespace Entidades.EntidadesBD
         public string Descripcion { get; set; }
         public bool EsManual { get; set; }
         public string CodigoEtiqueta { get; set; }
+        public Nullable<int> IdHermano { get; set; }
+        public bool EsMaster { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BancadasRegistrosOperarios> BancadasRegistrosOperarios { get; set; }
@@ -53,5 +56,8 @@ namespace Entidades.EntidadesBD
         public virtual ICollection<OrdenesFabricacionOperacionesTallasCantidad> OrdenesFabricacionOperacionesTallasCantidad { get; set; }
         public virtual BancadasConfiguracionesIncidencias BancadasConfiguracionesIncidencias { get; set; }
         public virtual BancadasConfiguracionesPins BancadasConfiguracionesPins { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Bancadas> Bancadas1 { get; set; }
+        public virtual Bancadas Bancadas2 { get; set; }
     }
 }
