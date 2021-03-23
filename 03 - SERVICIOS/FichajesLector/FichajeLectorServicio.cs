@@ -14,6 +14,8 @@ namespace FichajesLector
         public string CodigoBarquilla { get; set; } = "";
 
         public event EventHandler<BarquillaFichadaEventArgs> OnBarquillaFichada;
+        public event EventHandler<BarquillaFichadaEventArgs> OnOperacionFichada;
+
         private Timer timer = new Timer();
 
         public FichajeLectorServicio()
@@ -42,14 +44,13 @@ namespace FichajesLector
             this.Limpiar();
         }
 
-        private bool EsEtiquetaMaquina(string cod)
+        private void OperacionFichada(string codigo)
         {
-            return cod.StartsWith("02") || cod.StartsWith("2");
-        }
-
-        private bool EsEtiquetaBarquilla(string cod)
-        {
-            return cod.StartsWith("05") || cod.StartsWith("5");
+            if (OnOperacionFichada != null)
+            {
+                OnOperacionFichada(this, new BarquillaFichadaEventArgs(codigo));
+            }
+            this.Limpiar();
         }
 
         public void EtiquetaFichada(string cod)
@@ -58,6 +59,10 @@ namespace FichajesLector
             {
                 // barquilla
                 BarquillaFichada("0" + cod);
+            }
+            if(cod[0] == '0')
+            {
+                OperacionFichada("0" + cod);
             }
             else if (cod[0] == '2')
             {

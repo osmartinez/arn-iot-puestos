@@ -25,11 +25,11 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Style="{StaticResource BotonControlRestar}">
+                </Grid.ColumnDefinitions> 
+                <Button x:Name="BtRestar" Click="BtRestar_Click" Grid.Column="0" Style="{StaticResource BotonControlRestar}">
                     <TextBlock Text="-"></TextBlock>
                 </Button>
-                <Button Grid.Column="1" Style="{StaticResource BotonControlSumar}">
+                <Button x:Name="BtSumar" Click="BtSumar_Click" Grid.Column="1" Style="{StaticResource BotonControlSumar}">
                     <TextBlock Text="+"></TextBlock>
                 </Button>
             </Grid>

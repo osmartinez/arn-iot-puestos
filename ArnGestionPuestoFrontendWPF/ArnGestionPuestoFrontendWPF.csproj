@@ -32,7 +32,7 @@
     <ProductName>GestionPuesto</ProductName>
     <PublisherName>Arneplant</PublisherName>
     <SuiteName>IOT</SuiteName>
-    <ApplicationRevision>17</ApplicationRevision>
+    <ApplicationRevision>22</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -140,6 +140,9 @@
     <Compile Include="Ventanas\Configurar.xaml.cs">
       <DependentUpon>Configurar.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Ventanas\ElegirOperacionTalla.xaml.cs">
+      <DependentUpon>ElegirOperacionTalla.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Ventanas\FinalizarManual.xaml.cs">
       <DependentUpon>FinalizarManual.xaml</DependentUpon>
     </Compile>
@@ -224,6 +227,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Ventanas\Configurar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Ventanas\ElegirOperacionTalla.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

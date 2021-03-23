@@ -13,7 +13,7 @@ namespace Entidades.Eventos
 
         public PulsoGeneradoEventArgs(int idBancada)
         {
-            idBancada = IdBancada;
+            IdBancada = idBancada;
         }
     }
 }

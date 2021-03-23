@@ -29,7 +29,7 @@ namespace ArnGestionPuestoFrontendWPF.Controles
             {
                 if (Store.Tareas.Any())
                 {
-                    return Store.Tareas.First().Monton;
+                    return Store.TareaConsumir.Monton;
                 }
                 else
                 {
@@ -101,6 +101,24 @@ namespace ArnGestionPuestoFrontendWPF.Controles
         private void TbContadorPaquetes_MouseUp(object sender, MouseButtonEventArgs e)
         {
             EditarContador();
+        }
+
+        private void BtSumar_Click(object sender, RoutedEventArgs e)
+        {
+            if (Store.TareaConsumir != null)
+            {
+                Store.TareaConsumir.Monton--;
+                Notifica("Monton");
+            }
+        }
+
+        private void BtRestar_Click(object sender, RoutedEventArgs e)
+        {
+            if (Store.TareaConsumir != null)
+            {
+                Store.TareaConsumir.Monton++;
+                Notifica("Monton");
+            }
         }
     }
 }

@@ -38,9 +38,9 @@ namespace SerialCom
         }
 
 
-        public Uart(Bancadas b)
+        public Uart(IEnumerable<Maquinas> maquinas)
         {
-            this.maquinas = b.Maquinas.ToList();
+            this.maquinas = maquinas.ToList();
             Conectar();
             this.timerReconexion = new Timer();
             this.timerReconexion.Interval = 20 * 1000;

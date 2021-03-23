@@ -46,10 +46,7 @@ namespace ArnGestionPuestoFrontendWPF.Controles
             {
                 if (tareas.Any())
                 {
-                    return Convert.ToInt32(tareas.First().CantidadFabricada) 
-                        + tareas.First().Pulsos.Sum(x => x.Pares)
-                        - tareas.First().Saldos.Sum(x => x.Pares)
-                        + tareas.First().Correcciones.Sum(x => x.Pares);
+                    return Store.TareaConsumir.CantidadFabricadaReal;
                 }
                 else
                 {
@@ -171,6 +168,7 @@ namespace ArnGestionPuestoFrontendWPF.Controles
         private void BusEventos_OnTareasCargadas(object sender, EventosTareas.NuevasTareasCargadasEventArgs e)
         {
             tareas = e.Tareas;
+            PonerColorFrio();
             Notifica();
         }
 

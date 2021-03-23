@@ -11,7 +11,8 @@ namespace DatosConfiguracion
 {
     public static class BDConfiguracion
     {
-        private const string RUTA = "settings.json";
+        private static string RUTA = Path.Combine(Environment.GetFolderPath(
+    Environment.SpecialFolder.ApplicationData), "settings.json");
 
         public static void Guardar(Configuracion config)
         {

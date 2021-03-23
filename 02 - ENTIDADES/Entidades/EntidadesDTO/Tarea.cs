@@ -40,7 +40,7 @@ namespace Entidades.EntidadesDTO
         {
             get
             {
-                return (int)this.CantidadFabricada +
+                return /*(int)this.CantidadFabricada +*/
                     this.Pulsos.Sum(x => x.Pares)
                     + this.Correcciones.Sum(x => x.Pares)
                     - this.Saldos.Sum(x => x.Pares);

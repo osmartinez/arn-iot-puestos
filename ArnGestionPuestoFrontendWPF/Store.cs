@@ -11,6 +11,7 @@ namespace ArnGestionPuestoFrontendWPF
     public static class Store
     {
         public static Bancadas Bancada { get; set; }
+        public static Bancadas BancadaEsclavo { get; set; }
         public static List<Tarea> Tareas { get; set; } = new List<Tarea>();
         public static List<Operarios> Operarios { get; set; } = new List<Operarios>();
         public static Tarea TareaConsumir

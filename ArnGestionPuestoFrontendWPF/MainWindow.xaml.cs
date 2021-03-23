@@ -64,6 +64,7 @@ namespace ArnGestionPuestoFrontendWPF
                 }
                 this.PreviewKeyUp += MainWindow_PreviewKeyUp;
                 this.fichajes.OnBarquillaFichada += Fichajes_OnBarquillaFichada;
+                this.fichajes.OnOperacionFichada += Fichajes_OnOperacionFichada;
                 NavegacionEventos.OnNuevaPagina += NavegacionEventos_OnNuevaPagina;
                 NavegacionEventos.CargarNuevaPagina(NavegacionEventos.PaginaOperarios);
                 CargarConfiguracion();
@@ -74,6 +75,8 @@ namespace ArnGestionPuestoFrontendWPF
             }
 
         }
+
+
 
         private void CargarConfiguracion()
         {
@@ -93,6 +96,10 @@ namespace ArnGestionPuestoFrontendWPF
                 {
                     this.config = BDConfiguracion.Leer();
                     Store.Bancada = BDSQL.Select.ObtenerBancadaPorId(this.config.IdBancada);
+                    if(Store.Bancada != null && Store.Bancada.EsMaster && Store.Bancada.IdHermano.HasValue)
+                    {
+                        Store.BancadaEsclavo = BDSQL.Select.ObtenerBancadaPorId(Store.Bancada.IdHermano.Value);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -108,7 +115,12 @@ namespace ArnGestionPuestoFrontendWPF
                     {
                         if (Store.Bancada.EsMaster)
                         {
-                            uart = new Uart(Store.Bancada);
+                            var maquinasUart = Store.Bancada.Maquinas.ToList();
+                            if (Store.BancadaEsclavo != null)
+                            {
+                                maquinasUart.AddRange(Store.BancadaEsclavo.Maquinas.ToList());
+                            }
+                            uart = new Uart(maquinasUart);
                             uart.OnPulsoGenerado += this.Uart_OnPulsoGenerado;
                         }
 
@@ -211,6 +223,40 @@ namespace ArnGestionPuestoFrontendWPF
             }
         }
 
+        private void Fichajes_OnOperacionFichada(object sender, BarquillaFichadaEventArgs e)
+        {
+            try
+            {
+                int idOperacion = 0;
+                bool ok = int.TryParse(e.CodigoEtiqueta, out idOperacion);
+                if (ok)
+                {
+                    var operacionesTallas = Select.ObtenerOperacionesTallasOperacion(idOperacion);
+                    ElegirOperacionTalla eot = new ElegirOperacionTalla(operacionesTallas);
+                    eot.ShowDialog();
+                    if(eot.OfotElegida != null)
+                    {
+                        var infos = Select.BuscarTareasPorOfot(eot.OfotElegida.ID, Store.Bancada.Maquinas.ToList());
+                        List<Tarea> tareas = new List<Tarea>();
+                        foreach (var info in infos)
+                        {
+                            tareas.Add(new Tarea(info));
+                        }
+                        Store.Tareas = tareas;
+                        BusEventos.TareasCargadas(Store.Tareas);
+                    }
+                }
+                else
+                {
+                    Aviso a = new Aviso("Operación no encontrada");
+                    a.Show();
+                }
+            }catch(Exception ex)
+            {
+                Log.Write(ex);
+            }
+        }
+
         private void MainWindow_PreviewKeyUp(object sender, KeyEventArgs e)
         {
             try
@@ -245,86 +291,90 @@ namespace ArnGestionPuestoFrontendWPF
         {
             try
             {
-                if (Store.Operarios.Any())
+                if( Store.BancadaEsclavo!= null &&e.IdBancada == Store.BancadaEsclavo.ID)
                 {
-                    if (Store.Tareas.Any())
+                    ClienteMQTT.Publicar(string.Format("/puesto/{0}/pulsoInterno", Store.Bancada.IdHermano),"", 2);
+                }
+                else
+                {
+                    if (Store.Operarios.Any())
                     {
-
-                        Tarea tareaConsumir = Store.TareaConsumir;
-
-                        if (tareaConsumir != null)
+                        if (Store.Tareas.Any())
                         {
-                            var maquina = tareaConsumir.MaquinasEjecucion.First();
 
-                            if (maquina.IdBancada == e.IdBancada)
+                            Tarea tareaConsumir = Store.TareaConsumir;
+
+                            if (tareaConsumir != null)
                             {
-                                tareaConsumir.Pulsos.Add(new PulsoMaquina
+                                var maquina = tareaConsumir.MaquinasEjecucion.First();
+
+                                if (maquina.IdBancada == e.IdBancada)
                                 {
-                                    Pares = (int)maquina.MaquinasConfiguracionesPins.ProductoPorPulso,
-                                    Fecha = DateTime.Now,
-                                    IdOperario = Store.Operarios.First().Id,
-                                });
-
-
-
-                                if (maquina.MaquinasConfiguracionesPins.DescontarAutomaticamente)
-                                {
-                                    Insert.InsertarConsumo(tareaConsumir.IdTarea, (int)maquina.MaquinasConfiguracionesPins.ProductoPorPulso, Store.Operarios.First().Id, maquina.ID);
-
-                                }
-
-                                Insert.InsertarPulso(tareaConsumir, Store.Operarios.First().Id, Store.Bancada.ID, (int)maquina.MaquinasConfiguracionesPins.ProductoPorPulso);
-
-                                tareaConsumir.Monton++;
-                                if (tareaConsumir.Monton == Store.Bancada.BancadasConfiguracionesPins.ContadorPaquetes + 1)
-                                {
-                                    tareaConsumir.Monton = 1;
-                                }
-                                BusEventos.ParesActualizados(tareaConsumir);
-
-                                ClienteMQTT.Publicar(string.Format("/ordenFabricacion/{0}/{1}/consumo", tareaConsumir.IdOrden, maquina.CodSeccion),
-                                    JsonConvert.SerializeObject(new MensajeConsumoOrden
+                                    tareaConsumir.Pulsos.Add(new PulsoMaquina
                                     {
-                                        CodigoOrden = tareaConsumir.CodigoOrden,
-                                        IdMaquina = maquina.ID,
-                                        CodSeccion = maquina.CodSeccion,
-                                        CantidadPaquete = (int)tareaConsumir.CantidadEtiqueta
+                                        Pares = (int)maquina.MaquinasConfiguracionesPins.ProductoPorPulso,
+                                        Fecha = DateTime.Now,
+                                        IdOperario = Store.Operarios.First().Id,
+                                    });
+
+
+
+                                    if (maquina.MaquinasConfiguracionesPins.DescontarAutomaticamente)
+                                    {
+                                        Insert.InsertarConsumo(tareaConsumir.IdTarea, (int)maquina.MaquinasConfiguracionesPins.ProductoPorPulso, Store.Operarios.First().Id, maquina.ID);
+
+                                    }
+
+                                    Insert.InsertarPulso(tareaConsumir, Store.Operarios.First().Id, Store.Bancada.ID, (int)maquina.MaquinasConfiguracionesPins.ProductoPorPulso);
+
+                                    tareaConsumir.Monton++;
+                                    if (tareaConsumir.Monton == Store.Bancada.BancadasConfiguracionesPins.ContadorPaquetes + 1)
+                                    {
+                                        tareaConsumir.Monton = 1;
+                                    }
+                                    BusEventos.ParesActualizados(tareaConsumir);
+
+                                    ClienteMQTT.Publicar(string.Format("/ordenFabricacion/{0}/{1}/consumo", tareaConsumir.IdOrden, maquina.CodSeccion),
+                                        JsonConvert.SerializeObject(new MensajeConsumoOrden
+                                        {
+                                            CodigoOrden = tareaConsumir.CodigoOrden,
+                                            IdMaquina = maquina.ID,
+                                            CodSeccion = maquina.CodSeccion,
+                                            CantidadPaquete = (int)tareaConsumir.CantidadEtiqueta
+                                        }), 2);
+
+                                    ClienteMQTT.Publicar(string.Format("/puesto/{0}/normal", Store.Bancada.ID),
+                                    JsonConvert.SerializeObject(new MensajeConsumoTarea
+                                    {
+                                        IdPuesto = Store.Bancada.ID,
+                                        IdTarea = tareaConsumir.IdTarea,
+                                        ParesConsumidos = (int)maquina.MaquinasConfiguracionesPins.ProductoPorPulso,
+                                        PiezaIntroducida = true,
                                     }), 2);
 
-                                ClienteMQTT.Publicar(string.Format("/puesto/{0}/normal", Store.Bancada.ID),
-                                JsonConvert.SerializeObject(new MensajeConsumoTarea
-                                {
-                                    IdPuesto = Store.Bancada.ID,
-                                    IdTarea = tareaConsumir.IdTarea,
-                                    ParesConsumidos = (int)maquina.MaquinasConfiguracionesPins.ProductoPorPulso,
-                                    PiezaIntroducida = true,
-                                }), 2);
+                                }
 
                             }
-                            else
-                            {
-                                ClienteMQTT.Publicar(string.Format("/puesto/{0}/pulsoInterno", Store.Bancada.IdHermano),
-                                "", 2);
-                            }
                         }
+                        else
+                        {
+                            this.Dispatcher.BeginInvoke((Action)(() =>
+                            {
+                                new Aviso("No hay tarea").Show();
+                            }));
+
+                        }
+
                     }
                     else
                     {
                         this.Dispatcher.BeginInvoke((Action)(() =>
                         {
-                            new Aviso("No hay tarea").Show();
-                        }));
+                            new Aviso("No hay operario").Show();
 
+                        }));
                     }
 
-                }
-                else
-                {
-                    this.Dispatcher.BeginInvoke((Action)(() =>
-                    {
-                        new Aviso("No hay operario").Show();
-
-                    }));
                 }
 
             }
