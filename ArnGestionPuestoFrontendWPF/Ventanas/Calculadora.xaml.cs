@@ -22,8 +22,8 @@ namespace ArnGestionPuestoFrontendWPF.Ventanas
     public partial class Calculadora : Window,INotifyPropertyChanged
     {
         public string Texto { get; set; } = "";
-        private TextBox textbox;
-        public Calculadora(TextBox tb)
+        private TextBlock textbox;
+        public Calculadora(TextBlock tb)
         {
             InitializeComponent();
             this.DataContext = this;
@@ -54,13 +54,15 @@ namespace ArnGestionPuestoFrontendWPF.Ventanas
                 }
                 catch(Exception ex)
                 {
-                    this.Texto = "<SYNTAX ERROR>";
+                    this.Texto = "0";
                 }
                 
             }
             Notifica("Texto");
 
             textbox.Text = this.Texto;
+
+
             this.Close();
 
         }

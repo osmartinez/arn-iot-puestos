@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ArnGestionPuestoFrontendWPF.Ventanas"
         mc:Ignorable="d"
-        Title="Calculadora" Height="550" Width="400" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+        Title="Calculadora" Height="609.375" Width="487.5" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Grid>
         <Grid Grid.Column="0">
             <Grid.ColumnDefinitions>

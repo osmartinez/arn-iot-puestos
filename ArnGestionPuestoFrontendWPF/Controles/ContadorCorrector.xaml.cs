@@ -57,6 +57,7 @@ namespace ArnGestionPuestoFrontendWPF.Controles
         private void BusEventos_OnTareasCargadas(object sender, EventosTareas.NuevasTareasCargadasEventArgs e)
         {
             Notifica("CorreccionEditar");
+            Notifica("Correccion");
         }
 
         private void TimerCorreccion_Tick(object sender, EventArgs e)

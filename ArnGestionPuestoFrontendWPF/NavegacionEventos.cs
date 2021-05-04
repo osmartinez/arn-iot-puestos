@@ -14,6 +14,7 @@ namespace ArnGestionPuestoFrontendWPF
         private static OperariosPagina paginaOperarios;
         private static MenuPrincipal menuPrincipal;
         private static TareaPagina paginaTarea;
+        private static ConfiguracionOperarioPagina configOperariosPagina;
 
         public static TareaPagina PaginaTarea
         {
@@ -25,6 +26,19 @@ namespace ArnGestionPuestoFrontendWPF
                 }
 
                 return paginaTarea;
+            }
+        }
+
+        public static ConfiguracionOperarioPagina ConfiguracionOperarioPagina
+        {
+            get
+            {
+                if (configOperariosPagina == null)
+                {
+                    configOperariosPagina = new ConfiguracionOperarioPagina();
+                }
+
+                return configOperariosPagina;
             }
         }
 

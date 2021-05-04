@@ -4,143 +4,144 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="9369a72abc22480a9010e2e53bac5bb0" Name="Diagram1">
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.Agentes" Width="1.5" PointX="0.75" PointY="12.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.AlmacenesMERCADONA" Width="1.5" PointX="5.75" PointY="9.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.AlmacenSobras" Width="1.5" PointX="3.75" PointY="51" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.AlmacenSobrasUbicaciones" Width="1.5" PointX="6" PointY="59.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.Aplicacion" Width="1.5" PointX="10.75" PointY="9.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.Arboles" Width="1.5" PointX="2.75" PointY="12.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.Arn_Imputacion" Width="1.5" PointX="10.75" PointY="12.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.Articulos" Width="1.5" PointX="12" PointY="95.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.ArticulosDetalleCliente" Width="1.5" PointX="9.75" PointY="97.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.ArticulosFamilias" Width="1.5" PointX="7.75" PointY="13.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.ArticulosMateriales" Width="1.5" PointX="14.25" PointY="106.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.ArticulosMaterialesTallas" Width="1.5" PointX="16.5" PointY="107.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.ArticulosOperaciones" Width="1.5" PointX="13.5" PointY="74.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.ArticulosOperacionesTallas" Width="1.5" PointX="15.75" PointY="85.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.ArticulosSubFamilias" Width="1.5" PointX="12.75" PointY="12.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.ArticulosTallas" Width="1.5" PointX="11.25" PointY="47.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.ArticulosTallasDetalleCliente" Width="1.5" PointX="9" PointY="47.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.AUDITAR_IMPRESION_ETIQUETAS_MANUALES" Width="1.5" PointX="4.75" PointY="15.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.AUDITAR_MOVIMIENTOS_PREPAQUETES" Width="1.5" PointX="12.75" PointY="15.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.AUDITAR_MOVIMIENTOS_STOCK" Width="1.5" PointX="0.75" PointY="16.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.AUDITAR_UBICACIONES" Width="1.5" PointX="6.75" PointY="16.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.Bancadas" Width="1.5" PointX="3" PointY="68.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.BancadasConfiguracionesIncidencias" Width="1.5" PointX="5.25" PointY="86.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.BancadasConfiguracionesPins" Width="1.5" PointX="14.75" PointY="12.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.BancadasRegistrosOperarios" Width="1.5" PointX="5.25" PointY="90.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.Barquillas" Width="1.5" PointX="17.25" PointY="89.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.BarquillasConsumos" Width="1.5" PointX="21.75" PointY="74" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.BarquillasContenidos" Width="1.5" PointX="19.5" PointY="88.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.Bultos" Width="1.5" PointX="10.75" PointY="4.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.BultosLineas" Width="1.5" PointX="13" PointY="2.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.CalendarioFestivos" Width="1.5" PointX="14.75" PointY="16.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.CalendarioPlantillas" Width="1.5" PointX="3" PointY="74.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.CalendarioPlantillasParadas" Width="1.5" PointX="5.25" PointY="97.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.Campos_ERP" Width="1.5" PointX="12" PointY="102.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.Ciclos" Width="1.5" PointX="5.25" PointY="94" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.ConfiguracionesGenerales" Width="1.5" PointX="15.75" PointY="2.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.Contenedores" Width="1.5" PointX="3" PointY="59.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.CriteriosLiquidacionComercial" Width="1.5" PointX="15.75" PointY="5.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.EntradasAlmacen" Width="1.5" PointX="16.75" PointY="10.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.EspaciosVagon" Width="1.5" PointX="5.25" PointY="63.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.EtiquetasTipo1" Width="1.5" PointX="8.75" PointY="18.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.EtiquetasTipo2" Width="1.5" PointX="10.75" PointY="18.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.EtiquetasTipo3" Width="1.5" PointX="16.75" PointY="13.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.EtiquetasTipo4" Width="1.5" PointX="16.75" PointY="16.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.EtiquetasTipo5" Width="1.5" PointX="17.75" PointY="2.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.HistoricoDepositos" Width="1.5" PointX="2.75" PointY="19.25" IsExpanded="true" />
+      <Diagram DiagramId="07e8e643439542dda9577655e67039f8" Name="Diagram1">
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.Agentes" Width="1.5" PointX="9.75" PointY="12.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.AlmacenesMERCADONA" Width="1.5" PointX="7.75" PointY="8.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.AlmacenSobras" Width="1.5" PointX="3.75" PointY="50.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.AlmacenSobrasUbicaciones" Width="1.5" PointX="6" PointY="59" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.Aplicacion" Width="1.5" PointX="9.75" PointY="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.Arboles" Width="1.5" PointX="11.75" PointY="12.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.Arn_Imputacion" Width="1.5" PointX="12.75" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.Articulos" Width="1.5" PointX="12" PointY="94" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.ArticulosDetalleCliente" Width="1.5" PointX="9.75" PointY="95.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.ArticulosFamilias" Width="1.5" PointX="5.75" PointY="15.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.ArticulosMateriales" Width="1.5" PointX="14.25" PointY="105" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.ArticulosMaterialesTallas" Width="1.5" PointX="16.5" PointY="105.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.ArticulosOperaciones" Width="1.5" PointX="13.5" PointY="74.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.ArticulosOperacionesTallas" Width="1.5" PointX="15.75" PointY="83.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.ArticulosSubFamilias" Width="1.5" PointX="7.75" PointY="15.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.ArticulosTallas" Width="1.5" PointX="11.25" PointY="46.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.ArticulosTallasDetalleCliente" Width="1.5" PointX="9" PointY="46.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.AUDITAR_IMPRESION_ETIQUETAS_MANUALES" Width="1.5" PointX="13.75" PointY="11.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.AUDITAR_MOVIMIENTOS_PREPAQUETES" Width="1.5" PointX="13.75" PointY="15.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.AUDITAR_MOVIMIENTOS_STOCK" Width="1.5" PointX="14.75" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.AUDITAR_UBICACIONES" Width="1.5" PointX="14.75" PointY="6.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.Bancadas" Width="1.5" PointX="3" PointY="67.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.BancadasConfiguracionesIncidencias" Width="1.5" PointX="5.25" PointY="86" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.BancadasConfiguracionesPins" Width="1.5" PointX="5.25" PointY="89.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.BancadasRegistrosOperarios" Width="1.5" PointX="5.25" PointY="93.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.Barquillas" Width="1.5" PointX="17.25" PointY="88.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.BarquillasConsumos" Width="1.5" PointX="21.75" PointY="73" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.BarquillasContenidos" Width="1.5" PointX="19.5" PointY="87.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.Bultos" Width="1.5" PointX="0.75" PointY="14.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.BultosLineas" Width="1.5" PointX="3" PointY="12.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.CalendarioFestivos" Width="1.5" PointX="9.75" PointY="16.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.CalendarioPlantillas" Width="1.5" PointX="3" PointY="82.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.CalendarioPlantillasParadas" Width="1.5" PointX="5.25" PointY="100.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.Campos_ERP" Width="1.5" PointX="12" PointY="100.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.Ciclos" Width="1.5" PointX="5.25" PointY="96.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.ConfiguracionesGenerales" Width="1.5" PointX="9.75" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.Contenedores" Width="1.5" PointX="3" PointY="59" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.CriteriosLiquidacionComercial" Width="1.5" PointX="15.75" PointY="10.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.EntradasAlmacen" Width="1.5" PointX="15.75" PointY="15.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.EspaciosVagon" Width="1.5" PointX="5.25" PointY="62.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.EtiquetasTipo1" Width="1.5" PointX="16.75" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.EtiquetasTipo2" Width="1.5" PointX="16.75" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.EtiquetasTipo3" Width="1.5" PointX="5.75" PointY="18.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.EtiquetasTipo4" Width="1.5" PointX="11.75" PointY="18.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.EtiquetasTipo5" Width="1.5" PointX="13.75" PointY="18.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.EtiquetasTipo6" Width="1.5" PointX="15.75" PointY="18.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.HistoricoDepositos" Width="1.5" PointX="0.75" PointY="19.25" IsExpanded="true" />
         <EntityTypeShape EntityType="SistemaGlobalPREModel.Impresoras" Width="1.5" PointX="3" PointY="7.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.Impresos" Width="1.5" PointX="13" PointY="9.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.Incidencias" Width="1.5" PointX="3" PointY="83.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.IncidenciasBancadasRegistros" Width="1.5" PointX="11.25" PointY="78.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.IncidenciasEstados" Width="1.5" PointX="9" PointY="102.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.IncidenciasRegistradas" Width="1.5" PointX="17.75" PointY="5.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.IncidenciasTipos" Width="1.5" PointX="9" PointY="104.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.InfoTicketsManuales" Width="1.5" PointX="12.75" PointY="19.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.InventarioLecturas" Width="1.5" PointX="8.25" PointY="60.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.Inventarios" Width="1.5" PointX="6" PointY="45.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.Liquidaciones" Width="1.5" PointX="14.75" PointY="19.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.Maquinas" Width="1.5" PointX="5.25" PointY="66.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.MaquinasColasTrabajo" Width="1.5" PointX="10.5" PointY="69.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.MaquinasConfiguracionesPins" Width="1.5" PointX="7.5" PointY="70" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.MaquinasHistoricoCiclos" Width="1.5" PointX="7.5" PointY="83" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.MaquinasParadas" Width="1.5" PointX="10.5" PointY="74.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.MaquinasTipos" Width="1.5" PointX="3" PointY="86.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.MaquinasUtillajesCambios" Width="1.5" PointX="16.75" PointY="19.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.MercanciasDepositos" Width="1.5" PointX="9" PointY="42.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.MercanciasRecepcion" Width="1.5" PointX="9" PointY="38" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.MercanciasSalidas" Width="1.5" PointX="9" PointY="85.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.Operaciones" Width="1.5" PointX="14.25" PointY="47.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.OperacionesControles" Width="1.5" PointX="21.5" PointY="65.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.Operarios" Width="1.5" PointX="3" PointY="32.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.OperariosSinSalidas" Width="1.5" PointX="4.75" PointY="20.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacion" Width="1.5" PointX="14.25" PointY="98.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionCantidad" Width="1.5" PointX="19.5" PointY="59" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionEstados" Width="1.5" PointX="11.25" PointY="51.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionMateriales" Width="1.5" PointX="16.5" PointY="98.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionMaterialesTallas" Width="1.5" PointX="18.75" PointY="99.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionObservaciones" Width="1.5" PointX="16.5" PointY="104.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionOperaciones" Width="1.5" PointX="16.5" PointY="70.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionOperacionesTallas" Width="1.5" PointX="18.75" PointY="76.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionOperacionesTallasCantidad" Width="1.5" PointX="13.5" PointY="68" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionOperacionesTallasCantidadEjecucion" Width="1.5" PointX="15.75" PointY="65.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionOperacionesTallasCantidadPlanificacion" Width="1.5" PointX="15.75" PointY="80.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionPaquetes" Width="1.5" PointX="5.25" PointY="54.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionPaquetesBorrar" Width="1.5" PointX="13.5" PointY="60.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionPaquetesConsumos" Width="1.5" PointX="18.75" PointY="9.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionPaquetesTallas" Width="1.5" PointX="7.5" PointY="51.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionPaquetesUtilizados" Width="1.5" PointX="10.5" PointY="54.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionProductos" Width="1.5" PointX="18.75" PointY="69.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionTipos" Width="1.5" PointX="12" PointY="107" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.PackingList" Width="1.5" PointX="18.75" PointY="12.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.PaletBultos" Width="1.5" PointX="13" PointY="5.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.PaletsMERCADONA" Width="1.5" PointX="8" PointY="8.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.Paquetes" Width="1.5" PointX="11.25" PointY="57.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.PaquetesConsumosInternos" Width="1.5" PointX="16.5" PointY="60" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.PedidoBloqueado" Width="1.5" PointX="18.75" PointY="15.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.PedidoNoFabricar" Width="1.5" PointX="18.75" PointY="18.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.PedidoOrdenesFabricacion" Width="1.5" PointX="19.75" PointY="2.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.PedidoReferencia" Width="1.5" PointX="3" PointY="45" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.Impresos" Width="1.5" PointX="12" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.Incidencias" Width="1.5" PointX="3" PointY="85" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.IncidenciasBancadasRegistros" Width="1.5" PointX="12" PointY="39.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.IncidenciasEstados" Width="1.5" PointX="5.75" PointY="9.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.IncidenciasRegistradas" Width="1.5" PointX="2.75" PointY="19.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.IncidenciasTipos" Width="1.5" PointX="9.75" PointY="30.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.InfoTicketsManuales" Width="1.5" PointX="17.75" PointY="8.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.InventarioLecturas" Width="1.5" PointX="8.25" PointY="59.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.Inventarios" Width="1.5" PointX="6" PointY="45" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.Liquidaciones" Width="1.5" PointX="7.75" PointY="19.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.Maquinas" Width="1.5" PointX="5.25" PointY="65.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.MaquinasColasTrabajo" Width="1.5" PointX="10.5" PointY="68.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.MaquinasConfiguracionesPins" Width="1.5" PointX="7.5" PointY="69.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.MaquinasHistoricoCiclos" Width="1.5" PointX="7.5" PointY="82.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.MaquinasParadas" Width="1.5" PointX="10.5" PointY="73.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.MaquinasTipos" Width="1.5" PointX="3" PointY="87.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.MaquinasUtillajesCambios" Width="1.5" PointX="17.75" PointY="11.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.MercanciasDepositos" Width="1.5" PointX="9" PointY="42.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.MercanciasRecepcion" Width="1.5" PointX="9" PointY="38.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.MercanciasSalidas" Width="1.5" PointX="9" PointY="34.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.Operaciones" Width="1.5" PointX="14.25" PointY="47" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.OperacionesControles" Width="1.5" PointX="21.5" PointY="65.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.Operarios" Width="1.5" PointX="3" PointY="31.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.OperariosSinSalidas" Width="1.5" PointX="17.75" PointY="14.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacion" Width="1.5" PointX="14.25" PointY="96.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionCantidad" Width="1.5" PointX="19.5" PointY="58.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionEstados" Width="1.5" PointX="11.25" PointY="50.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionMateriales" Width="1.5" PointX="16.5" PointY="96.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionMaterialesTallas" Width="1.5" PointX="18.75" PointY="97.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionObservaciones" Width="1.5" PointX="16.5" PointY="102.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionOperaciones" Width="1.5" PointX="16.5" PointY="69.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionOperacionesTallas" Width="1.5" PointX="18.75" PointY="75.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionOperacionesTallasCantidad" Width="1.5" PointX="13.5" PointY="67.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionOperacionesTallasCantidadEjecucion" Width="1.5" PointX="15.75" PointY="64.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionOperacionesTallasCantidadPlanificacion" Width="1.5" PointX="15.75" PointY="79.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionPaquetes" Width="1.5" PointX="5.25" PointY="53.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionPaquetesBorrar" Width="1.5" PointX="13.5" PointY="59.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionPaquetesConsumos" Width="1.5" PointX="17.75" PointY="17.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionPaquetesTallas" Width="1.5" PointX="7.5" PointY="51" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionPaquetesUtilizados" Width="1.5" PointX="10.5" PointY="53.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionProductos" Width="1.5" PointX="18.75" PointY="68.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionTipos" Width="1.5" PointX="12" PointY="105" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.PackingList" Width="1.5" PointX="18.75" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.PaletBultos" Width="1.5" PointX="3" PointY="15.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.PaletsMERCADONA" Width="1.5" PointX="10" PointY="7.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.Paquetes" Width="1.5" PointX="11.25" PointY="57.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.PaquetesConsumosInternos" Width="1.5" PointX="16.5" PointY="59.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.PedidoBloqueado" Width="1.5" PointX="18.75" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.PedidoNoFabricar" Width="1.5" PointX="17.75" PointY="20.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.PedidoOrdenesFabricacion" Width="1.5" PointX="4.75" PointY="21.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.PedidoReferencia" Width="1.5" PointX="3" PointY="44.375" IsExpanded="true" />
         <EntityTypeShape EntityType="SistemaGlobalPREModel.PowerBIGrupo" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="SistemaGlobalPREModel.PowerBIPagina" Width="1.5" PointX="3" PointY="3.125" IsExpanded="true" />
         <EntityTypeShape EntityType="SistemaGlobalPREModel.PowerBISector" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.PreciosLaboralesSubcontratas" Width="1.5" PointX="5.25" PointY="78.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.PrePaquetes" Width="1.5" PointX="18.75" PointY="62.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.PrePaquetesAgrupaciones" Width="1.5" PointX="3" PointY="55.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.PrepaquetesConsumidos" Width="1.5" PointX="24" PointY="69.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.ProductosMERCADONA" Width="1.5" PointX="5.75" PointY="12.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.Referencias" Width="1.5" PointX="0.75" PointY="65.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.RELACIONPEDIDOS" Width="1.5" PointX="19.75" PointY="5.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.Secciones" Width="1.5" PointX="3" PointY="89" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.StockArticulos" Width="1.5" PointX="8.25" PointY="54.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.StockArticulosTallas" Width="1.5" PointX="13.5" PointY="55.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.StockArticulosTipos" Width="1.5" PointX="6" PointY="48.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.sysdiagrams" Width="1.5" PointX="6.75" PointY="21.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.Talleres" Width="1.5" PointX="3" PointY="77.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.TalleresPaquetesEnvios" Width="1.5" PointX="8.25" PointY="78.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.TalleresPaquetesRecepciones" Width="1.5" PointX="5.25" PointY="82.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.TicketCalculos" Width="1.5" PointX="14.25" PointY="94.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.Tickets" Width="1.5" PointX="19.5" PointY="53.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.TicketsAgrupacion" Width="1.5" PointX="17.25" PointY="53.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.TicketsCantidad" Width="1.5" PointX="21.75" PointY="69.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.TicketTipos" Width="1.5" PointX="17.25" PointY="56.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.Trenes" Width="1.5" PointX="1.5" PointY="47.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.TrenesVagones" Width="1.5" PointX="1.5" PointY="51.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.TrenesVagonesEspacios" Width="1.5" PointX="0.75" PointY="55.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.Ubicaciones" Width="1.5" PointX="0.75" PointY="59.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.UbicacionesARN" Width="1.5" PointX="8.75" PointY="21.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.UbicacionReferencia" Width="1.5" PointX="3" PointY="64.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.UnidadesMedida" Width="1.5" PointX="18.75" PointY="21.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.PreciosLaboralesSubcontratas" Width="1.5" PointX="5.25" PointY="77.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.PrePaquetes" Width="1.5" PointX="18.75" PointY="61.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.PrePaquetesAgrupaciones" Width="1.5" PointX="3" PointY="54.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.PrepaquetesConsumidos" Width="1.5" PointX="24" PointY="68.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.ProductosMERCADONA" Width="1.5" PointX="7.75" PointY="12.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.Referencias" Width="1.5" PointX="0.75" PointY="64.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.RELACIONPEDIDOS" Width="1.5" PointX="19.75" PointY="8.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.Secciones" Width="1.5" PointX="3" PointY="90.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.StockArticulos" Width="1.5" PointX="8.25" PointY="53.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.StockArticulosTallas" Width="1.5" PointX="13.5" PointY="54.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.StockArticulosTipos" Width="1.5" PointX="6" PointY="48" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.sysdiagrams" Width="1.5" PointX="9.75" PointY="21.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.Talleres" Width="1.5" PointX="3" PointY="76.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.TalleresPaquetesEnvios" Width="1.5" PointX="8.25" PointY="77.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.TalleresPaquetesRecepciones" Width="1.5" PointX="5.25" PointY="81.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.TicketCalculos" Width="1.5" PointX="14.25" PointY="87.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.Tickets" Width="1.5" PointX="19.5" PointY="53" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.TicketsAgrupacion" Width="1.5" PointX="17.25" PointY="52.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.TicketsCantidad" Width="1.5" PointX="21.75" PointY="68.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.TicketTipos" Width="1.5" PointX="17.25" PointY="55.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.Trenes" Width="1.5" PointX="1.5" PointY="47.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.TrenesVagones" Width="1.5" PointX="1.5" PointY="51.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.TrenesVagonesEspacios" Width="1.5" PointX="0.75" PointY="55.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.Ubicaciones" Width="1.5" PointX="0.75" PointY="58.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.UbicacionesARN" Width="1.5" PointX="19.75" PointY="12.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.UbicacionReferencia" Width="1.5" PointX="3" PointY="64.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.UnidadesMedida" Width="1.5" PointX="11.75" PointY="21.25" IsExpanded="true" />
         <EntityTypeShape EntityType="SistemaGlobalPREModel.UsuariosAD" Width="1.5" PointX="5.25" PointY="2.5" IsExpanded="true" />
         <EntityTypeShape EntityType="SistemaGlobalPREModel.UsuariosADAplicaciones" Width="1.5" PointX="7.5" PointY="3.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.Utillajes" Width="1.5" PointX="8.25" PointY="73.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.UtillajesTallas" Width="1.5" PointX="10.5" PointY="90.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.UtillajesTallasColeccion" Width="1.5" PointX="8.25" PointY="63.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.UtillajesTallasRendimiento" Width="1.5" PointX="12.75" PointY="91.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.MaquinasRegistrosDatos" Width="1.5" PointX="0.75" PointY="22.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.MaquinasTiposIncidencias" Width="1.5" PointX="20.75" PointY="9.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.Utillajes" Width="1.5" PointX="8.25" PointY="72.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.UtillajesTallas" Width="1.5" PointX="10.5" PointY="89.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.UtillajesTallasColeccion" Width="1.5" PointX="8.25" PointY="62.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.UtillajesTallasRendimiento" Width="1.5" PointX="12.75" PointY="90.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.MaquinasRegistrosDatos" Width="1.5" PointX="19.75" PointY="15.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.MaquinasTiposIncidencias" Width="1.5" PointX="13.75" PointY="21.25" IsExpanded="true" />
         <AssociationConnector Association="SistemaGlobalPREModel.FK_PaletsMercadona_AlmacenesMERCADONA" ManuallyRouted="false" />
         <AssociationConnector Association="SistemaGlobalPREModel.FK_AlmacenSobrasUbicaciones_AlmacenSobras" ManuallyRouted="false" />
         <AssociationConnector Association="SistemaGlobalPREModel.FK_AlmacenSobrasUbicaciones_Ubicaciones" ManuallyRouted="false" />
@@ -159,6 +160,8 @@
         <AssociationConnector Association="SistemaGlobalPREModel.FK_TallasOperacionUtillaje_TallasUtillaje" ManuallyRouted="false" />
         <AssociationConnector Association="SistemaGlobalPREModel.FK_ArticulosTallas_ArticulosTallasDetalleCliente" ManuallyRouted="false" />
         <AssociationConnector Association="SistemaGlobalPREModel.FK_StockArticulosTallas_ArticulosTallas" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaGlobalPREModel.FK_Bancadas_Bancadas" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaGlobalPREModel.FK_BancadasConfiguracionesPins_Bancadas" ManuallyRouted="false" />
         <AssociationConnector Association="SistemaGlobalPREModel.FK_BancadasRegistrosOperarios_Bancadas" ManuallyRouted="false" />
         <AssociationConnector Association="SistemaGlobalPREModel.FK_Ciclos_Bancadas" ManuallyRouted="false" />
         <AssociationConnector Association="SistemaGlobalPREModel.FK_IncidenciasBancadasRegistros_Bancadas" ManuallyRouted="false" />
@@ -282,8 +285,8 @@
         <AssociationConnector Association="SistemaGlobalPREModel.FK_UtillajesTallasRendimiento_UtillajesTallasRendimiento" ManuallyRouted="false" />
         <AssociationConnector Association="SistemaGlobalPREModel.TalleresUtillaje" ManuallyRouted="false" />
         <AssociationConnector Association="SistemaGlobalPREModel.UsuariosADPowerBI" ManuallyRouted="false" />
-        <AssociationConnector Association="SistemaGlobalPREModel.FK_BancadasConfiguracionesPins_Bancadas" />
-        <AssociationConnector Association="SistemaGlobalPREModel.FK_Bancadas_Bancadas" />
+        <AssociationConnector Association="SistemaGlobalPREModel.FK_Barquillas_Ubicaciones" />
+        <AssociationConnector Association="SistemaGlobalPREModel.FK_Ubicaciones_Secciones" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

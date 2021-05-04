@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:ArnGestionPuestoFrontendWPF.Controles"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Border CornerRadius="10" Background="White" Margin="1">
+    <Border Name="border" CornerRadius="10" Background="White" Margin="1">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition/>
@@ -18,7 +18,7 @@
                 <TextBlock Grid.Row="1" Text="{Binding Monton, Mode=OneWay}" FontSize="60" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
                 <TextBlock Grid.Row="1" Text="/" FontSize="60" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
                 <Button Name="BtEditarContador" Click="BtEditarContador_Click" Grid.Row="1" Style="{StaticResource BotonMaxMonton}" FontSize="60" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <TextBox x:Name="TbContadorPaquetes" MouseUp="TbContadorPaquetes_MouseUp" Text="{Binding Contador, Mode=OneWay}" IsReadOnly="True" Background="Transparent" BorderThickness="0"></TextBox>
+                    <TextBlock x:Name="TbContadorPaquetes" Text="{Binding Contador, Mode=OneWay}" ></TextBlock>
                 </Button>
             </StackPanel>
             <Grid Grid.Row="2">

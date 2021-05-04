@@ -25,10 +25,13 @@ namespace Entidades.EntidadesBD
             this.Talleres = new HashSet<Talleres>();
             this.UbicacionReferencia = new HashSet<UbicacionReferencia>();
             this.UtillajesTallasColeccion = new HashSet<UtillajesTallasColeccion>();
+            this.Barquillas = new HashSet<Barquillas>();
         }
     
         public string CodUbicacion { get; set; }
         public string Descripcion { get; set; }
+        public string CodSeccion { get; set; }
+        public bool EsMaquina { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AlmacenSobrasUbicaciones> AlmacenSobrasUbicaciones { get; set; }
@@ -46,5 +49,8 @@ namespace Entidades.EntidadesBD
         public virtual ICollection<UbicacionReferencia> UbicacionReferencia { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UtillajesTallasColeccion> UtillajesTallasColeccion { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Barquillas> Barquillas { get; set; }
+        public virtual Secciones Secciones { get; set; }
     }
 }

@@ -12,16 +12,10 @@ namespace Entidades.EntidadesBD
     using System;
     using System.Collections.Generic;
     
-    public partial class AUDITAR_MOVIMIENTOS_STOCK
+    public partial class EtiquetasTipo6
     {
-        public int Id { get; set; }
-        public int IdStockArticulo { get; set; }
-        public string CodigoArticulo { get; set; }
-        public int IdStockArticuloTalla { get; set; }
-        public string Talla { get; set; }
-        public double CantidadAnterior { get; set; }
-        public double Cantidad { get; set; }
-        public System.DateTime FechaMovimiento { get; set; }
-        public Nullable<int> IdTipoStock { get; set; }
+        public int ID { get; set; }
+        public string UsuarioSolicitud { get; set; }
+        public Nullable<System.DateTime> FechaSolicitud { get; set; }
     }
 }

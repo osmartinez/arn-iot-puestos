@@ -163,6 +163,11 @@
     <Compile Include="EntidadesBD\CriteriosLiquidacionComercial.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="EntidadesBD\EntidadesBDExtensiones\MaquinasColasTrabajoExtension.cs" />
+    <Compile Include="EntidadesBD\EntidadesBDExtensiones\MaquinasExtension.cs" />
+    <Compile Include="EntidadesBD\EntidadesBDExtensiones\MaquinasRegistrosDatosExtension.cs" />
+    <Compile Include="EntidadesBD\EntidadesBDExtensiones\Notificable.cs" />
+    <Compile Include="EntidadesBD\EntidadesBDExtensiones\OperacionesControles.cs" />
     <Compile Include="EntidadesBD\EntidadesBDExtensiones\SP_BarquillaBuscarInformacionEnSeccion_ResultExtension.cs" />
     <Compile Include="EntidadesBD\EntradasAlmacen.cs">
       <DependentUpon>Model.tt</DependentUpon>
@@ -183,6 +188,9 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="EntidadesBD\EtiquetasTipo5.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntidadesBD\EtiquetasTipo6.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="EntidadesBD\HistoricoDepositos.cs">
@@ -994,6 +1002,7 @@
     <Compile Include="EntidadesConfiguracion\Configuracion.cs" />
     <Compile Include="EntidadesDTO\MensajeConsumoOrden.cs" />
     <Compile Include="EntidadesDTO\MensajeConsumoTarea.cs" />
+    <Compile Include="EntidadesDTO\MensajePulsoNormalMQTT.cs" />
     <Compile Include="EntidadesDTO\PulsoMaquina.cs" />
     <Compile Include="EntidadesDTO\Tarea.cs" />
     <Compile Include="EntidadesDTO\Topic.cs" />

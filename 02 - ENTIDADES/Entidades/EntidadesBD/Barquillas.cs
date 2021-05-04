@@ -24,8 +24,10 @@ namespace Entidades.EntidadesBD
         public string CodigoEtiqueta { get; set; }
         public System.DateTime FechaCreacion { get; set; }
         public Nullable<int> NumeroAgrupacion { get; set; }
+        public string CodUbicacion { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BarquillasContenidos> BarquillasContenidos { get; set; }
+        public virtual Ubicaciones Ubicaciones { get; set; }
     }
 }

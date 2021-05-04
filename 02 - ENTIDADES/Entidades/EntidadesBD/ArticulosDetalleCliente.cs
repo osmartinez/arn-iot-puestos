@@ -32,6 +32,8 @@ namespace Entidades.EntidadesBD
         public string SuDescripcionMaspica { get; set; }
         public string SuColorMaspica { get; set; }
         public string SuDescripcionElten { get; set; }
+        public string SuCodigoEcco { get; set; }
+        public string SuDescripcionEcco { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Articulos> Articulos { get; set; }

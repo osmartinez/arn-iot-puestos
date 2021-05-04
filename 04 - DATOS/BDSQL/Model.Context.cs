@@ -72,6 +72,7 @@ namespace Entidades.EntidadesBD
         public virtual DbSet<EtiquetasTipo3> EtiquetasTipo3 { get; set; }
         public virtual DbSet<EtiquetasTipo4> EtiquetasTipo4 { get; set; }
         public virtual DbSet<EtiquetasTipo5> EtiquetasTipo5 { get; set; }
+        public virtual DbSet<EtiquetasTipo6> EtiquetasTipo6 { get; set; }
         public virtual DbSet<HistoricoDepositos> HistoricoDepositos { get; set; }
         public virtual DbSet<Impresoras> Impresoras { get; set; }
         public virtual DbSet<Impresos> Impresos { get; set; }

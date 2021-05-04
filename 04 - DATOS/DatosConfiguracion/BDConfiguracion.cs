@@ -27,7 +27,6 @@ namespace DatosConfiguracion
             {
                 config = new Configuracion { IdBancada = 29 };
                 Guardar(config);
-
             }
             else
             {

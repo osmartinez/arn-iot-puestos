@@ -17,17 +17,21 @@ namespace Entidades.EntidadesBD
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Bancadas()
         {
+            this.Bancadas1 = new HashSet<Bancadas>();
             this.BancadasRegistrosOperarios = new HashSet<BancadasRegistrosOperarios>();
             this.Ciclos = new HashSet<Ciclos>();
             this.IncidenciasBancadasRegistros = new HashSet<IncidenciasBancadasRegistros>();
             this.Maquinas = new HashSet<Maquinas>();
             this.OrdenesFabricacionOperacionesTallasCantidad = new HashSet<OrdenesFabricacionOperacionesTallasCantidad>();
-            this.Bancadas1 = new HashSet<Bancadas>();
         }
     
         public int ID { get; set; }
         public string Nombre { get; set; }
+        public string Descripcion { get; set; }
         public Nullable<bool> Activa { get; set; }
+        public Nullable<int> IdHermano { get; set; }
+        public bool EsMaster { get; set; }
+        public bool EsManual { get; set; }
         public Nullable<decimal> TiempoDesplazamiento { get; set; }
         public Nullable<decimal> TiempoObjetivo { get; set; }
         public Nullable<decimal> PorcentajeDesviacion { get; set; }
@@ -38,12 +42,12 @@ namespace Entidades.EntidadesBD
         public Nullable<double> Ritmo { get; set; }
         public Nullable<double> CicloSegundos { get; set; }
         public string Observaciones { get; set; }
-        public string Descripcion { get; set; }
-        public bool EsManual { get; set; }
         public string CodigoEtiqueta { get; set; }
-        public Nullable<int> IdHermano { get; set; }
-        public bool EsMaster { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Bancadas> Bancadas1 { get; set; }
+        public virtual Bancadas Bancadas2 { get; set; }
+        public virtual BancadasConfiguracionesPins BancadasConfiguracionesPins { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BancadasRegistrosOperarios> BancadasRegistrosOperarios { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -55,9 +59,5 @@ namespace Entidades.EntidadesBD
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrdenesFabricacionOperacionesTallasCantidad> OrdenesFabricacionOperacionesTallasCantidad { get; set; }
         public virtual BancadasConfiguracionesIncidencias BancadasConfiguracionesIncidencias { get; set; }
-        public virtual BancadasConfiguracionesPins BancadasConfiguracionesPins { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Bancadas> Bancadas1 { get; set; }
-        public virtual Bancadas Bancadas2 { get; set; }
     }
 }

@@ -15,7 +15,11 @@ namespace Entidades.EntidadesBD
     {
         public int ID { get; set; }
         public string Nombre { get; set; }
+        public string Descripcion { get; set; }
         public Nullable<bool> Activa { get; set; }
+        public Nullable<int> IdHermano { get; set; }
+        public bool EsMaster { get; set; }
+        public bool EsManual { get; set; }
         public Nullable<decimal> TiempoDesplazamiento { get; set; }
         public Nullable<decimal> TiempoObjetivo { get; set; }
         public Nullable<decimal> PorcentajeDesviacion { get; set; }
@@ -26,8 +30,6 @@ namespace Entidades.EntidadesBD
         public Nullable<double> Ritmo { get; set; }
         public Nullable<double> CicloSegundos { get; set; }
         public string Observaciones { get; set; }
-        public string Descripcion { get; set; }
-        public bool EsManual { get; set; }
         public string CodigoEtiqueta { get; set; }
     }
 }

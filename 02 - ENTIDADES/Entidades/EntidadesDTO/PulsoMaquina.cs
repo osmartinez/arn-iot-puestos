@@ -9,6 +9,8 @@ namespace Entidades.EntidadesDTO
 {
     public class PulsoMaquina
     {
+        public string CodigoEtiqueta { get; set; }
+        public OperacionesControles Control { get; set; }
         public int IdPuesto { get; set; }
         public int Pares { get; set; }
         public DateTime Fecha { get; set; }

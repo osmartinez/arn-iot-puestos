@@ -111,6 +111,7 @@
           <Property Name="MinimoSaldos" Type="float" />
           <Property Name="MaximoSaldos" Type="float" />
           <Property Name="Ciclo" Type="float" Nullable="false" />
+          <Property Name="ObservacionEtiqueta1" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="ArticulosDetalleCliente">
           <Key>
@@ -128,6 +129,8 @@
           <Property Name="SuDescripcionMaspica" Type="nvarchar" MaxLength="50" />
           <Property Name="SuColorMaspica" Type="nvarchar" MaxLength="50" />
           <Property Name="SuDescripcionElten" Type="nvarchar" MaxLength="100" />
+          <Property Name="SuCodigoEcco" Type="nvarchar" MaxLength="25" />
+          <Property Name="SuDescripcionEcco" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="ArticulosFamilias">
           <Key>
@@ -276,6 +279,7 @@
           <Property Name="CantidadAnterior" Type="float" Nullable="false" />
           <Property Name="Cantidad" Type="float" Nullable="false" />
           <Property Name="FechaMovimiento" Type="datetime" Nullable="false" />
+          <Property Name="IdTipoStock" Type="int" />
         </EntityType>
         <EntityType Name="AUDITAR_UBICACIONES">
           <Key>
@@ -361,6 +365,7 @@
           <Property Name="CodigoEtiqueta" Type="nvarchar" MaxLength="13" Nullable="false" />
           <Property Name="FechaCreacion" Type="datetime" Nullable="false" />
           <Property Name="NumeroAgrupacion" Type="int" />
+          <Property Name="CodUbicacion" Type="nvarchar" MaxLength="13" />
         </EntityType>
         <EntityType Name="BarquillasConsumos">
           <Key>
@@ -547,6 +552,14 @@
           <Property Name="UsuarioSolicitud" Type="nvarchar" MaxLength="150" />
           <Property Name="FechaSolicitud" Type="datetime" />
         </EntityType>
+        <EntityType Name="EtiquetasTipo6">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UsuarioSolicitud" Type="nvarchar" MaxLength="150" />
+          <Property Name="FechaSolicitud" Type="datetime" />
+        </EntityType>
         <EntityType Name="HistoricoDepositos">
           <Key>
             <PropertyRef Name="Id" />
@@ -721,6 +734,8 @@
           <Property Name="Ejecucion" Type="bit" Nullable="false" />
           <Property Name="IdOperarioEjecuta" Type="int" />
           <Property Name="IdOperarioPrograma" Type="int" />
+          <Property Name="CodigoEtiquetaFichada" Type="nvarchar" MaxLength="13" Nullable="false" />
+          <Property Name="CantidadEtiquetaFichada" Type="float" Nullable="false" />
         </EntityType>
         <EntityType Name="MaquinasConfiguracionesPins">
           <Key>
@@ -1600,6 +1615,8 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           </Key>
           <Property Name="CodUbicacion" Type="nvarchar" MaxLength="13" Nullable="false" />
           <Property Name="Descripcion" Type="nvarchar" MaxLength="100" />
+          <Property Name="CodSeccion" Type="nvarchar" MaxLength="10" />
+          <Property Name="EsMaquina" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="UbicacionesARN">
           <Key>
@@ -1814,6 +1831,18 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
             </Principal>
             <Dependent Role="BancadasRegistrosOperarios">
               <PropertyRef Name="IdBancada" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Barquillas_Ubicaciones">
+          <End Role="Ubicaciones" Type="Self.Ubicaciones" Multiplicity="0..1" />
+          <End Role="Barquillas" Type="Self.Barquillas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ubicaciones">
+              <PropertyRef Name="CodUbicacion" />
+            </Principal>
+            <Dependent Role="Barquillas">
+              <PropertyRef Name="CodUbicacion" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3363,6 +3392,18 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Ubicaciones_Secciones">
+          <End Role="Secciones" Type="Self.Secciones" Multiplicity="0..1" />
+          <End Role="Ubicaciones" Type="Self.Ubicaciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Secciones">
+              <PropertyRef Name="CodSeccion" />
+            </Principal>
+            <Dependent Role="Ubicaciones">
+              <PropertyRef Name="CodSeccion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_UbicacionReferencia_Referencias">
           <End Role="Referencias" Type="Self.Referencias" Multiplicity="1" />
           <End Role="UbicacionReferencia" Type="Self.UbicacionReferencia" Multiplicity="*" />
@@ -4088,28 +4129,12 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <Parameter Name="DescontarAuto" Type="bit" Mode="In" />
           <Parameter Name="DireccionPulso" Type="int" Mode="In" />
         </Function>
-        <Function Name="SP_MaquinaAsignarTarea" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="IdsTareas" Type="nvarchar(max)" Mode="In" />
-          <Parameter Name="IdMaquina" Type="int" Mode="In" />
-          <Parameter Name="Agrupacion" Type="int" Mode="In" />
-          <Parameter Name="IdOperarioEjecucion" Type="int" Mode="In" />
-        </Function>
         <Function Name="SP_MaquinaAsociarAPuesto" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdMaquina" Type="int" Mode="In" />
           <Parameter Name="IdPuesto" Type="int" Mode="In" />
         </Function>
-        <Function Name="SP_MaquinaDesasignarTarea" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="IdsTareas" Type="nvarchar(max)" Mode="In" />
-          <Parameter Name="IdMaquina" Type="int" Mode="In" />
-        </Function>
         <Function Name="SP_MaquinaDesasociarPuesto" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdPuesto" Type="int" Mode="In" />
-        </Function>
-        <Function Name="SP_MaquinaProgramarTarea" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="IdsTareas" Type="nvarchar(max)" Mode="In" />
-          <Parameter Name="IdMaquina" Type="int" Mode="In" />
-          <Parameter Name="Agrupacion" Type="int" Mode="In" />
-          <Parameter Name="IdOperarioPrograma" Type="int" Mode="In" />
         </Function>
         <Function Name="SP_MaquinaRegistrarDato" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CodigoEtiqueta" Type="nvarchar" Mode="In" />
@@ -4717,6 +4742,7 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <EntitySet Name="EtiquetasTipo3" EntityType="Self.EtiquetasTipo3" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EtiquetasTipo4" EntityType="Self.EtiquetasTipo4" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EtiquetasTipo5" EntityType="Self.EtiquetasTipo5" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EtiquetasTipo6" EntityType="Self.EtiquetasTipo6" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HistoricoDepositos" EntityType="Self.HistoricoDepositos" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Impresoras" EntityType="Self.Impresoras" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Impresos" EntityType="Self.Impresos" Schema="dbo" store:Type="Tables" />
@@ -4865,6 +4891,10 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <AssociationSet Name="FK_BancadasRegistrosOperarios_Bancadas" Association="Self.FK_BancadasRegistrosOperarios_Bancadas">
             <End Role="Bancadas" EntitySet="Bancadas" />
             <End Role="BancadasRegistrosOperarios" EntitySet="BancadasRegistrosOperarios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Barquillas_Ubicaciones" Association="Self.FK_Barquillas_Ubicaciones">
+            <End Role="Ubicaciones" EntitySet="Ubicaciones" />
+            <End Role="Barquillas" EntitySet="Barquillas" />
           </AssociationSet>
           <AssociationSet Name="FK_BarquillasConsumos_BarquillasContenidos" Association="Self.FK_BarquillasConsumos_BarquillasContenidos">
             <End Role="BarquillasContenidos" EntitySet="BarquillasContenidos" />
@@ -5370,6 +5400,10 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
             <End Role="TrenesVagones" EntitySet="TrenesVagones" />
             <End Role="TrenesVagonesEspacios" EntitySet="TrenesVagonesEspacios" />
           </AssociationSet>
+          <AssociationSet Name="FK_Ubicaciones_Secciones" Association="Self.FK_Ubicaciones_Secciones">
+            <End Role="Secciones" EntitySet="Secciones" />
+            <End Role="Ubicaciones" EntitySet="Ubicaciones" />
+          </AssociationSet>
           <AssociationSet Name="FK_UbicacionReferencia_Referencias" Association="Self.FK_UbicacionReferencia_Referencias">
             <End Role="Referencias" EntitySet="Referencias" />
             <End Role="UbicacionReferencia" EntitySet="UbicacionReferencia" />
@@ -5545,6 +5579,7 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <NavigationProperty Name="OrdenesFabricacionMateriales" Relationship="Self.FK_OrdenesFabricacionMateriales_Articulos" FromRole="Articulos" ToRole="OrdenesFabricacionMateriales" />
           <NavigationProperty Name="StockArticulos" Relationship="Self.FK_StockArticulos_Articulos" FromRole="Articulos" ToRole="StockArticulos" />
           <NavigationProperty Name="ArticulosTallas" Relationship="Self.FK_TallasArticulo_Item" FromRole="Articulos" ToRole="ArticulosTallas" />
+          <Property Name="ObservacionEtiqueta1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="ArticulosDetalleCliente">
           <Key>
@@ -5562,6 +5597,8 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <Property Name="SuDescripcionMaspica" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="SuColorMaspica" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="SuDescripcionElten" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="SuCodigoEcco" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="SuDescripcionEcco" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Articulos" Relationship="Self.FK_Articulos_ArticulosDetalleCliente" FromRole="ArticulosDetalleCliente" ToRole="Articulos" />
         </EntityType>
         <EntityType Name="ArticulosFamilias">
@@ -5724,6 +5761,7 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <Property Name="CantidadAnterior" Type="Double" Nullable="false" />
           <Property Name="Cantidad" Type="Double" Nullable="false" />
           <Property Name="FechaMovimiento" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IdTipoStock" Type="Int32" />
         </EntityType>
         <EntityType Name="AUDITAR_UBICACIONES">
           <Key>
@@ -5743,7 +5781,11 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Activa" Type="Boolean" />
+          <Property Name="IdHermano" Type="Int32" />
+          <Property Name="EsMaster" Type="Boolean" Nullable="false" />
+          <Property Name="EsManual" Type="Boolean" Nullable="false" />
           <Property Name="TiempoDesplazamiento" Type="Decimal" Precision="13" Scale="3" />
           <Property Name="TiempoObjetivo" Type="Decimal" Precision="13" Scale="3" />
           <Property Name="PorcentajeDesviacion" Type="Decimal" Precision="13" Scale="3" />
@@ -5754,20 +5796,16 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <Property Name="Ritmo" Type="Double" />
           <Property Name="CicloSegundos" Type="Double" />
           <Property Name="Observaciones" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Descripcion" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="EsManual" Type="Boolean" Nullable="false" />
           <Property Name="CodigoEtiqueta" Type="String" MaxLength="13" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Bancadas1" Relationship="Self.FK_Bancadas_Bancadas" FromRole="Bancadas" ToRole="Bancadas1" />
+          <NavigationProperty Name="Bancadas2" Relationship="Self.FK_Bancadas_Bancadas" FromRole="Bancadas1" ToRole="Bancadas" />
+          <NavigationProperty Name="BancadasConfiguracionesPins" Relationship="Self.FK_BancadasConfiguracionesPins_Bancadas" FromRole="Bancadas" ToRole="BancadasConfiguracionesPins" />
           <NavigationProperty Name="BancadasRegistrosOperarios" Relationship="Self.FK_BancadasRegistrosOperarios_Bancadas" FromRole="Bancadas" ToRole="BancadasRegistrosOperarios" />
           <NavigationProperty Name="Ciclos" Relationship="Self.FK_Ciclos_Bancadas" FromRole="Bancadas" ToRole="Ciclos" />
           <NavigationProperty Name="IncidenciasBancadasRegistros" Relationship="Self.FK_IncidenciasBancadasRegistros_Bancadas" FromRole="Bancadas" ToRole="IncidenciasBancadasRegistros" />
           <NavigationProperty Name="Maquinas" Relationship="Self.FK_Maquinas_Bancadas" FromRole="Bancadas" ToRole="Maquinas" />
           <NavigationProperty Name="OrdenesFabricacionOperacionesTallasCantidad" Relationship="Self.FK_OrdenesFabricacionOperacionesTallasCantidad_Bancadas" FromRole="Bancadas" ToRole="OrdenesFabricacionOperacionesTallasCantidad" />
           <NavigationProperty Name="BancadasConfiguracionesIncidencias" Relationship="Self.FK_PuestosConfiguracionesIncidencias_Bancadas" FromRole="Bancadas" ToRole="BancadasConfiguracionesIncidencias" />
-          <NavigationProperty Name="BancadasConfiguracionesPins" Relationship="SistemaGlobalPREModel.FK_BancadasConfiguracionesPins_Bancadas" FromRole="Bancadas" ToRole="BancadasConfiguracionesPins" />
-          <Property Name="IdHermano" Type="Int32" />
-          <Property Name="EsMaster" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Bancadas1" Relationship="SistemaGlobalPREModel.FK_Bancadas_Bancadas" FromRole="Bancadas" ToRole="Bancadas1" />
-          <NavigationProperty Name="Bancadas2" Relationship="SistemaGlobalPREModel.FK_Bancadas_Bancadas" FromRole="Bancadas1" ToRole="Bancadas" />
         </EntityType>
         <EntityType Name="BancadasConfiguracionesIncidencias">
           <Key>
@@ -5796,7 +5834,7 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <Property Name="EsContadorPaquetesAutomatico" Type="Boolean" Nullable="false" />
           <Property Name="AvisarFinPaquete" Type="Boolean" Nullable="false" />
           <Property Name="AvisarFinTarea" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Bancadas" Relationship="SistemaGlobalPREModel.FK_BancadasConfiguracionesPins_Bancadas" FromRole="BancadasConfiguracionesPins" ToRole="Bancadas" />
+          <NavigationProperty Name="Bancadas" Relationship="Self.FK_BancadasConfiguracionesPins_Bancadas" FromRole="BancadasConfiguracionesPins" ToRole="Bancadas" />
         </EntityType>
         <EntityType Name="BancadasRegistrosOperarios">
           <Key>
@@ -5822,6 +5860,8 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <Property Name="FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="NumeroAgrupacion" Type="Int32" />
           <NavigationProperty Name="BarquillasContenidos" Relationship="Self.FK_ContenidosBarquillas_Barquillas" FromRole="Barquillas" ToRole="BarquillasContenidos" />
+          <Property Name="CodUbicacion" Type="String" MaxLength="13" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Ubicaciones" Relationship="SistemaGlobalPREModel.FK_Barquillas_Ubicaciones" FromRole="Barquillas" ToRole="Ubicaciones" />
         </EntityType>
         <EntityType Name="BarquillasConsumos">
           <Key>
@@ -6023,6 +6063,14 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <Property Name="FechaSolicitud" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="EtiquetasTipo5">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UsuarioSolicitud" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="FechaSolicitud" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="EtiquetasTipo6">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
@@ -6237,6 +6285,8 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <NavigationProperty Name="Operarios" Relationship="Self.FK_MaquinasColasTrabajo_Operarios" FromRole="MaquinasColasTrabajo" ToRole="Operarios" />
           <NavigationProperty Name="Operarios1" Relationship="Self.FK_MaquinasColasTrabajo_OperariosPrograma" FromRole="MaquinasColasTrabajo" ToRole="Operarios" />
           <NavigationProperty Name="OrdenesFabricacionOperacionesTallasCantidad" Relationship="Self.FK_MaquinasColasTrabajo_OrdenesFabricacionOperacionesTallasCantidad" FromRole="MaquinasColasTrabajo" ToRole="OrdenesFabricacionOperacionesTallasCantidad" />
+          <Property Name="CodigoEtiquetaFichada" Type="String" Nullable="false" MaxLength="13" FixedLength="false" Unicode="true" />
+          <Property Name="CantidadEtiquetaFichada" Type="Double" Nullable="false" />
         </EntityType>
         <EntityType Name="MaquinasConfiguracionesPins">
           <Key>
@@ -7017,6 +7067,7 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <NavigationProperty Name="Operaciones" Relationship="Self.FK_Operaciones_Secciones" FromRole="Secciones" ToRole="Operaciones" />
           <NavigationProperty Name="OrdenesFabricacionOperaciones" Relationship="Self.FK_OrdenesFabricacionOperaciones_Secciones" FromRole="Secciones" ToRole="OrdenesFabricacionOperaciones" />
           <NavigationProperty Name="Utillajes" Relationship="Self.FK_Utillajes_Secciones" FromRole="Secciones" ToRole="Utillajes" />
+          <NavigationProperty Name="Ubicaciones" Relationship="SistemaGlobalPREModel.FK_Ubicaciones_Secciones" FromRole="Secciones" ToRole="Ubicaciones" />
         </EntityType>
         <EntityType Name="StockArticulos">
           <Key>
@@ -7234,6 +7285,10 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <NavigationProperty Name="Talleres" Relationship="Self.FK_Talleres_Ubicaciones" FromRole="Ubicaciones" ToRole="Talleres" />
           <NavigationProperty Name="UbicacionReferencia" Relationship="Self.FK_UbicacionReferencia_Ubicaciones" FromRole="Ubicaciones" ToRole="UbicacionReferencia" />
           <NavigationProperty Name="UtillajesTallasColeccion" Relationship="Self.FK_UtillajesTallasColeccion_Ubicaciones" FromRole="Ubicaciones" ToRole="UtillajesTallasColeccion" />
+          <Property Name="CodSeccion" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="EsMaquina" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Barquillas" Relationship="SistemaGlobalPREModel.FK_Barquillas_Ubicaciones" FromRole="Ubicaciones" ToRole="Barquillas" />
+          <NavigationProperty Name="Secciones" Relationship="SistemaGlobalPREModel.FK_Ubicaciones_Secciones" FromRole="Ubicaciones" ToRole="Secciones" />
         </EntityType>
         <EntityType Name="UbicacionesARN">
           <Key>
@@ -7369,6 +7424,7 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
             <PropertyRef Name="Productividad" />
             <PropertyRef Name="IpAutomata" />
             <PropertyRef Name="PosicionMaquina" />
+            <PropertyRef Name="IdPuesto" />
             <PropertyRef Name="IdOperacion" />
             <PropertyRef Name="CodigoOrden" />
             <PropertyRef Name="IdOrden" />
@@ -7379,13 +7435,13 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
             <PropertyRef Name="PiezaIntroducida" />
             <PropertyRef Name="Pares" />
             <PropertyRef Name="Fecha" />
-            <PropertyRef Name="IdPuesto" />
           </Key>
           <Property Name="CodigoEtiqueta" Type="String" MaxLength="13" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="IdTarea" Type="Int32" Nullable="false" />
           <Property Name="Productividad" Type="Int32" Nullable="false" />
           <Property Name="IpAutomata" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="PosicionMaquina" Type="Int32" Nullable="false" />
+          <Property Name="IdPuesto" Type="Int32" Nullable="false" />
           <Property Name="IdOperacion" Type="Int32" Nullable="false" />
           <Property Name="CodigoOrden" Type="String" MaxLength="13" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="IdOrden" Type="Int32" Nullable="false" />
@@ -7396,7 +7452,6 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <Property Name="PiezaIntroducida" Type="Boolean" Nullable="false" />
           <Property Name="Pares" Type="Int32" Nullable="false" />
           <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="IdPuesto" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="MaquinasTiposIncidencias">
           <Key>
@@ -7625,6 +7680,30 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
             </Principal>
             <Dependent Role="StockArticulosTallas">
               <PropertyRef Name="IdArticuloTalla" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Bancadas_Bancadas">
+          <End Role="Bancadas" Type="Self.Bancadas" Multiplicity="0..1" />
+          <End Role="Bancadas1" Type="Self.Bancadas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bancadas">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Bancadas1">
+              <PropertyRef Name="IdHermano" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BancadasConfiguracionesPins_Bancadas">
+          <End Role="Bancadas" Type="Self.Bancadas" Multiplicity="1" />
+          <End Role="BancadasConfiguracionesPins" Type="Self.BancadasConfiguracionesPins" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Bancadas">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BancadasConfiguracionesPins">
+              <PropertyRef Name="IdBancada" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -9166,6 +9245,7 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <EntitySet Name="EtiquetasTipo3" EntityType="Self.EtiquetasTipo3" />
           <EntitySet Name="EtiquetasTipo4" EntityType="Self.EtiquetasTipo4" />
           <EntitySet Name="EtiquetasTipo5" EntityType="Self.EtiquetasTipo5" />
+          <EntitySet Name="EtiquetasTipo6" EntityType="Self.EtiquetasTipo6" />
           <EntitySet Name="HistoricoDepositos" EntityType="Self.HistoricoDepositos" />
           <EntitySet Name="Impresoras" EntityType="Self.Impresoras" />
           <EntitySet Name="Impresos" EntityType="Self.Impresos" />
@@ -9328,6 +9408,14 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <AssociationSet Name="FK_StockArticulosTallas_ArticulosTallas" Association="Self.FK_StockArticulosTallas_ArticulosTallas">
             <End Role="ArticulosTallas" EntitySet="ArticulosTallas" />
             <End Role="StockArticulosTallas" EntitySet="StockArticulosTallas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Bancadas_Bancadas" Association="Self.FK_Bancadas_Bancadas">
+            <End Role="Bancadas" EntitySet="Bancadas" />
+            <End Role="Bancadas1" EntitySet="Bancadas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BancadasConfiguracionesPins_Bancadas" Association="Self.FK_BancadasConfiguracionesPins_Bancadas">
+            <End Role="Bancadas" EntitySet="Bancadas" />
+            <End Role="BancadasConfiguracionesPins" EntitySet="BancadasConfiguracionesPins" />
           </AssociationSet>
           <AssociationSet Name="FK_BancadasRegistrosOperarios_Bancadas" Association="Self.FK_BancadasRegistrosOperarios_Bancadas">
             <End Role="Bancadas" EntitySet="Bancadas" />
@@ -10972,13 +11060,13 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <FunctionImport Name="SP_VaciarUbicacion" ReturnType="Collection(SistemaGlobalPREModel.SP_VaciarUbicacion_Result)">
           <Parameter Name="CodigoUbicacion" Mode="In" Type="String" />
           </FunctionImport>
-          <AssociationSet Name="FK_BancadasConfiguracionesPins_Bancadas" Association="SistemaGlobalPREModel.FK_BancadasConfiguracionesPins_Bancadas">
-            <End Role="Bancadas" EntitySet="Bancadas" />
-            <End Role="BancadasConfiguracionesPins" EntitySet="BancadasConfiguracionesPins" />
+          <AssociationSet Name="FK_Barquillas_Ubicaciones" Association="SistemaGlobalPREModel.FK_Barquillas_Ubicaciones">
+            <End Role="Ubicaciones" EntitySet="Ubicaciones" />
+            <End Role="Barquillas" EntitySet="Barquillas" />
           </AssociationSet>
-          <AssociationSet Name="FK_Bancadas_Bancadas" Association="SistemaGlobalPREModel.FK_Bancadas_Bancadas">
-            <End Role="Bancadas" EntitySet="Bancadas" />
-            <End Role="Bancadas1" EntitySet="Bancadas" />
+          <AssociationSet Name="FK_Ubicaciones_Secciones" Association="SistemaGlobalPREModel.FK_Ubicaciones_Secciones">
+            <End Role="Secciones" EntitySet="Secciones" />
+            <End Role="Ubicaciones" EntitySet="Ubicaciones" />
           </AssociationSet>
         </EntityContainer>
         <ComplexType Name="SP_AgruparContenedor_Result">
@@ -11048,6 +11136,7 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <Property Type="Boolean" Name="CosteConfirmado" Nullable="true" />
           <Property Type="Int32" Name="TipoProceso" Nullable="true" />
           <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="Int32" Name="IdOperacion" Nullable="false" />
         </ComplexType>
         <ComplexType Name="SP_ArticulosRutasOperacionesOrden_Result">
           <Property Type="Int32" Name="ID" Nullable="true" />
@@ -11077,6 +11166,7 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <Property Type="Double" Name="CosteHoraSubcontrata" Nullable="true" />
           <Property Type="Boolean" Name="CosteConfirmado" Nullable="true" />
           <Property Type="Int32" Name="TipoProceso" Nullable="true" />
+          <Property Type="Int32" Name="IdOperacion" Nullable="true" />
         </ComplexType>
         <ComplexType Name="SP_ArticulosSage_Result">
           <Property Type="Int32" Name="ID" Nullable="false" />
@@ -11178,7 +11268,11 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
         <ComplexType Name="SP_BancadaActualizar_Result">
           <Property Type="Int32" Name="ID" Nullable="false" />
           <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Descripcion" Nullable="true" MaxLength="100" />
           <Property Type="Boolean" Name="Activa" Nullable="true" />
+          <Property Type="Int32" Name="IdHermano" Nullable="true" />
+          <Property Type="Boolean" Name="EsMaster" Nullable="false" />
+          <Property Type="Boolean" Name="EsManual" Nullable="false" />
           <Property Type="Decimal" Name="TiempoDesplazamiento" Nullable="true" Precision="13" Scale="3" />
           <Property Type="Decimal" Name="TiempoObjetivo" Nullable="true" Precision="13" Scale="3" />
           <Property Type="Decimal" Name="PorcentajeDesviacion" Nullable="true" Precision="13" Scale="3" />
@@ -11189,8 +11283,6 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <Property Type="Double" Name="Ritmo" Nullable="true" />
           <Property Type="Double" Name="CicloSegundos" Nullable="true" />
           <Property Type="String" Name="Observaciones" Nullable="true" MaxLength="100" />
-          <Property Type="String" Name="Descripcion" Nullable="true" MaxLength="100" />
-          <Property Type="Boolean" Name="EsManual" Nullable="false" />
           <Property Type="String" Name="CodigoEtiqueta" Nullable="true" MaxLength="13" />
           <Property Type="Int32" Name="IdBancada" Nullable="false" />
           <Property Type="String" Name="PinBuzzer" Nullable="true" MaxLength="50" />
@@ -11267,7 +11359,11 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
         <ComplexType Name="SP_BancadaBuscarPorCodigoEtiqueta_Result">
           <Property Type="Int32" Name="ID" Nullable="false" />
           <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Descripcion" Nullable="true" MaxLength="100" />
           <Property Type="Boolean" Name="Activa" Nullable="true" />
+          <Property Type="Int32" Name="IdHermano" Nullable="true" />
+          <Property Type="Boolean" Name="EsMaster" Nullable="false" />
+          <Property Type="Boolean" Name="EsManual" Nullable="false" />
           <Property Type="Decimal" Name="TiempoDesplazamiento" Nullable="true" Precision="13" Scale="3" />
           <Property Type="Decimal" Name="TiempoObjetivo" Nullable="true" Precision="13" Scale="3" />
           <Property Type="Decimal" Name="PorcentajeDesviacion" Nullable="true" Precision="13" Scale="3" />
@@ -11278,14 +11374,16 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <Property Type="Double" Name="Ritmo" Nullable="true" />
           <Property Type="Double" Name="CicloSegundos" Nullable="true" />
           <Property Type="String" Name="Observaciones" Nullable="true" MaxLength="100" />
-          <Property Type="String" Name="Descripcion" Nullable="true" MaxLength="100" />
-          <Property Type="Boolean" Name="EsManual" Nullable="false" />
           <Property Type="String" Name="CodigoEtiqueta" Nullable="true" MaxLength="13" />
         </ComplexType>
         <ComplexType Name="SP_BancadaBuscarPorDescripcion_Result">
           <Property Type="Int32" Name="ID" Nullable="false" />
           <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Descripcion" Nullable="true" MaxLength="100" />
           <Property Type="Boolean" Name="Activa" Nullable="true" />
+          <Property Type="Int32" Name="IdHermano" Nullable="true" />
+          <Property Type="Boolean" Name="EsMaster" Nullable="false" />
+          <Property Type="Boolean" Name="EsManual" Nullable="false" />
           <Property Type="Decimal" Name="TiempoDesplazamiento" Nullable="true" Precision="13" Scale="3" />
           <Property Type="Decimal" Name="TiempoObjetivo" Nullable="true" Precision="13" Scale="3" />
           <Property Type="Decimal" Name="PorcentajeDesviacion" Nullable="true" Precision="13" Scale="3" />
@@ -11296,14 +11394,16 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <Property Type="Double" Name="Ritmo" Nullable="true" />
           <Property Type="Double" Name="CicloSegundos" Nullable="true" />
           <Property Type="String" Name="Observaciones" Nullable="true" MaxLength="100" />
-          <Property Type="String" Name="Descripcion" Nullable="true" MaxLength="100" />
-          <Property Type="Boolean" Name="EsManual" Nullable="false" />
           <Property Type="String" Name="CodigoEtiqueta" Nullable="true" MaxLength="13" />
         </ComplexType>
         <ComplexType Name="SP_BancadaBuscarPorId_Result">
           <Property Type="Int32" Name="ID" Nullable="false" />
           <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Descripcion" Nullable="true" MaxLength="100" />
           <Property Type="Boolean" Name="Activa" Nullable="true" />
+          <Property Type="Int32" Name="IdHermano" Nullable="true" />
+          <Property Type="Boolean" Name="EsMaster" Nullable="false" />
+          <Property Type="Boolean" Name="EsManual" Nullable="false" />
           <Property Type="Decimal" Name="TiempoDesplazamiento" Nullable="true" Precision="13" Scale="3" />
           <Property Type="Decimal" Name="TiempoObjetivo" Nullable="true" Precision="13" Scale="3" />
           <Property Type="Decimal" Name="PorcentajeDesviacion" Nullable="true" Precision="13" Scale="3" />
@@ -11314,8 +11414,6 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <Property Type="Double" Name="Ritmo" Nullable="true" />
           <Property Type="Double" Name="CicloSegundos" Nullable="true" />
           <Property Type="String" Name="Observaciones" Nullable="true" MaxLength="100" />
-          <Property Type="String" Name="Descripcion" Nullable="true" MaxLength="100" />
-          <Property Type="Boolean" Name="EsManual" Nullable="false" />
           <Property Type="String" Name="CodigoEtiqueta" Nullable="true" MaxLength="13" />
           <Property Type="Int32" Name="IdBancada" Nullable="true" />
           <Property Type="String" Name="PinBuzzer" Nullable="true" MaxLength="50" />
@@ -11328,7 +11426,11 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
         <ComplexType Name="SP_BancadaCrear_Result">
           <Property Type="Int32" Name="ID" Nullable="false" />
           <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Descripcion" Nullable="true" MaxLength="100" />
           <Property Type="Boolean" Name="Activa" Nullable="true" />
+          <Property Type="Int32" Name="IdHermano" Nullable="true" />
+          <Property Type="Boolean" Name="EsMaster" Nullable="false" />
+          <Property Type="Boolean" Name="EsManual" Nullable="false" />
           <Property Type="Decimal" Name="TiempoDesplazamiento" Nullable="true" Precision="13" Scale="3" />
           <Property Type="Decimal" Name="TiempoObjetivo" Nullable="true" Precision="13" Scale="3" />
           <Property Type="Decimal" Name="PorcentajeDesviacion" Nullable="true" Precision="13" Scale="3" />
@@ -11339,14 +11441,16 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <Property Type="Double" Name="Ritmo" Nullable="true" />
           <Property Type="Double" Name="CicloSegundos" Nullable="true" />
           <Property Type="String" Name="Observaciones" Nullable="true" MaxLength="100" />
-          <Property Type="String" Name="Descripcion" Nullable="true" MaxLength="100" />
-          <Property Type="Boolean" Name="EsManual" Nullable="false" />
           <Property Type="String" Name="CodigoEtiqueta" Nullable="true" MaxLength="13" />
         </ComplexType>
         <ComplexType Name="SP_BancadaObtenerTodos_Result">
           <Property Type="Int32" Name="ID" Nullable="false" />
           <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Descripcion" Nullable="true" MaxLength="100" />
           <Property Type="Boolean" Name="Activa" Nullable="true" />
+          <Property Type="Int32" Name="IdHermano" Nullable="true" />
+          <Property Type="Boolean" Name="EsMaster" Nullable="false" />
+          <Property Type="Boolean" Name="EsManual" Nullable="false" />
           <Property Type="Decimal" Name="TiempoDesplazamiento" Nullable="true" Precision="13" Scale="3" />
           <Property Type="Decimal" Name="TiempoObjetivo" Nullable="true" Precision="13" Scale="3" />
           <Property Type="Decimal" Name="PorcentajeDesviacion" Nullable="true" Precision="13" Scale="3" />
@@ -11357,8 +11461,6 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <Property Type="Double" Name="Ritmo" Nullable="true" />
           <Property Type="Double" Name="CicloSegundos" Nullable="true" />
           <Property Type="String" Name="Observaciones" Nullable="true" MaxLength="100" />
-          <Property Type="String" Name="Descripcion" Nullable="true" MaxLength="100" />
-          <Property Type="Boolean" Name="EsManual" Nullable="false" />
           <Property Type="String" Name="CodigoEtiqueta" Nullable="true" MaxLength="13" />
         </ComplexType>
         <ComplexType Name="SP_BancadaOperariosActuales_Result">
@@ -12607,7 +12709,11 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
         <ComplexType Name="SP_MoldesObtenerBancadaPorId_Result">
           <Property Type="Int32" Name="ID" Nullable="false" />
           <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Descripcion" Nullable="true" MaxLength="100" />
           <Property Type="Boolean" Name="Activa" Nullable="true" />
+          <Property Type="Int32" Name="IdHermano" Nullable="true" />
+          <Property Type="Boolean" Name="EsMaster" Nullable="false" />
+          <Property Type="Boolean" Name="EsManual" Nullable="false" />
           <Property Type="Decimal" Name="TiempoDesplazamiento" Nullable="true" Precision="13" Scale="3" />
           <Property Type="Decimal" Name="TiempoObjetivo" Nullable="true" Precision="13" Scale="3" />
           <Property Type="Decimal" Name="PorcentajeDesviacion" Nullable="true" Precision="13" Scale="3" />
@@ -12618,8 +12724,6 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <Property Type="Double" Name="Ritmo" Nullable="true" />
           <Property Type="Double" Name="CicloSegundos" Nullable="true" />
           <Property Type="String" Name="Observaciones" Nullable="true" MaxLength="100" />
-          <Property Type="String" Name="Descripcion" Nullable="true" MaxLength="100" />
-          <Property Type="Boolean" Name="EsManual" Nullable="false" />
           <Property Type="String" Name="CodigoEtiqueta" Nullable="true" MaxLength="13" />
         </ComplexType>
         <ComplexType Name="SP_MoldesObtenerMaquinasPorIdBancada_Result">
@@ -13676,27 +13780,27 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <Property Type="Int16" Name="AgrupacionPosicionContenedor" Nullable="true" />
           <Property Type="DateTime" Name="AgrupacionFecha" Nullable="true" Precision="23" />
         </ComplexType>
-        <Association Name="FK_BancadasConfiguracionesPins_Bancadas">
-          <End Type="SistemaGlobalPREModel.Bancadas" Role="Bancadas" Multiplicity="1" />
-          <End Type="SistemaGlobalPREModel.BancadasConfiguracionesPins" Role="BancadasConfiguracionesPins" Multiplicity="0..1" />
+        <Association Name="FK_Barquillas_Ubicaciones">
+          <End Type="SistemaGlobalPREModel.Ubicaciones" Role="Ubicaciones" Multiplicity="0..1" />
+          <End Type="SistemaGlobalPREModel.Barquillas" Role="Barquillas" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Bancadas">
-              <PropertyRef Name="ID" />
+            <Principal Role="Ubicaciones">
+              <PropertyRef Name="CodUbicacion" />
             </Principal>
-            <Dependent Role="BancadasConfiguracionesPins">
-              <PropertyRef Name="IdBancada" />
+            <Dependent Role="Barquillas">
+              <PropertyRef Name="CodUbicacion" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Bancadas_Bancadas">
-          <End Type="SistemaGlobalPREModel.Bancadas" Role="Bancadas" Multiplicity="0..1" />
-          <End Type="SistemaGlobalPREModel.Bancadas" Role="Bancadas1" Multiplicity="*" />
+        <Association Name="FK_Ubicaciones_Secciones">
+          <End Type="SistemaGlobalPREModel.Secciones" Role="Secciones" Multiplicity="0..1" />
+          <End Type="SistemaGlobalPREModel.Ubicaciones" Role="Ubicaciones" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Bancadas">
-              <PropertyRef Name="ID" />
+            <Principal Role="Secciones">
+              <PropertyRef Name="CodSeccion" />
             </Principal>
-            <Dependent Role="Bancadas1">
-              <PropertyRef Name="IdHermano" />
+            <Dependent Role="Ubicaciones">
+              <PropertyRef Name="CodSeccion" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -13797,6 +13901,7 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <EntitySetMapping Name="Articulos">
             <EntityTypeMapping TypeName="SistemaGlobalPREModel.Articulos">
               <MappingFragment StoreEntitySet="Articulos">
+                <ScalarProperty Name="ObservacionEtiqueta1" ColumnName="ObservacionEtiqueta1" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="CodigoArticulo" ColumnName="CodigoArticulo" />
                 <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
@@ -13836,6 +13941,8 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
                 <ScalarProperty Name="SuDescripcionMaspica" ColumnName="SuDescripcionMaspica" />
                 <ScalarProperty Name="SuColorMaspica" ColumnName="SuColorMaspica" />
                 <ScalarProperty Name="SuDescripcionElten" ColumnName="SuDescripcionElten" />
+                <ScalarProperty Name="SuCodigoEcco" ColumnName="SuCodigoEcco" />
+                <ScalarProperty Name="SuDescripcionEcco" ColumnName="SuDescripcionEcco" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -13986,6 +14093,7 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <EntitySetMapping Name="AUDITAR_MOVIMIENTOS_STOCK">
             <EntityTypeMapping TypeName="SistemaGlobalPREModel.AUDITAR_MOVIMIENTOS_STOCK">
               <MappingFragment StoreEntitySet="AUDITAR_MOVIMIENTOS_STOCK">
+                <ScalarProperty Name="IdTipoStock" ColumnName="IdTipoStock" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="IdStockArticulo" ColumnName="IdStockArticulo" />
                 <ScalarProperty Name="CodigoArticulo" ColumnName="CodigoArticulo" />
@@ -14013,11 +14121,13 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <EntitySetMapping Name="Bancadas">
             <EntityTypeMapping TypeName="SistemaGlobalPREModel.Bancadas">
               <MappingFragment StoreEntitySet="Bancadas">
-                <ScalarProperty Name="EsMaster" ColumnName="EsMaster" />
-                <ScalarProperty Name="IdHermano" ColumnName="IdHermano" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
                 <ScalarProperty Name="Activa" ColumnName="Activa" />
+                <ScalarProperty Name="IdHermano" ColumnName="IdHermano" />
+                <ScalarProperty Name="EsMaster" ColumnName="EsMaster" />
+                <ScalarProperty Name="EsManual" ColumnName="EsManual" />
                 <ScalarProperty Name="TiempoDesplazamiento" ColumnName="TiempoDesplazamiento" />
                 <ScalarProperty Name="TiempoObjetivo" ColumnName="TiempoObjetivo" />
                 <ScalarProperty Name="PorcentajeDesviacion" ColumnName="PorcentajeDesviacion" />
@@ -14028,8 +14138,6 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
                 <ScalarProperty Name="Ritmo" ColumnName="Ritmo" />
                 <ScalarProperty Name="CicloSegundos" ColumnName="CicloSegundos" />
                 <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
-                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
-                <ScalarProperty Name="EsManual" ColumnName="EsManual" />
                 <ScalarProperty Name="CodigoEtiqueta" ColumnName="CodigoEtiqueta" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -14081,6 +14189,7 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <EntitySetMapping Name="Barquillas">
             <EntityTypeMapping TypeName="SistemaGlobalPREModel.Barquillas">
               <MappingFragment StoreEntitySet="Barquillas">
+                <ScalarProperty Name="CodUbicacion" ColumnName="CodUbicacion" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="CodigoEtiqueta" ColumnName="CodigoEtiqueta" />
                 <ScalarProperty Name="FechaCreacion" ColumnName="FechaCreacion" />
@@ -14291,6 +14400,15 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="EtiquetasTipo6">
+            <EntityTypeMapping TypeName="SistemaGlobalPREModel.EtiquetasTipo6">
+              <MappingFragment StoreEntitySet="EtiquetasTipo6">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="UsuarioSolicitud" ColumnName="UsuarioSolicitud" />
+                <ScalarProperty Name="FechaSolicitud" ColumnName="FechaSolicitud" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="HistoricoDepositos">
             <EntityTypeMapping TypeName="SistemaGlobalPREModel.HistoricoDepositos">
               <MappingFragment StoreEntitySet="HistoricoDepositos">
@@ -14467,6 +14585,8 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <EntitySetMapping Name="MaquinasColasTrabajo">
             <EntityTypeMapping TypeName="SistemaGlobalPREModel.MaquinasColasTrabajo">
               <MappingFragment StoreEntitySet="MaquinasColasTrabajo">
+                <ScalarProperty Name="CantidadEtiquetaFichada" ColumnName="CantidadEtiquetaFichada" />
+                <ScalarProperty Name="CodigoEtiquetaFichada" ColumnName="CodigoEtiquetaFichada" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="IdMaquina" ColumnName="IdMaquina" />
                 <ScalarProperty Name="IdTarea" ColumnName="IdTarea" />
@@ -15352,6 +15472,8 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <EntitySetMapping Name="Ubicaciones">
             <EntityTypeMapping TypeName="SistemaGlobalPREModel.Ubicaciones">
               <MappingFragment StoreEntitySet="Ubicaciones">
+                <ScalarProperty Name="EsMaquina" ColumnName="EsMaquina" />
+                <ScalarProperty Name="CodSeccion" ColumnName="CodSeccion" />
                 <ScalarProperty Name="CodUbicacion" ColumnName="CodUbicacion" />
                 <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
               </MappingFragment>
@@ -15477,12 +15599,12 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <EntitySetMapping Name="MaquinasRegistrosDatos">
             <EntityTypeMapping TypeName="SistemaGlobalPREModel.MaquinasRegistrosDatos">
               <MappingFragment StoreEntitySet="MaquinasRegistrosDatos">
-                <ScalarProperty Name="IdPuesto" ColumnName="IdPuesto" />
                 <ScalarProperty Name="CodigoEtiqueta" ColumnName="CodigoEtiqueta" />
                 <ScalarProperty Name="IdTarea" ColumnName="IdTarea" />
                 <ScalarProperty Name="Productividad" ColumnName="Productividad" />
                 <ScalarProperty Name="IpAutomata" ColumnName="IpAutomata" />
                 <ScalarProperty Name="PosicionMaquina" ColumnName="PosicionMaquina" />
+                <ScalarProperty Name="IdPuesto" ColumnName="IdPuesto" />
                 <ScalarProperty Name="IdOperacion" ColumnName="IdOperacion" />
                 <ScalarProperty Name="CodigoOrden" ColumnName="CodigoOrden" />
                 <ScalarProperty Name="IdOrden" ColumnName="IdOrden" />
@@ -15624,6 +15746,7 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
                 <ScalarProperty Name="CosteConfirmado" ColumnName="CosteConfirmado" />
                 <ScalarProperty Name="TipoProceso" ColumnName="TipoProceso" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IdOperacion" ColumnName="IdOperacion" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -15657,6 +15780,7 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
                 <ScalarProperty Name="CosteHoraSubcontrata" ColumnName="CosteHoraSubcontrata" />
                 <ScalarProperty Name="CosteConfirmado" ColumnName="CosteConfirmado" />
                 <ScalarProperty Name="TipoProceso" ColumnName="TipoProceso" />
+                <ScalarProperty Name="IdOperacion" ColumnName="IdOperacion" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -15778,7 +15902,11 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
               <ComplexTypeMapping TypeName="SistemaGlobalPREModel.SP_BancadaActualizar_Result">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
                 <ScalarProperty Name="Activa" ColumnName="Activa" />
+                <ScalarProperty Name="IdHermano" ColumnName="IdHermano" />
+                <ScalarProperty Name="EsMaster" ColumnName="EsMaster" />
+                <ScalarProperty Name="EsManual" ColumnName="EsManual" />
                 <ScalarProperty Name="TiempoDesplazamiento" ColumnName="TiempoDesplazamiento" />
                 <ScalarProperty Name="TiempoObjetivo" ColumnName="TiempoObjetivo" />
                 <ScalarProperty Name="PorcentajeDesviacion" ColumnName="PorcentajeDesviacion" />
@@ -15789,8 +15917,6 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
                 <ScalarProperty Name="Ritmo" ColumnName="Ritmo" />
                 <ScalarProperty Name="CicloSegundos" ColumnName="CicloSegundos" />
                 <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
-                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
-                <ScalarProperty Name="EsManual" ColumnName="EsManual" />
                 <ScalarProperty Name="CodigoEtiqueta" ColumnName="CodigoEtiqueta" />
                 <ScalarProperty Name="IdBancada" ColumnName="IdBancada" />
                 <ScalarProperty Name="PinBuzzer" ColumnName="PinBuzzer" />
@@ -15887,7 +16013,11 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
               <ComplexTypeMapping TypeName="SistemaGlobalPREModel.SP_BancadaBuscarPorCodigoEtiqueta_Result">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
                 <ScalarProperty Name="Activa" ColumnName="Activa" />
+                <ScalarProperty Name="IdHermano" ColumnName="IdHermano" />
+                <ScalarProperty Name="EsMaster" ColumnName="EsMaster" />
+                <ScalarProperty Name="EsManual" ColumnName="EsManual" />
                 <ScalarProperty Name="TiempoDesplazamiento" ColumnName="TiempoDesplazamiento" />
                 <ScalarProperty Name="TiempoObjetivo" ColumnName="TiempoObjetivo" />
                 <ScalarProperty Name="PorcentajeDesviacion" ColumnName="PorcentajeDesviacion" />
@@ -15898,8 +16028,6 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
                 <ScalarProperty Name="Ritmo" ColumnName="Ritmo" />
                 <ScalarProperty Name="CicloSegundos" ColumnName="CicloSegundos" />
                 <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
-                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
-                <ScalarProperty Name="EsManual" ColumnName="EsManual" />
                 <ScalarProperty Name="CodigoEtiqueta" ColumnName="CodigoEtiqueta" />
               </ComplexTypeMapping>
             </ResultMapping>
@@ -15909,7 +16037,11 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
               <ComplexTypeMapping TypeName="SistemaGlobalPREModel.SP_BancadaBuscarPorDescripcion_Result">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
                 <ScalarProperty Name="Activa" ColumnName="Activa" />
+                <ScalarProperty Name="IdHermano" ColumnName="IdHermano" />
+                <ScalarProperty Name="EsMaster" ColumnName="EsMaster" />
+                <ScalarProperty Name="EsManual" ColumnName="EsManual" />
                 <ScalarProperty Name="TiempoDesplazamiento" ColumnName="TiempoDesplazamiento" />
                 <ScalarProperty Name="TiempoObjetivo" ColumnName="TiempoObjetivo" />
                 <ScalarProperty Name="PorcentajeDesviacion" ColumnName="PorcentajeDesviacion" />
@@ -15920,8 +16052,6 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
                 <ScalarProperty Name="Ritmo" ColumnName="Ritmo" />
                 <ScalarProperty Name="CicloSegundos" ColumnName="CicloSegundos" />
                 <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
-                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
-                <ScalarProperty Name="EsManual" ColumnName="EsManual" />
                 <ScalarProperty Name="CodigoEtiqueta" ColumnName="CodigoEtiqueta" />
               </ComplexTypeMapping>
             </ResultMapping>
@@ -15931,7 +16061,11 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
               <ComplexTypeMapping TypeName="SistemaGlobalPREModel.SP_BancadaBuscarPorId_Result">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
                 <ScalarProperty Name="Activa" ColumnName="Activa" />
+                <ScalarProperty Name="IdHermano" ColumnName="IdHermano" />
+                <ScalarProperty Name="EsMaster" ColumnName="EsMaster" />
+                <ScalarProperty Name="EsManual" ColumnName="EsManual" />
                 <ScalarProperty Name="TiempoDesplazamiento" ColumnName="TiempoDesplazamiento" />
                 <ScalarProperty Name="TiempoObjetivo" ColumnName="TiempoObjetivo" />
                 <ScalarProperty Name="PorcentajeDesviacion" ColumnName="PorcentajeDesviacion" />
@@ -15942,8 +16076,6 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
                 <ScalarProperty Name="Ritmo" ColumnName="Ritmo" />
                 <ScalarProperty Name="CicloSegundos" ColumnName="CicloSegundos" />
                 <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
-                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
-                <ScalarProperty Name="EsManual" ColumnName="EsManual" />
                 <ScalarProperty Name="CodigoEtiqueta" ColumnName="CodigoEtiqueta" />
                 <ScalarProperty Name="IdBancada" ColumnName="IdBancada" />
                 <ScalarProperty Name="PinBuzzer" ColumnName="PinBuzzer" />
@@ -15960,7 +16092,11 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
               <ComplexTypeMapping TypeName="SistemaGlobalPREModel.SP_BancadaCrear_Result">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
                 <ScalarProperty Name="Activa" ColumnName="Activa" />
+                <ScalarProperty Name="IdHermano" ColumnName="IdHermano" />
+                <ScalarProperty Name="EsMaster" ColumnName="EsMaster" />
+                <ScalarProperty Name="EsManual" ColumnName="EsManual" />
                 <ScalarProperty Name="TiempoDesplazamiento" ColumnName="TiempoDesplazamiento" />
                 <ScalarProperty Name="TiempoObjetivo" ColumnName="TiempoObjetivo" />
                 <ScalarProperty Name="PorcentajeDesviacion" ColumnName="PorcentajeDesviacion" />
@@ -15971,8 +16107,6 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
                 <ScalarProperty Name="Ritmo" ColumnName="Ritmo" />
                 <ScalarProperty Name="CicloSegundos" ColumnName="CicloSegundos" />
                 <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
-                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
-                <ScalarProperty Name="EsManual" ColumnName="EsManual" />
                 <ScalarProperty Name="CodigoEtiqueta" ColumnName="CodigoEtiqueta" />
               </ComplexTypeMapping>
             </ResultMapping>
@@ -15982,7 +16116,11 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
               <ComplexTypeMapping TypeName="SistemaGlobalPREModel.SP_BancadaObtenerTodos_Result">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
                 <ScalarProperty Name="Activa" ColumnName="Activa" />
+                <ScalarProperty Name="IdHermano" ColumnName="IdHermano" />
+                <ScalarProperty Name="EsMaster" ColumnName="EsMaster" />
+                <ScalarProperty Name="EsManual" ColumnName="EsManual" />
                 <ScalarProperty Name="TiempoDesplazamiento" ColumnName="TiempoDesplazamiento" />
                 <ScalarProperty Name="TiempoObjetivo" ColumnName="TiempoObjetivo" />
                 <ScalarProperty Name="PorcentajeDesviacion" ColumnName="PorcentajeDesviacion" />
@@ -15993,8 +16131,6 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
                 <ScalarProperty Name="Ritmo" ColumnName="Ritmo" />
                 <ScalarProperty Name="CicloSegundos" ColumnName="CicloSegundos" />
                 <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
-                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
-                <ScalarProperty Name="EsManual" ColumnName="EsManual" />
                 <ScalarProperty Name="CodigoEtiqueta" ColumnName="CodigoEtiqueta" />
               </ComplexTypeMapping>
             </ResultMapping>
@@ -17464,68 +17600,8 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_MaquinaAsignarTarea" FunctionName="SistemaGlobalPREModel.Store.SP_MaquinaAsignarTarea">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="SistemaGlobalPREModel.SP_MaquinaAsignarTarea_Result">
-                <ScalarProperty Name="CodigoOrden" ColumnName="CodigoOrden" />
-                <ScalarProperty Name="NombreCliente" ColumnName="NombreCliente" />
-                <ScalarProperty Name="Agrupacion" ColumnName="Agrupacion" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Posicion" ColumnName="Posicion" />
-                <ScalarProperty Name="Ejecucion" ColumnName="Ejecucion" />
-                <ScalarProperty Name="CantidadFabricar" ColumnName="CantidadFabricar" />
-                <ScalarProperty Name="IdMaquina" ColumnName="IdMaquina" />
-                <ScalarProperty Name="IdTarea" ColumnName="IdTarea" />
-                <ScalarProperty Name="IdOperarioEjecuta" ColumnName="IdOperarioEjecuta" />
-                <ScalarProperty Name="IdOperarioPrograma" ColumnName="IdOperarioPrograma" />
-                <ScalarProperty Name="TallaUtillaje" ColumnName="TallaUtillaje" />
-                <ScalarProperty Name="Utillaje" ColumnName="Utillaje" />
-                <ScalarProperty Name="Modelo" ColumnName="Modelo" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="SP_MaquinaAsociarAPuesto" FunctionName="SistemaGlobalPREModel.Store.SP_MaquinaAsociarAPuesto" />
-          <FunctionImportMapping FunctionImportName="SP_MaquinaDesasignarTarea" FunctionName="SistemaGlobalPREModel.Store.SP_MaquinaDesasignarTarea">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="SistemaGlobalPREModel.SP_MaquinaDesasignarTarea_Result">
-                <ScalarProperty Name="CodigoOrden" ColumnName="CodigoOrden" />
-                <ScalarProperty Name="NombreCliente" ColumnName="NombreCliente" />
-                <ScalarProperty Name="Agrupacion" ColumnName="Agrupacion" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Posicion" ColumnName="Posicion" />
-                <ScalarProperty Name="Ejecucion" ColumnName="Ejecucion" />
-                <ScalarProperty Name="CantidadFabricar" ColumnName="CantidadFabricar" />
-                <ScalarProperty Name="IdMaquina" ColumnName="IdMaquina" />
-                <ScalarProperty Name="IdTarea" ColumnName="IdTarea" />
-                <ScalarProperty Name="IdOperarioEjecuta" ColumnName="IdOperarioEjecuta" />
-                <ScalarProperty Name="IdOperarioPrograma" ColumnName="IdOperarioPrograma" />
-                <ScalarProperty Name="TallaUtillaje" ColumnName="TallaUtillaje" />
-                <ScalarProperty Name="Utillaje" ColumnName="Utillaje" />
-                <ScalarProperty Name="Modelo" ColumnName="Modelo" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="SP_MaquinaDesasociarPuesto" FunctionName="SistemaGlobalPREModel.Store.SP_MaquinaDesasociarPuesto" />
-          <FunctionImportMapping FunctionImportName="SP_MaquinaProgramarTarea" FunctionName="SistemaGlobalPREModel.Store.SP_MaquinaProgramarTarea">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="SistemaGlobalPREModel.SP_MaquinaProgramarTarea_Result">
-                <ScalarProperty Name="CodigoOrden" ColumnName="CodigoOrden" />
-                <ScalarProperty Name="NombreCliente" ColumnName="NombreCliente" />
-                <ScalarProperty Name="Agrupacion" ColumnName="Agrupacion" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Posicion" ColumnName="Posicion" />
-                <ScalarProperty Name="Ejecucion" ColumnName="Ejecucion" />
-                <ScalarProperty Name="CantidadFabricar" ColumnName="CantidadFabricar" />
-                <ScalarProperty Name="IdMaquina" ColumnName="IdMaquina" />
-                <ScalarProperty Name="IdTarea" ColumnName="IdTarea" />
-                <ScalarProperty Name="IdOperarioEjecuta" ColumnName="IdOperarioEjecuta" />
-                <ScalarProperty Name="IdOperarioPrograma" ColumnName="IdOperarioPrograma" />
-                <ScalarProperty Name="TallaUtillaje" ColumnName="TallaUtillaje" />
-                <ScalarProperty Name="Utillaje" ColumnName="Utillaje" />
-                <ScalarProperty Name="Modelo" ColumnName="Modelo" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="SP_MaquinaRegistrarDato" FunctionName="SistemaGlobalPREModel.Store.SP_MaquinaRegistrarDato" />
           <FunctionImportMapping FunctionImportName="SP_MaquinaRegistrarHistoricoCiclo" FunctionName="SistemaGlobalPREModel.Store.SP_MaquinaRegistrarHistoricoCiclo">
             <ResultMapping>
@@ -17643,7 +17719,11 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
               <ComplexTypeMapping TypeName="SistemaGlobalPREModel.SP_MoldesObtenerBancadaPorId_Result">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
                 <ScalarProperty Name="Activa" ColumnName="Activa" />
+                <ScalarProperty Name="IdHermano" ColumnName="IdHermano" />
+                <ScalarProperty Name="EsMaster" ColumnName="EsMaster" />
+                <ScalarProperty Name="EsManual" ColumnName="EsManual" />
                 <ScalarProperty Name="TiempoDesplazamiento" ColumnName="TiempoDesplazamiento" />
                 <ScalarProperty Name="TiempoObjetivo" ColumnName="TiempoObjetivo" />
                 <ScalarProperty Name="PorcentajeDesviacion" ColumnName="PorcentajeDesviacion" />
@@ -17654,8 +17734,6 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
                 <ScalarProperty Name="Ritmo" ColumnName="Ritmo" />
                 <ScalarProperty Name="CicloSegundos" ColumnName="CicloSegundos" />
                 <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
-                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
-                <ScalarProperty Name="EsManual" ColumnName="EsManual" />
                 <ScalarProperty Name="CodigoEtiqueta" ColumnName="CodigoEtiqueta" />
               </ComplexTypeMapping>
             </ResultMapping>

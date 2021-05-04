@@ -32,7 +32,7 @@
     <ProductName>GestionPuesto</ProductName>
     <PublisherName>Arneplant</PublisherName>
     <SuiteName>IOT</SuiteName>
-    <ApplicationRevision>22</ApplicationRevision>
+    <ApplicationRevision>36</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -82,6 +82,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -127,6 +128,9 @@
     <Compile Include="EventosTareas\OperarioEntradaEventArgs.cs" />
     <Compile Include="EventosTareas\OperarioSalidaEventArgs.cs" />
     <Compile Include="EventosTareas\ParesActualizadosEventArgs.cs" />
+    <Compile Include="Paginas\ConfiguracionOperarioPagina.xaml.cs">
+      <DependentUpon>ConfiguracionOperarioPagina.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Store.cs" />
     <Compile Include="Ventanas\Aviso.xaml.cs">
       <DependentUpon>Aviso.xaml</DependentUpon>
@@ -202,6 +206,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Paginas\ConfiguracionOperarioPagina.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Paginas\MenuPrincipal.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

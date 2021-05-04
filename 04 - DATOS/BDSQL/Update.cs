@@ -22,5 +22,18 @@ namespace BDSQL
                 }
             }
         }
+
+        public static void UpdateConfiguracionBancada(bool finPaqueteAudio, bool finTareaAudio,int idBancada)
+        {
+            using (SistemaGlobalPREEntities db = new SistemaGlobalPREEntities())
+            {
+                BancadasConfiguracionesPins configDb = db.BancadasConfiguracionesPins.FirstOrDefault(x => x.IdBancada == idBancada);
+                configDb.AvisarFinPaquete = finPaqueteAudio;
+                configDb.AvisarFinTarea = finTareaAudio;
+
+                db.SaveChanges();
+                
+            }
+        }
     }
 }

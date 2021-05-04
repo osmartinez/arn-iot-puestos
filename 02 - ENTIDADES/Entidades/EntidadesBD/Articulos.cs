@@ -45,6 +45,7 @@ namespace Entidades.EntidadesBD
         public Nullable<double> MinimoSaldos { get; set; }
         public Nullable<double> MaximoSaldos { get; set; }
         public double Ciclo { get; set; }
+        public string ObservacionEtiqueta1 { get; set; }
     
         public virtual ArticulosDetalleCliente ArticulosDetalleCliente { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

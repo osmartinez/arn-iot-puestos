@@ -28,6 +28,7 @@ namespace Entidades.EntidadesDTO
         public int IdTarea { get; set; }
         public double Productividad { get; set; }
         public int Agrupacion { get; set; }
+        public string CodSeccion { get; set; }
 
         public bool Acabada
         {
@@ -40,8 +41,8 @@ namespace Entidades.EntidadesDTO
         {
             get
             {
-                return /*(int)this.CantidadFabricada +*/
-                    this.Pulsos.Sum(x => x.Pares)
+                return (int)this.CantidadFabricada
+                    + this.Pulsos.Sum(x => x.Pares)
                     + this.Correcciones.Sum(x => x.Pares)
                     - this.Saldos.Sum(x => x.Pares);
             }
@@ -83,14 +84,15 @@ namespace Entidades.EntidadesDTO
             this.DescripcionOperacion = sp.Descripcion;
             this.TallaUtillaje = sp.IdUtillajeTalla;
             this.TallasArticulo = sp.Tallas;
-            this.CantidadFabricada = sp.CantidadFabricada??0;
-            this.CantidadFabricar = sp.CantidadFabricar??0;
+            this.CantidadFabricada = sp.CantidadFabricada ?? 0;
+            this.CantidadFabricar = sp.CantidadFabricar ?? 0;
             this.PedidoLinea = sp.PedidoLinea;
             this.IdOperacion = sp.IdOperacion;
             this.IdTarea = sp.IdTarea ?? 0;
             this.Productividad = sp.Productividad;
-            this.Agrupacion = sp.Agrupacion??0;
+            this.Agrupacion = sp.Agrupacion ?? 0;
             this.MaquinasEjecucion = sp.MaquinasEjecucion.ToList();
+            this.CodSeccion = sp.MaquinasEjecucion.First().CodSeccion;
         }
 
         public Tarea(string codigoOrden, int idOrden, string codigoArticulo, string modelo, string nombreCliente, string codigoEtiqueta, string tallaEtiqueta, double cantidadEtiqueta, string codigoUtillaje, string descripcionOperacion, string tallaUtillaje, string tallasArticulo, double cantidadFabricar, double cantidadFabricada, string pedidoLinea, int idOperacion, int idTarea, double productividad, int agrupacion)

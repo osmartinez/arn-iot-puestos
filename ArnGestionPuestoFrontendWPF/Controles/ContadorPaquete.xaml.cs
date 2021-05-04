@@ -15,13 +15,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace ArnGestionPuestoFrontendWPF.Controles
 {
     /// <summary>
     /// Lógica de interacción para ContadorPaquete.xaml
     /// </summary>
-    public partial class ContadorPaquete : UserControl,INotifyPropertyChanged
+    public partial class ContadorPaquete : UserControl, INotifyPropertyChanged
     {
         public int Monton
         {
@@ -41,14 +42,94 @@ namespace ArnGestionPuestoFrontendWPF.Controles
         {
             get
             {
-                return (int)Store.Bancada.BancadasConfiguracionesPins.ContadorPaquetes;
+                if (Store.Bancada != null)
+                {
+                    return (int)Store.Bancada.BancadasConfiguracionesPins.ContadorPaquetes;
+                }
+                return 5;
             }
         }
+        private DispatcherTimer timerExceso;
+
         public ContadorPaquete()
         {
             InitializeComponent();
             this.DataContext = this;
             BusEventos.OnParesActualizados += BusEventos_OnParesActualizados;
+            BusEventos.OnTareasCargadas += BusEventos_OnTareasCargadas;
+
+            this.timerExceso = new DispatcherTimer();
+            this.timerExceso.Interval = new TimeSpan(0, 0, 0, 0, 400);
+            this.timerExceso.Tick += TimerExceso_Tick;
+            this.timerExceso.Start();
+        }
+
+        private void TimerExceso_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Store.Bancada != null && this.Monton == this.Contador)
+                {
+                    border.Dispatcher.BeginInvoke((Action)(() =>
+                    {
+                        if (border.Background == Brushes.White)
+                        {
+                            PonerColorCaliente();
+                        }
+                        else
+                        {
+                            PonerColorFrio();
+                        }
+                    }));
+                }
+                else
+                {
+                    PonerColorFrio();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Logs.Log.Write(ex);
+            }
+        }
+
+        private void PonerColorCaliente()
+        {
+            try
+            {
+                this.Dispatcher.BeginInvoke((Action)(() =>
+                {
+                    border.Background = Brushes.Red;
+                }));
+            }
+            catch (Exception ex)
+            {
+                Logs.Log.Write(ex);
+            }
+
+        }
+
+        private void PonerColorFrio()
+        {
+            try
+            {
+                this.Dispatcher.BeginInvoke((Action)(() =>
+                {
+                    border.Background = Brushes.White;
+
+                }));
+            }
+            catch (Exception ex)
+            {
+                Logs.Log.Write(ex);
+            }
+
+        }
+
+        private void BusEventos_OnTareasCargadas(object sender, EventosTareas.NuevasTareasCargadasEventArgs e)
+        {
+            Notifica();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -60,7 +141,7 @@ namespace ArnGestionPuestoFrontendWPF.Controles
 
         private void BusEventos_OnParesActualizados(object sender, EventosTareas.ParesActualizadosEventArgs e)
         {
-            if(Monton!=0 && Contador != 0 && Monton == Contador)
+            if (Monton != 0 && Contador != 0 && Monton == Contador)
             {
                 if (Store.Bancada.BancadasConfiguracionesPins.AvisarFinPaquete)
                 {
@@ -87,27 +168,30 @@ namespace ArnGestionPuestoFrontendWPF.Controles
             {
                 Calculadora c = new Calculadora(this.TbContadorPaquetes);
                 c.ShowDialog();
-
-                int contador = Convert.ToInt32(TbContadorPaquetes.Text);
+                int contador = 0;
+                int.TryParse(TbContadorPaquetes.Text, out contador);
                 Update.UpdateContadorPaquetesBancada(Store.Bancada, contador);
-                Notifica();
+                
             }
             catch (Exception ex)
             {
                 Logs.Log.Write(ex);
             }
+            Notifica();
+            PonerColorFrio();
+
         }
 
-        private void TbContadorPaquetes_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            EditarContador();
-        }
 
         private void BtSumar_Click(object sender, RoutedEventArgs e)
         {
             if (Store.TareaConsumir != null)
             {
-                Store.TareaConsumir.Monton--;
+                Store.TareaConsumir.Monton++;
+                if (Store.TareaConsumir.Monton == Store.Bancada.BancadasConfiguracionesPins.ContadorPaquetes + 1)
+                {
+                    Store.TareaConsumir.Monton = 1;
+                }
                 Notifica("Monton");
             }
         }
@@ -116,9 +200,19 @@ namespace ArnGestionPuestoFrontendWPF.Controles
         {
             if (Store.TareaConsumir != null)
             {
-                Store.TareaConsumir.Monton++;
+                Store.TareaConsumir.Monton--;
+                if (Store.TareaConsumir.Monton == Store.Bancada.BancadasConfiguracionesPins.ContadorPaquetes + 1)
+                {
+                    Store.TareaConsumir.Monton = 1;
+                }
                 Notifica("Monton");
             }
+        }
+
+        private void TbContadorPaquetes_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            EditarContador();
+
         }
     }
 }

@@ -24,6 +24,8 @@ namespace Entidades.EntidadesBD
         public bool Ejecucion { get; set; }
         public Nullable<int> IdOperarioEjecuta { get; set; }
         public Nullable<int> IdOperarioPrograma { get; set; }
+        public string CodigoEtiquetaFichada { get; set; }
+        public double CantidadEtiquetaFichada { get; set; }
     
         public virtual Maquinas Maquinas { get; set; }
         public virtual Operarios Operarios { get; set; }

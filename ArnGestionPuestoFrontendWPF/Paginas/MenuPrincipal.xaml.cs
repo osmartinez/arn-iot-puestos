@@ -34,5 +34,10 @@ namespace ArnGestionPuestoFrontendWPF.Paginas
         {
             NavegacionEventos.CargarNuevaPagina(NavegacionEventos.PaginaTarea);
         }
+
+        private void BtConfigOperarios_Click(object sender, RoutedEventArgs e)
+        {
+            NavegacionEventos.CargarNuevaPagina(NavegacionEventos.ConfiguracionOperarioPagina);
+        }
     }
 }

@@ -39,6 +39,48 @@ namespace BDSQL
             }
         }
 
+        public static List<SP_BarquillaBuscarInformacionEnSeccion_Result> BuscarTareasPorCodigoBarquilla(string codEtiqueta, string codSeccion)
+        {
+            using (SistemaGlobalPREEntities db = new SistemaGlobalPREEntities())
+            {
+                return db.SP_BarquillaBuscarInformacionEnSeccion(codEtiqueta, codSeccion).ToList();
+            }
+        }
+
+        /// <summary>
+        /// busca el control de un tipo de maquina a partir de una operación
+        /// </summary>
+        /// <param name="idOfo"></param>
+        /// <param name="idTipoMaquina"></param>
+        /// <returns></returns>
+        public static OperacionesControles BuscarControlOperacion(int idOfo, int idTipoMaquina)
+        {
+            using (SistemaGlobalPREEntities db = new SistemaGlobalPREEntities())
+            {
+                var ofo = db.OrdenesFabricacionOperaciones.Find(idOfo);
+                if (ofo.IdOperacionMaestra == null)
+                {
+                    return OperacionesControles.Default;
+                }
+                var control = db.OperacionesControles.FirstOrDefault(x => x.IdOperacion == ofo.IdOperacionMaestra && x.IdTipoMaquina == idTipoMaquina);
+                if (control == null)
+                {
+                    return OperacionesControles.Default;
+
+                }
+                else
+                {
+                    return control;
+                }
+            }
+        }
+
+        /// <summary>
+        /// busca la lista de tareas en formato SP_BarquillaBuscarInformacionEnSeccion a partir de una ofot
+        /// </summary>
+        /// <param name="idOfot"></param>
+        /// <param name="maquinas"></param>
+        /// <returns></returns>
         public static List<SP_BarquillaBuscarInformacionEnSeccion_Result> BuscarTareasPorOfot(int idOfot, List<Maquinas> maquinas)
         {
             using (SistemaGlobalPREEntities db = new SistemaGlobalPREEntities())
@@ -74,6 +116,11 @@ namespace BDSQL
             }
         }
 
+        /// <summary>
+        /// a partir de una id de operacion, encuentra las ofot
+        /// </summary>
+        /// <param name="idOperacion"></param>
+        /// <returns></returns>
         public static List<OrdenesFabricacionOperacionesTallas> ObtenerOperacionesTallasOperacion(int idOperacion)
         {
             using (SistemaGlobalPREEntities db = new SistemaGlobalPREEntities())
@@ -82,6 +129,11 @@ namespace BDSQL
             }
         }
 
+        /// <summary>
+        /// busca un operario por código de obrero
+        /// </summary>
+        /// <param name="cod"></param>
+        /// <returns></returns>
         public static Operarios BuscarOperarioPorCodigo(string cod)
         {
             using (SistemaGlobalPREEntities db = new SistemaGlobalPREEntities())

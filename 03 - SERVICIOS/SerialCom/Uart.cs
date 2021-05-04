@@ -143,7 +143,13 @@ namespace SerialCom
                     foreach (Maquinas maq in this.maquinas)
                     {
                         int valor = this.LeerPulso(maq.MaquinasConfiguracionesPins.DireccionPulso);
-                        if (valor > 0)
+                        
+                        if(valor > 10)
+                        {
+                            RestarPulso(maq.MaquinasConfiguracionesPins.DireccionPulso, 0);
+                            valor = 0;
+                        }
+                        else if (valor > 0)
                         {
                             RestarPulso(maq.MaquinasConfiguracionesPins.DireccionPulso, valor - 1);
                             PulsoGenerado(maq);
@@ -183,8 +189,6 @@ namespace SerialCom
         {
             try
             {
-                 //int[] test = this.client.ReadHoldingRegisters(4096, 100);
-                // bool[] inputs = this.client.ReadDiscreteInputs(0, 7);
                 int[] resultado = this.client.ReadHoldingRegisters(ObtenerDireccion(direccionPulso), 1);
                 int valor = resultado[0];
                 return valor;

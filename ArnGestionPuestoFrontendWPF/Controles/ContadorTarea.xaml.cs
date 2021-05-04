@@ -24,15 +24,14 @@ namespace ArnGestionPuestoFrontendWPF.Controles
     public partial class ContadorTarea : UserControl,INotifyPropertyChanged
     {
         private DispatcherTimer timerExceso;
-        private List<Tarea> tareas = new List<Tarea>();
         public event PropertyChangedEventHandler PropertyChanged;
         public string Utillaje
         {
             get
             {
-                if (tareas.Any())
+                if (Store.Tareas.Any())
                 {
-                    return tareas.First().CodigoUtillaje;
+                    return Store.TareaConsumir.CodigoUtillaje;
                 }
                 else
                 {
@@ -44,7 +43,7 @@ namespace ArnGestionPuestoFrontendWPF.Controles
         {
             get
             {
-                if (tareas.Any())
+                if (Store.Tareas.Any())
                 {
                     return Store.TareaConsumir.CantidadFabricadaReal;
                 }
@@ -58,9 +57,9 @@ namespace ArnGestionPuestoFrontendWPF.Controles
         {
             get
             {
-                if (tareas.Any())
+                if (Store.Tareas.Any())
                 {
-                    return Convert.ToInt32(tareas.First().CantidadFabricar);
+                    return Convert.ToInt32(Store.TareaConsumir.CantidadFabricar);
                 }
                 else
                 {
@@ -72,15 +71,15 @@ namespace ArnGestionPuestoFrontendWPF.Controles
         {
             get
             {
-                if (tareas.Any())
+                if (Store.Tareas.Any())
                 {
-                    if(tareas.First().TallaUtillaje == "00")
+                    if(Store.TareaConsumir.TallaUtillaje == "00")
                     {
-                        return tareas.First().TallasArticulo;
+                        return Store.TareaConsumir.TallasArticulo;
                     }
                     else
                     {
-                        return tareas.First().TallaUtillaje;
+                        return Store.TareaConsumir.TallaUtillaje;
                     }
                 }
                 else
@@ -167,7 +166,6 @@ namespace ArnGestionPuestoFrontendWPF.Controles
 
         private void BusEventos_OnTareasCargadas(object sender, EventosTareas.NuevasTareasCargadasEventArgs e)
         {
-            tareas = e.Tareas;
             PonerColorFrio();
             Notifica();
         }
