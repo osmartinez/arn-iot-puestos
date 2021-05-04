@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Entidades.EntidadesBD
 {
-    public partial class Maquinas:Notificable
+    public partial class Maquinas : Notificable
     {
         public event EventHandler OnErrorTareaSinEjecutar;
         public event EventHandler OnColaTrabajoActualizada;
@@ -33,7 +33,7 @@ namespace Entidades.EntidadesBD
         {
             get
             {
-              
+
 
                 if (TrabajoEjecucion != null)
                 {
@@ -57,7 +57,7 @@ namespace Entidades.EntidadesBD
         {
             get
             {
-              
+
 
                 if (TrabajoEjecucion != null)
                 {
@@ -74,7 +74,7 @@ namespace Entidades.EntidadesBD
         {
             get
             {
-                
+
                 if (TrabajoEjecucion != null)
                 {
                     return TrabajoEjecucion.OrdenesFabricacionOperacionesTallasCantidad.OrdenesFabricacionOperacionesTallas.OrdenesFabricacionOperaciones.CodUtillaje;
@@ -118,7 +118,7 @@ namespace Entidades.EntidadesBD
         {
             get
             {
-               
+
                 if (TrabajoEjecucion != null)
                 {
                     return TrabajoEjecucion.OrdenesFabricacionOperacionesTallasCantidad.OrdenesFabricacionOperacionesTallas.IdUtillajeTalla;
@@ -195,7 +195,7 @@ namespace Entidades.EntidadesBD
         {
             get
             {
-               
+
                 if (TrabajoEjecucion != null)
                 {
                     return TrabajoEjecucion.CantidadEtiquetaFichada;
@@ -211,7 +211,7 @@ namespace Entidades.EntidadesBD
         {
             get
             {
-                
+
                 if (this.TrabajoEjecucion != null)
                 {
                     var pulsos = this.Pulsos.Where(x => x.CodigoEtiqueta == this.TrabajoEjecucion.CodigoEtiquetaFichada);
@@ -251,20 +251,10 @@ namespace Entidades.EntidadesBD
                         {
                             if (enEjecucion.Count == 0)
                             {
-                                var planificadas = this.MaquinasColasTrabajo.Where(x => !x.Ejecucion).ToList();
-                                if (planificadas.Count == 0)
-                                {
-                                    return null;
-                                }
-                                else
-                                {
-                                    int minPosicion = planificadas.Min(x => x.Posicion);
-                                    return planificadas.FirstOrDefault(x => x.Posicion == minPosicion);
-                                }
+                                return null;
                             }
                             else
                             {
-
                                 // agrupacion
                                 double maxPendientes = this.MaquinasColasTrabajo.Max(x => x.ParesPendientes);
                                 return this.MaquinasColasTrabajo.FirstOrDefault(x => x.ParesPendientes == maxPendientes);
@@ -272,9 +262,7 @@ namespace Entidades.EntidadesBD
                         }
                         else
                         {
-
                             return enEjecucion[0];
-
                         }
                     }
                     else
@@ -381,6 +369,30 @@ namespace Entidades.EntidadesBD
             {
                 this.ErrorTareaSinEjecutar();
                 return false;
+            }
+        }
+
+        public static Maquinas Default
+        {
+            get
+            {
+                return new Maquinas
+                {
+                    Nombre = "- SIN MAQUINA -",
+                    CodSeccion = "- SIN SECCION -",
+                    MaquinasColasTrabajo = new List<MaquinasColasTrabajo> {
+                        new EntidadesBD.MaquinasColasTrabajo {
+                            Ejecucion = true,
+                            CodigoEtiquetaFichada = "- SIN ETIQUETA -",
+                            OrdenesFabricacionOperacionesTallasCantidad = new EntidadesBD.OrdenesFabricacionOperacionesTallasCantidad
+                            { CantidadFabricar = 0,
+                                CantidadSaldos = 0,
+                        OrdenesFabricacionOperacionesTallas = new OrdenesFabricacionOperacionesTallas {
+                        Tallas = "- SIN TALLAS -", IdUtillajeTalla = "- SIN TALLA -", OrdenesFabricacionOperaciones = new OrdenesFabricacionOperaciones { CodUtillaje = "-SIN UTILLAJE-", CodSeccion = "- SIN SECCION-", OrdenesFabricacion = new OrdenesFabricacion { Codigo = "-SIN OF-", Campos_ERP = new Campos_ERP { NOMBRECLI = "-SIN CLIENTE-" } } } }
+                    } }
+                    }
+
+                };
             }
         }
     }

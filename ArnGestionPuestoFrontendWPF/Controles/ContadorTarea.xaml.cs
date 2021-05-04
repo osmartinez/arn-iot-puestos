@@ -1,4 +1,5 @@
-﻿using Entidades.EntidadesDTO;
+﻿using ArnGestionPuestoFrontendWPF.Ventanas;
+using Entidades.EntidadesDTO;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -25,27 +26,21 @@ namespace ArnGestionPuestoFrontendWPF.Controles
     {
         private DispatcherTimer timerExceso;
         public event PropertyChangedEventHandler PropertyChanged;
+        private bool estaAvisado = false;
         public string Utillaje
         {
             get
             {
-                if (Store.Tareas.Any())
-                {
-                    return Store.TareaConsumir.CodigoUtillaje;
-                }
-                else
-                {
-                    return "";
-                }
+                return Store.MaquinaPrincipal.Utillaje;
             }
         }
         public int CantidadFabricada
         {
             get
             {
-                if (Store.Tareas.Any())
+                if (Store.HayAlgunaTarea)
                 {
-                    return Store.TareaConsumir.CantidadFabricadaReal;
+                    return Store.MaquinaPrincipal.Pulsos.Where(x=>x.IdTarea == Store.MaquinaPrincipal.IdTarea).Sum(x=>x.Pares);
                 }
                 else
                 {
@@ -57,35 +52,14 @@ namespace ArnGestionPuestoFrontendWPF.Controles
         {
             get
             {
-                if (Store.Tareas.Any())
-                {
-                    return Convert.ToInt32(Store.TareaConsumir.CantidadFabricar);
-                }
-                else
-                {
-                    return 0;
-                }
+                return Store.MaquinaPrincipal.ParesFabricando;
             }
         }
         public string Talla
         {
             get
             {
-                if (Store.Tareas.Any())
-                {
-                    if(Store.TareaConsumir.TallaUtillaje == "00")
-                    {
-                        return Store.TareaConsumir.TallasArticulo;
-                    }
-                    else
-                    {
-                        return Store.TareaConsumir.TallaUtillaje;
-                    }
-                }
-                else
-                {
-                    return "";
-                }
+                return Store.MaquinaPrincipal.TallaArticulo;
             }
         }
         public ContadorTarea()
@@ -106,6 +80,12 @@ namespace ArnGestionPuestoFrontendWPF.Controles
             {
                 if (this.CantidadFabricada >= this.CantidadFabricar)
                 {
+                    if(Store.Bancada.BancadasConfiguracionesPins.AvisarFinPaquete && !estaAvisado)
+                    {
+                        new Aviso("Has finalizado la tarea", hablar: true);
+                        estaAvisado = true;
+                    }
+
                     border.Dispatcher.BeginInvoke((Action)(() =>
                     {
                         if (border.Background == Brushes.White)
@@ -117,6 +97,10 @@ namespace ArnGestionPuestoFrontendWPF.Controles
                             PonerColorFrio();
                         }
                     }));
+                }
+                else
+                {
+                    estaAvisado = false;
                 }
                
             }

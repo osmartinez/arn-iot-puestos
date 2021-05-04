@@ -70,7 +70,21 @@
                 <TextBlock Text="OK" ></TextBlock>
             </Button>
         </Grid>
-        <DataGrid Name="TablaOperarios" Grid.Column="1" AutoGenerateColumns="False" IsReadOnly="True" FontSize="35" ItemsSource="{Binding Operarios}">
+
+        <Grid Grid.Column="1" Background="White">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" FontSize="40" Text="{Binding Operario.Nombre}" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+            <TextBlock Grid.Row="1" FontSize="40" Text="{Binding Operario.Apellidos}" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+
+            <Button Name="BtSalir" Click="BtSalir_Click" Grid.Row="2"  Style="{StaticResource BotonBorrarLogin}">SALIR</Button>
+        </Grid>
+        
+        <!--<DataGrid Name="TablaOperarios" Grid.Column="1" AutoGenerateColumns="False" IsReadOnly="True" FontSize="35" ItemsSource="{Binding Operarios}">
             <DataGrid.Columns>
                 <DataGridTextColumn Width="*" Binding="{Binding CodigoObrero}">
                     <DataGridTextColumn.Header>
@@ -93,7 +107,7 @@
                 </DataGridTemplateColumn>
 
             </DataGrid.Columns>
-        </DataGrid>
+        </DataGrid>-->
     </Grid>
 
 </Page>

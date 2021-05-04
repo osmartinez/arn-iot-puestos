@@ -28,14 +28,7 @@ namespace ArnGestionPuestoFrontendWPF.Controles
         {
             get
             {
-                if (Store.Tareas.Any())
-                {
-                    return Store.TareaConsumir.Monton;
-                }
-                else
-                {
-                    return 0;
-                }
+                return Store.Monton;
             }
         }
         public int Contador
@@ -185,12 +178,12 @@ namespace ArnGestionPuestoFrontendWPF.Controles
 
         private void BtSumar_Click(object sender, RoutedEventArgs e)
         {
-            if (Store.TareaConsumir != null)
+            if (Store.HayAlgunaTarea)
             {
-                Store.TareaConsumir.Monton++;
-                if (Store.TareaConsumir.Monton == Store.Bancada.BancadasConfiguracionesPins.ContadorPaquetes + 1)
+                Store.Monton++;
+                if (Store.Monton == Store.Bancada.BancadasConfiguracionesPins.ContadorPaquetes + 1)
                 {
-                    Store.TareaConsumir.Monton = 1;
+                    Store.Monton = 1;
                 }
                 Notifica("Monton");
             }
@@ -198,12 +191,12 @@ namespace ArnGestionPuestoFrontendWPF.Controles
 
         private void BtRestar_Click(object sender, RoutedEventArgs e)
         {
-            if (Store.TareaConsumir != null)
+            if (Store.HayAlgunaTarea )
             {
-                Store.TareaConsumir.Monton--;
-                if (Store.TareaConsumir.Monton == Store.Bancada.BancadasConfiguracionesPins.ContadorPaquetes + 1)
+                Store.Monton--;
+                if (Store.Monton == Store.Bancada.BancadasConfiguracionesPins.ContadorPaquetes + 1)
                 {
-                    Store.TareaConsumir.Monton = 1;
+                    Store.Monton = 1;
                 }
                 Notifica("Monton");
             }

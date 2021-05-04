@@ -17,6 +17,8 @@ namespace BDSQL
                     .Include("BancadasConfiguracionesIncidencias")
                     .Include("BancadasConfiguracionesPins")
                     .Include("Maquinas.MaquinasConfiguracionesPins")
+                    .Include("Maquinas.MaquinasColasTrabajo.OrdenesFabricacionOperacionesTallasCantidad.OrdenesFabricacionOperacionesTallas.OrdenesFabricacionOperaciones.OrdenesFabricacion.Campos_ERP")
+                    .Include("Maquinas.MaquinasColasTrabajo.OrdenesFabricacionOperacionesTallasCantidad.OrdenesFabricacionProductos")
                     .FirstOrDefault(x=>x.ID == id);
             }
         }

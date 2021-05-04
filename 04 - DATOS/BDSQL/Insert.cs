@@ -10,7 +10,7 @@ namespace BDSQL
 {
     public static class Insert
     {
-        public async static Task<int> InsertarConsumo(int idTarea, int pares, int idOperario, int idMaquina,bool finalizar)
+        public async static Task<int> InsertarConsumo(int idTarea, int pares, int idOperario, int idMaquina, bool finalizar)
         {
             using (SistemaGlobalPREEntities db = new SistemaGlobalPREEntities())
             {
@@ -40,7 +40,7 @@ namespace BDSQL
             }
         }
 
-        private static MaquinasRegistrosDatos TranformarTareaAMaquinaRegistroDato(Tarea tarea, int idOperario,int idPuesto, int pares, bool piezaIntroducida, int productividad)
+        private static MaquinasRegistrosDatos TranformarTareaAMaquinaRegistroDato(Tarea tarea, int idOperario, int idPuesto, int pares, bool piezaIntroducida, int productividad)
         {
             return new MaquinasRegistrosDatos
             {
@@ -176,31 +176,120 @@ namespace BDSQL
             return trabajosInsertar;
         }
 
-        public static void InsertarPulso(Tarea tarea, int idOperario,int idPuesto, int pares)
+        public static List<MaquinasColasTrabajo> EliminarDeColaTrabajo(string codigoBarquilla, int idMaquina)
+        {
+            List<MaquinasColasTrabajo> trabajosInsertar = new List<MaquinasColasTrabajo>();
+
+            using (SistemaGlobalPREEntities db = new SistemaGlobalPREEntities())
+            {
+
+                // recupero la cola de la maquina
+                var trabajos = db.MaquinasColasTrabajo
+                    .Include("OrdenesFabricacionOperacionesTallasCantidad.OrdenesFabricacionOperacionesTallas.OrdenesFabricacionOperaciones.OrdenesFabricacion.Campos_ERP")
+                    .Include("OrdenesFabricacionOperacionesTallasCantidad.OrdenesFabricacionProductos")
+                    .Where(x => x.IdMaquina == idMaquina).ToList();
+
+                // elimino todos los trabajos que tengan que ver con la tarea que quiero ejecutar
+                trabajos.RemoveAll(x =>x.CodigoEtiquetaFichada == codigoBarquilla);
+
+                // elimino los trabajos que se encuentren en ejecución actualmente
+                trabajos.RemoveAll(x => x.Ejecucion);
+
+                // los ordeno por posicion
+                var trabajosOrdenados = trabajos.OrderBy(x => x.Posicion).ToList();
+
+                // actualizo sus posiciones en +1
+                int i = 1;
+                int anterior = 0;
+                foreach (var trabajo in trabajosOrdenados)
+                {
+                    if (anterior == 0)
+                    {
+                        anterior = trabajo.Posicion;
+                        trabajo.Posicion = i;
+                    }
+                    else
+                    {
+                        if (anterior == trabajo.Posicion)
+                        {
+                            trabajo.Posicion = i;
+                        }
+                        else
+                        {
+                            i++;
+                            anterior = trabajo.Posicion;
+                            trabajo.Posicion = i;
+                        }
+                    }
+                }
+
+                // busco el trabajo en ejecucion actual de la cola
+                MaquinasColasTrabajo trabajoEjecucionActual = db.MaquinasColasTrabajo.FirstOrDefault(x => x.IdMaquina == idMaquina && x.Ejecucion);
+                // si tiene trabajo en ejecución
+                if (trabajoEjecucionActual != null)
+                {
+                    // lo desubico
+                    var barquilla = db.Barquillas.FirstOrDefault(x => x.CodigoEtiqueta == trabajoEjecucionActual.CodigoEtiquetaFichada);
+                    barquilla.CodUbicacion = null;
+                }
+
+                // elimino toda la cola
+                db.MaquinasColasTrabajo.RemoveRange(db.MaquinasColasTrabajo.Where(x => x.IdMaquina == idMaquina).ToList());
+
+
+                // inserto los trabajos antiguos con las posiciones actualizadas en +1
+                foreach (var trabajo in trabajosOrdenados)
+                {
+                    trabajosInsertar.Add(new MaquinasColasTrabajo
+                    {
+                        CantidadEtiquetaFichada = trabajo.CantidadEtiquetaFichada,
+                        Ejecucion = false,
+                        Posicion = trabajo.Posicion,
+                        IdTarea = trabajo.IdTarea,
+                        Agrupacion = trabajo.Agrupacion,
+                        FechaProgramado = trabajo.FechaProgramado,
+                        IdMaquina = idMaquina,
+                        IdOperarioEjecuta = trabajo.IdOperarioEjecuta,
+                        IdOperarioPrograma = trabajo.IdOperarioPrograma,
+                        CodigoEtiquetaFichada = trabajo.CodigoEtiquetaFichada,
+                        OrdenesFabricacionOperacionesTallasCantidad = trabajo.OrdenesFabricacionOperacionesTallasCantidad
+                    });
+
+                }
+
+                db.MaquinasColasTrabajo.AddRange(trabajosInsertar);
+                db.SaveChanges();
+            }
+
+            return trabajosInsertar;
+        }
+
+
+        public static void InsertarPulso(Tarea tarea, int idOperario, int idPuesto, int pares)
         {
             using (SistemaGlobalPREEntities db = new SistemaGlobalPREEntities())
             {
-                db.MaquinasRegistrosDatos.Add(TranformarTareaAMaquinaRegistroDato(tarea, idOperario,idPuesto, pares, true, 1));
+                db.MaquinasRegistrosDatos.Add(TranformarTareaAMaquinaRegistroDato(tarea, idOperario, idPuesto, pares, true, 1));
                 db.SaveChangesAsync();
 
             }
         }
 
-        public static void InsertarSaldos(Tarea tarea, int idOperario,int idPuesto, int pares)
+        public static void InsertarSaldos(Tarea tarea, int idOperario, int idPuesto, int pares)
         {
             using (SistemaGlobalPREEntities db = new SistemaGlobalPREEntities())
             {
-                db.MaquinasRegistrosDatos.Add(TranformarTareaAMaquinaRegistroDato(tarea, idOperario,idPuesto, pares, false, -1));
+                db.MaquinasRegistrosDatos.Add(TranformarTareaAMaquinaRegistroDato(tarea, idOperario, idPuesto, pares, false, -1));
                 db.SaveChangesAsync();
 
             }
         }
 
-        public static void InsertarCorreccion(Tarea tarea, int idOperario,int idPuesto, int pares)
+        public static void InsertarCorreccion(Tarea tarea, int idOperario, int idPuesto, int pares)
         {
             using (SistemaGlobalPREEntities db = new SistemaGlobalPREEntities())
             {
-                db.MaquinasRegistrosDatos.Add(TranformarTareaAMaquinaRegistroDato(tarea, idOperario,idPuesto, pares, false, 1));
+                db.MaquinasRegistrosDatos.Add(TranformarTareaAMaquinaRegistroDato(tarea, idOperario, idPuesto, pares, false, 1));
                 db.SaveChangesAsync();
 
             }

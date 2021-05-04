@@ -1,4 +1,5 @@
 ﻿using ArnGestionPuestoFrontendWPF.Ventanas;
+using BDSQL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,24 +35,30 @@ namespace ArnGestionPuestoFrontendWPF.Controles
                 return;
             }
 
-            if (Store.Tareas.Any())
-            {
-                if (Store.Bancada.EsManual)
-                {
-                    FinalizarManual fm = new FinalizarManual();
-                    fm.ShowDialog();
-                }
-                else
-                {
 
-                }
-                Store.Tareas = new List<Entidades.EntidadesDTO.Tarea>();
-                BusEventos.TareasCargadas(Store.Tareas);
+            if (Store.Bancada.EsManual)
+            {
+                FinalizarManual fm = new FinalizarManual();
+                fm.ShowDialog();
             }
             else
             {
-                new Aviso("No hay tarea").Show();
+                foreach (var maquina in Store.Bancada.Maquinas)
+                {
+                    if (maquina.TrabajoEjecucion != null)
+                    {
+                        var cola = Insert.EliminarDeColaTrabajo(maquina.TrabajoEjecucion.CodigoEtiquetaFichada,maquina.ID);
+                        maquina.AsignarColaTrabajo(cola);
+                    }
+                    else
+                    {
+                        new Aviso(string.Format("No hay tarea en {0}",maquina.Nombre)).Show();
+                    }
+                }
             }
+
+
+
 
         }
     }

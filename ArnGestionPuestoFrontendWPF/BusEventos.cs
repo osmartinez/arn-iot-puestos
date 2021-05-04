@@ -25,11 +25,11 @@ namespace ArnGestionPuestoFrontendWPF
             }
         }
 
-        public static void ParesActualizados(Tarea tarea)
+        public static void ParesActualizados()
         {
             if(OnParesActualizados!= null)
             {
-                OnParesActualizados(null, new ParesActualizadosEventArgs(tarea));
+                OnParesActualizados(null, new ParesActualizadosEventArgs(null));
             }
         }
 

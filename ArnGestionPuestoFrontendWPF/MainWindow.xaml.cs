@@ -418,6 +418,7 @@ namespace ArnGestionPuestoFrontendWPF
 
                     maquina.Pulsos.Add(new PulsoMaquina
                     {
+                        IdTarea = maquina.IdTarea,
                         CodigoEtiqueta = maquina.TrabajoEjecucion.CodigoEtiquetaFichada,
                         Fecha = ahora,
                         IdOperario = Store.OperarioEjecucion.Id,

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Speech.Synthesis;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -22,11 +24,27 @@ namespace ArnGestionPuestoFrontendWPF.Ventanas
     {
         public string Texto { get; private set; }
         private DispatcherTimer timer;
-        public Aviso(string texto,int ms = 800)
+        public Aviso(string texto,int ms = 800, bool hablar=false)
         {
             InitializeComponent();
-            System.Media.SoundPlayer player = new System.Media.SoundPlayer(@"Assets/beep_error.wav");
-            player.Play();
+
+            if (!hablar)
+            {
+                System.Media.SoundPlayer player = new System.Media.SoundPlayer(@"Assets/beep_error.wav");
+                player.Play();
+            }
+            else
+            {
+                BackgroundWorker worker = new BackgroundWorker();
+                worker.DoWork += (s, e) => {
+                    var synthesizer = new SpeechSynthesizer();
+                    synthesizer.SetOutputToDefaultAudioDevice();
+                    synthesizer.Speak(texto);
+                };
+                worker.RunWorkerAsync();
+
+            }
+           
             this.DataContext = this;
             this.Texto = texto;
             timer = new DispatcherTimer();

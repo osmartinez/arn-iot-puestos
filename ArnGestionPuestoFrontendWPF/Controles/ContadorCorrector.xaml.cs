@@ -34,14 +34,7 @@ namespace ArnGestionPuestoFrontendWPF.Controles
         {
             get
             {
-                if (Store.Tareas.Any())
-                {
-                    return Store.Tareas.First().Correcciones.Sum(x => x.Pares);
-                }
-                else
-                {
-                    return 0;
-                }
+                return Store.Correcciones.Sum(x=>x.Pares);
             }
         }
         public ContadorCorrector()
@@ -64,30 +57,16 @@ namespace ArnGestionPuestoFrontendWPF.Controles
         {
             if (Store.Operarios.Any())
             {
-                if (Store.Tareas.Any())
+                if (Store.HayAlgunaTarea)
                 {
-                    Tarea tareaConsumir = Store.TareaConsumir;
-
-                    if (tareaConsumir != null)
+                    Store.Correcciones.Add(new PulsoMaquina
                     {
-                        tareaConsumir.Correcciones.Add(new Entidades.EntidadesDTO.PulsoMaquina
-                        {
-                            Pares = this.CorreccionEditar,
-                            Fecha = DateTime.Now,
-                            IdOperario = Store.Operarios.Any() ? Store.Operarios.First().Id : 0,
-                        });
-                        Insert.InsertarCorreccion(tareaConsumir, Store.Operarios.Any() ? Store.Operarios.First().Id : 0, Store.Bancada.ID, this.CorreccionEditar);
-                        ClienteMQTT.Publicar(string.Format("/puesto/{0}/normal", Store.Bancada.ID),
-                            JsonConvert.SerializeObject(new MensajeConsumoTarea
-                            {
-                                IdPuesto = Store.Bancada.ID,
-                                IdTarea = Store.TareaConsumir.IdTarea,
-                                ParesConsumidos = (int)this.CorreccionEditar,
-                                PiezaIntroducida = false,
-                            }), 2);
-                        BusEventos.ParesActualizados(tareaConsumir);
-                    }
-
+                        Fecha = DateTime.Now,
+                        IdOperario = Store.OperarioEjecucion.Id,
+                        IdPuesto = Store.Bancada.ID,
+                        Pares = CorreccionEditar,
+                    });
+                    BusEventos.ParesActualizados();
                 }
                 else
                 {

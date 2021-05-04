@@ -23,14 +23,14 @@ namespace ArnGestionPuestoFrontendWPF.Ventanas
         {
             get
             {
-                return Store.TareasCodigoOrdenToString;
+                return Store.MaquinaPrincipal.CodigoOrden;
             }
         }
         public string NombreCliente
         {
             get
             {
-                return Store.TareasClienteToString;
+                return Store.MaquinaPrincipal.Cliente;
             }
         }
 
@@ -38,14 +38,14 @@ namespace ArnGestionPuestoFrontendWPF.Ventanas
         {
             get
             {
-                return Store.TareasUtillajeToString;
+                return Store.MaquinaPrincipal.Utillaje;
             }
         }
         public string Talla
         {
             get
             {
-                return Store.TareasTallaToString;
+                return Store.MaquinaPrincipal.TallaArticulo;
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using BDSQL;
+﻿using ArnGestionPuestoFrontendWPF.Ventanas;
+using BDSQL;
 using Entidades.EntidadesBD;
 using System;
 using System.Collections.Generic;
@@ -25,11 +26,18 @@ namespace ArnGestionPuestoFrontendWPF.Paginas
     public partial class OperariosPagina : Page, INotifyPropertyChanged
     {
         public string CodigoOperario { get; set; } = "";
-        public ObservableCollection<Operarios> Operarios
+        //public ObservableCollection<Operarios> Operarios
+        //{
+        //    get
+        //    {
+        //        return new ObservableCollection<Operarios>(Store.Operarios);
+        //    }
+        //}
+        public Operarios Operario
         {
             get
             {
-                return new ObservableCollection<Operarios>(Store.Operarios);
+                return Store.OperarioEjecucion;
             }
         }
      
@@ -84,6 +92,8 @@ namespace ArnGestionPuestoFrontendWPF.Paginas
                 {
                     if (!Store.Operarios.Any(x=>x.Id == o.Id))
                     {
+                        new Aviso(string.Format("¡Bienvenido {0}!", o.Nombre),hablar:true).Show();
+
                         Store.Operarios.Add(o);
                         BusEventos.OperarioEntra(o);
                         NavegacionEventos.CargarNuevaPagina(NavegacionEventos.PaginaTarea);
@@ -95,14 +105,26 @@ namespace ArnGestionPuestoFrontendWPF.Paginas
             }
         }
 
-        private void BtOperarioSalir_Click(object sender, RoutedEventArgs e)
+        private void BtSalir_Click(object sender, RoutedEventArgs e)
         {
-            if(this.TablaOperarios.SelectedItems.Count == 1)
+            if (Store.OperarioEjecucion != null)
             {
-                Operarios o = this.TablaOperarios.SelectedItems[0] as Operarios;
-                Store.Operarios.Remove(o);
+                Operarios o = Store.OperarioEjecucion;
+                new Aviso(string.Format("¡Hasta pronto {0}!", Store.OperarioEjecucion.Nombre), hablar: true).Show();
+                Store.Operarios.Clear();
                 BusEventos.OperarioSale(o);
+
             }
         }
+
+        //private void BtOperarioSalir_Click(object sender, RoutedEventArgs e)
+        //{
+        //    if(this.TablaOperarios.SelectedItems.Count == 1)
+        //    {
+        //        Operarios o = this.TablaOperarios.SelectedItems[0] as Operarios;
+        //        Store.Operarios.Remove(o);
+        //        BusEventos.OperarioSale(o);
+        //    }
+        //}
     }
 }
