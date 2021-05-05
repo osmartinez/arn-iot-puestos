@@ -43,6 +43,7 @@ namespace ArnGestionPuestoFrontendWPF.Controles
             }
             else
             {
+
                 foreach (var maquina in Store.Bancada.Maquinas)
                 {
                     if (maquina.TrabajoEjecucion != null)
@@ -52,11 +53,15 @@ namespace ArnGestionPuestoFrontendWPF.Controles
                     }
                     else
                     {
-                        new Aviso(string.Format("No hay tarea en {0}",maquina.Nombre)).Show();
+                        new Aviso(string.Format("No hay tarea")).Show();
                     }
                 }
             }
 
+            Store.Saldos.Clear();
+            Store.Correcciones.Clear();
+
+            BusEventos.TareasCargadas();
 
 
 

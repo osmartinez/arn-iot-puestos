@@ -4,6 +4,7 @@ using DatosConfiguracion;
 using Entidades.EntidadesBD;
 using Entidades.EntidadesConfiguracion;
 using Entidades.EntidadesDTO;
+using Entidades.Enum;
 using Entidades.Eventos;
 using FichajesLector;
 using Logs;
@@ -29,6 +30,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using Turnos;
 
 namespace ArnGestionPuestoFrontendWPF
 {
@@ -111,6 +113,36 @@ namespace ArnGestionPuestoFrontendWPF
                     if (Store.Bancada != null && Store.Bancada.EsMaster && Store.Bancada.IdHermano.HasValue)
                     {
                         Store.BancadaEsclavo = BDSQL.Select.ObtenerBancadaPorId(Store.Bancada.IdHermano.Value);
+                    }
+
+                    DateTime ahora = DateTime.Now;
+                    Turno turno = Horario.CalcularTurnoAFecha(ahora);
+                    DateTime fechaInicio;
+                    DateTime fechaFin;
+                    Horario.CalcularHorarioTurno(turno, ahora, out fechaInicio, out fechaFin);
+
+                    var paquetes = new List<MaquinasRegistrosDatos>();
+                    foreach(var maquina in Store.Bancada.Maquinas)
+                    {
+                        paquetes.AddRange(Select.HistoricoPaquetesOperario(maquina.IpAutomata,maquina.Posicion,fechaInicio, fechaFin));
+
+                    }
+
+                    foreach (var paquete in paquetes.Where(x => x.PiezaIntroducida))
+                    {
+                        var maq = Store.Bancada.Maquinas.FirstOrDefault(x => x.IpAutomata == paquete.IpAutomata && x.Posicion == paquete.PosicionMaquina);
+                        if (maq != null)
+                        {
+                            maq.Pulsos.Add(new PulsoMaquina
+                            {
+                                IdTarea = paquete.IdTarea,
+                                CodigoEtiqueta = paquete.CodigoEtiqueta,
+                                Control = BuscarControl(paquete.IdOperacion, maq),
+                                Fecha = paquete.FechaCreacion,
+                                Pares = paquete.Pares,
+                                IdOperario = paquete.IdOperario,
+                            }); ;
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -213,6 +245,42 @@ namespace ArnGestionPuestoFrontendWPF
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        private void AsignarTareaEjecucion(List<SP_BarquillaBuscarInformacionEnSeccion_Result> infoBarquillaSeccion, Maquinas maquina,string codigoEtiqueta)
+        {
+            if (infoBarquillaSeccion.Any())
+            {
+                var idsOrden = infoBarquillaSeccion.Select(x => x.IdOrden);
+                var idsOrdenDistinto = idsOrden.Distinct();
+                if (idsOrden.Count() != idsOrdenDistinto.Count())
+                {
+                    // multiOperacion
+                }
+                else
+                {
+                    var idsTareas = infoBarquillaSeccion.Select(x => x.IdTarea.Value).Distinct().ToList();
+
+                    var control = BuscarControl(infoBarquillaSeccion.First().IdOperacion, maquina);
+
+                    // bd
+                    BackgroundWorker bwActualizarCola = new BackgroundWorker();
+                    List<MaquinasColasTrabajo> cola = new List<MaquinasColasTrabajo>();
+                    bwActualizarCola.DoWork += (se, ev) =>
+                    {
+                        cola = Insert.ActualizarColaTrabajo(codigoEtiqueta, idsTareas, infoBarquillaSeccion.First().Agrupacion ?? 0, maquina.ID, Store.OperarioEjecucion.Id, infoBarquillaSeccion.Sum(x => x.Cantidad));
+                    };
+                    bwActualizarCola.RunWorkerCompleted += (se, ev) =>
+                    {
+                        maquina.AsignarColaTrabajo(cola);
+                        BusEventos.TareasCargadas();
+                    };
+                    bwActualizarCola.RunWorkerAsync();
+
+                    // mqtt
+                    MqttAsociarBarquilla(infoBarquillaSeccion, maquina);
+                }
+            }
+
+        }
         private void Fichajes_OnBarquillaFichada(object sender, BarquillaFichadaEventArgs e)
         {
             try
@@ -221,37 +289,7 @@ namespace ArnGestionPuestoFrontendWPF
                 {
                     var infoBarquillaSeccion = Select.BuscarTareasPorCodigoBarquilla(e.CodigoEtiqueta, maquina.CodSeccion);
 
-                    if (infoBarquillaSeccion.Any())
-                    {
-                        var idsOrden = infoBarquillaSeccion.Select(x => x.IdOrden);
-                        var idsOrdenDistinto = idsOrden.Distinct();
-                        if (idsOrden.Count() != idsOrdenDistinto.Count())
-                        {
-                            // multiOperacion
-                        }
-                        else
-                        {
-                            var idsTareas = infoBarquillaSeccion.Select(x => x.IdTarea.Value).Distinct().ToList();
-
-                            var control = BuscarControl(infoBarquillaSeccion.First().IdOperacion, maquina);
-
-                            // bd
-                            BackgroundWorker bwActualizarCola = new BackgroundWorker();
-                            List<MaquinasColasTrabajo> cola = new List<MaquinasColasTrabajo>();
-                            bwActualizarCola.DoWork += (se, ev) =>
-                            {
-                                cola = Insert.ActualizarColaTrabajo(e.CodigoEtiqueta, idsTareas, infoBarquillaSeccion.First().Agrupacion ?? 0, maquina.ID, Store.OperarioEjecucion.Id, infoBarquillaSeccion.Sum(x => x.Cantidad));
-                            };
-                            bwActualizarCola.RunWorkerCompleted += (se, ev) =>
-                            {
-                                maquina.AsignarColaTrabajo(cola);
-                            };
-                            bwActualizarCola.RunWorkerAsync();
-
-                            // mqtt
-                            MqttAsociarBarquilla(infoBarquillaSeccion, maquina);
-                        }
-                    }
+                    this.AsignarTareaEjecucion(infoBarquillaSeccion, maquina, e.CodigoEtiqueta);
                 }
 
             }
@@ -260,7 +298,6 @@ namespace ArnGestionPuestoFrontendWPF
                 Log.Write(ex);
             }
         }
-
         private void MqttAsociarBarquilla(List<SP_BarquillaBuscarInformacionEnSeccion_Result> prepaquete, Maquinas maquina, bool asociacion = true)
         {
             try
@@ -322,15 +359,13 @@ namespace ArnGestionPuestoFrontendWPF
                         // quizás lo más elegante es buscar una etiqueta de barquilla de esa ofot elegida
                         // invocar a la función de barquilla
 
-                        //var infos = Select.BuscarTareasPorOfot(eot.OfotElegida.ID, Store.Bancada.Maquinas.ToList());
-                        //List<Tarea> tareas = new List<Tarea>(
-                        //    );
-                        //foreach (var info in infos)
-                        //{
-                        //    tareas.Add(new Tarea(info));
-                        //}
-                        //Store.Tareas = tareas;
-                        //BusEventos.TareasCargadas(Store.Tareas);
+                        foreach (var maquina in Store.Bancada.Maquinas)
+                        {
+                            var infoBarquillaSeccion = Select.BuscarTareasPorOfot(eot.OfotElegida.ID);
+
+                            this.AsignarTareaEjecucion(infoBarquillaSeccion, maquina, e.CodigoEtiqueta);
+                        }
+                        
                     }
                 }
                 else
@@ -367,6 +402,11 @@ namespace ArnGestionPuestoFrontendWPF
                     Configurar c = new Configurar();
                     c.ShowDialog();
                 }
+
+                if (e.Key == Key.F2)
+                {
+                    PulsoGenerado(new PulsoGeneradoEventArgs(Store.Bancada.ID));
+                }
             }
             catch (Exception ex)
             {
@@ -385,15 +425,16 @@ namespace ArnGestionPuestoFrontendWPF
                     if (maquina.MaquinasConfiguracionesPins.DescontarAutomaticamente)
                     {
 
-                        ClienteMQTT.Publicar(string.Format("/puesto/{0}/pulso", maquina.IpAutomata), JsonConvert.SerializeObject(new MensajePulsoNormalMQTT
+                        ClienteMQTT.Publicar(string.Format("/puesto/{0}/pulso", Store.Bancada.ID), JsonConvert.SerializeObject(new MensajePulsoNormalMQTT
                         {
+                            IpAutomata = maquina.IpAutomata,
                             CodigoArticulo = maquina.CodigoArticulo,
                             CodigoBarras = maquina.TrabajoEjecucion.CodigoEtiquetaFichada,
                             CodigoOF = maquina.CodigoOrden,
                             IdObrero = Store.OperarioEjecucion.Id,
                             IdOF = maquina.IdOrden,
                             IdOperacion = maquina.IdOperacion,
-                            IdTarea = maquina.IdTarea,
+                            IdTarea = maquina.TrabajoEjecucion.IdTarea,
                             NombreCliente = maquina.Cliente,
                             NumUtillajes = 1,
                             Posicion = maquina.Posicion,
@@ -443,6 +484,8 @@ namespace ArnGestionPuestoFrontendWPF
                         ParesConsumidos = (int)maquina.MaquinasConfiguracionesPins.ProductoPorPulso,
                         PiezaIntroducida = true,
                     }), 2);
+
+                    BusEventos.ParesActualizados();
 
                 }
             }

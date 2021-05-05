@@ -58,6 +58,10 @@ namespace ArnGestionPuestoFrontendWPF.Ventanas
                 }
                 
             }
+            else
+            {
+                this.Texto = "0";
+            }
             Notifica("Texto");
 
             textbox.Text = this.Texto;

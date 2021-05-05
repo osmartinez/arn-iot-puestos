@@ -17,11 +17,11 @@ namespace ArnGestionPuestoFrontendWPF
         public static event EventHandler<OperarioEntradaEventArgs> OnOperarioEntra;
 
 
-        public static void TareasCargadas(List<Tarea> tareas)
+        public static void TareasCargadas()
         {
             if (OnTareasCargadas != null)
             {
-                OnTareasCargadas(null, new NuevasTareasCargadasEventArgs(tareas));
+                OnTareasCargadas(null, new NuevasTareasCargadasEventArgs(null));
             }
         }
 

@@ -17,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Turnos;
 
 namespace ArnGestionPuestoFrontendWPF.Paginas
 {
@@ -92,8 +93,9 @@ namespace ArnGestionPuestoFrontendWPF.Paginas
                 {
                     if (!Store.Operarios.Any(x=>x.Id == o.Id))
                     {
-                        new Aviso(string.Format("¡Bienvenido {0}!", o.Nombre),hablar:true).Show();
+                        new Aviso(string.Format("¡{0}!",Horario.CalcularSaludoActual()),hablar:true).Show();
 
+                        Store.Operarios.Clear();
                         Store.Operarios.Add(o);
                         BusEventos.OperarioEntra(o);
                         NavegacionEventos.CargarNuevaPagina(NavegacionEventos.PaginaTarea);
@@ -110,7 +112,7 @@ namespace ArnGestionPuestoFrontendWPF.Paginas
             if (Store.OperarioEjecucion != null)
             {
                 Operarios o = Store.OperarioEjecucion;
-                new Aviso(string.Format("¡Hasta pronto {0}!", Store.OperarioEjecucion.Nombre), hablar: true).Show();
+                new Aviso(string.Format("¡Hasta pronto!"), hablar: true).Show();
                 Store.Operarios.Clear();
                 BusEventos.OperarioSale(o);
 

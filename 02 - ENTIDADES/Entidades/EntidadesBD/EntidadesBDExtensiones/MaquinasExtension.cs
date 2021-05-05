@@ -383,12 +383,12 @@ namespace Entidades.EntidadesBD
                     MaquinasColasTrabajo = new List<MaquinasColasTrabajo> {
                         new EntidadesBD.MaquinasColasTrabajo {
                             Ejecucion = true,
-                            CodigoEtiquetaFichada = "- SIN ETIQUETA -",
+                            CodigoEtiquetaFichada = "SIN ETIQUETA",
                             OrdenesFabricacionOperacionesTallasCantidad = new EntidadesBD.OrdenesFabricacionOperacionesTallasCantidad
                             { CantidadFabricar = 0,
                                 CantidadSaldos = 0,
                         OrdenesFabricacionOperacionesTallas = new OrdenesFabricacionOperacionesTallas {
-                        Tallas = "- SIN TALLAS -", IdUtillajeTalla = "- SIN TALLA -", OrdenesFabricacionOperaciones = new OrdenesFabricacionOperaciones { CodUtillaje = "-SIN UTILLAJE-", CodSeccion = "- SIN SECCION-", OrdenesFabricacion = new OrdenesFabricacion { Codigo = "-SIN OF-", Campos_ERP = new Campos_ERP { NOMBRECLI = "-SIN CLIENTE-" } } } }
+                        Tallas = "SIN TALLAS", IdUtillajeTalla = "SIN TALLA", OrdenesFabricacionOperaciones = new OrdenesFabricacionOperaciones { CodUtillaje = "-SIN UTILLAJE-", CodSeccion = "- SIN SECCION-", OrdenesFabricacion = new OrdenesFabricacion { Codigo = "-SIN OF-", Campos_ERP = new Campos_ERP { NOMBRECLI = "-SIN CLIENTE-" } } } }
                     } }
                     }
 

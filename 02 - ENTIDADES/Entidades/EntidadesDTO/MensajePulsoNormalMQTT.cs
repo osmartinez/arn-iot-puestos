@@ -8,6 +8,7 @@ namespace Entidades.EntidadesDTO
 {
     public class MensajePulsoNormalMQTT
     {
+        public string IpAutomata { get; set; }
         public int Posicion { get; set; }
         public int Tipo { get; set; }
         public int IdTarea { get; set; }

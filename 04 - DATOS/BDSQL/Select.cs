@@ -19,19 +19,42 @@ namespace BDSQL
                     .Include("Maquinas.MaquinasConfiguracionesPins")
                     .Include("Maquinas.MaquinasColasTrabajo.OrdenesFabricacionOperacionesTallasCantidad.OrdenesFabricacionOperacionesTallas.OrdenesFabricacionOperaciones.OrdenesFabricacion.Campos_ERP")
                     .Include("Maquinas.MaquinasColasTrabajo.OrdenesFabricacionOperacionesTallasCantidad.OrdenesFabricacionProductos")
-                    .FirstOrDefault(x=>x.ID == id);
+                    .FirstOrDefault(x => x.ID == id);
             }
         }
+        public static List<MaquinasRegistrosDatos> HistoricoPaquetesOperario(string ipAutomata, int pos,DateTime fechaInicio, DateTime fechaFin)
+        {
+            fechaInicio = fechaInicio.ToUniversalTime();
+            fechaFin = fechaFin.ToUniversalTime();
+            using (SistemaGlobalPREEntities db = new SistemaGlobalPREEntities())
+            {
+                var registros =
+                db.MaquinasRegistrosDatos
+                    .Where(x => x.IpAutomata == ipAutomata && x.PosicionMaquina == pos &&
+                (fechaInicio <= x.Fecha && x.Fecha <= fechaFin)).ToList();
 
-        public static List<SP_BarquillaBuscarInformacionEnSeccion_Result> BuscarTareasPorCodigoBarquilla(string codigo,List<Maquinas> maquinas)
+                foreach (var registro in registros)
+                {
+                    if (registro.IdTarea != 0)
+                    {
+                        registro.OrdenesFabricacionOperacionesTallasCantidad = db.OrdenesFabricacionOperacionesTallasCantidad
+                            .Include("OrdenesFabricacionOperacionesTallas.OrdenesFabricacionOperaciones.OrdenesFabricacion")
+                            .FirstOrDefault(x => x.ID == registro.IdTarea);
+                    }
+                }
+
+                return registros;
+            }
+        }
+        public static List<SP_BarquillaBuscarInformacionEnSeccion_Result> BuscarTareasPorCodigoBarquilla(string codigo, List<Maquinas> maquinas)
         {
             using (SistemaGlobalPREEntities db = new SistemaGlobalPREEntities())
             {
                 List<SP_BarquillaBuscarInformacionEnSeccion_Result> info = new List<SP_BarquillaBuscarInformacionEnSeccion_Result>();
-                foreach(var maquina in maquinas)
+                foreach (var maquina in maquinas)
                 {
                     var _infos = db.SP_BarquillaBuscarInformacionEnSeccion(codigo, maquina.CodSeccion).ToList();
-                    foreach(var _info in _infos)
+                    foreach (var _info in _infos)
                     {
                         _info.MaquinasEjecucion.Add(maquina);
                     }
@@ -46,6 +69,40 @@ namespace BDSQL
             using (SistemaGlobalPREEntities db = new SistemaGlobalPREEntities())
             {
                 return db.SP_BarquillaBuscarInformacionEnSeccion(codEtiqueta, codSeccion).ToList();
+            }
+        }
+
+        public static List<SP_BarquillaBuscarInformacionEnSeccion_Result> BuscarTareasPorOfot(int idOfot)
+        {
+            using (SistemaGlobalPREEntities db = new SistemaGlobalPREEntities())
+            {
+                var ofot = db.OrdenesFabricacionOperacionesTallas.FirstOrDefault(x => x.ID == idOfot);
+                var ofotc = ofot.OrdenesFabricacionOperacionesTallasCantidad.First();
+                var campos =ofot.OrdenesFabricacionOperaciones.OrdenesFabricacion.Campos_ERP;
+                return new List<SP_BarquillaBuscarInformacionEnSeccion_Result>() { new SP_BarquillaBuscarInformacionEnSeccion_Result
+                {
+                     CantidadFabricar = ofotc.CantidadFabricar.Value + ofotc.CantidadSaldos.Value,
+                     Cantidad = ofotc.CantidadFabricar.Value + ofotc.CantidadSaldos.Value,
+                     Agrupacion = 0,
+                     CantidadFabricada = ofotc.OrdenesFabricacionProductos.Sum(x=>x.Cantidad),
+                     Codigo = ofot.OrdenesFabricacionOperaciones.OrdenesFabricacion.Codigo,
+                     CodigoAgrupacion = ofot.OrdenesFabricacionOperaciones.OrdenesFabricacion.Agrupacion,
+                     CodigoArticulo = ofot.OrdenesFabricacionOperaciones.OrdenesFabricacion.CodigoArticulo,
+                     CodigoEtiqueta = "",
+                     CodUtillaje = ofot.OrdenesFabricacionOperaciones.CodUtillaje,
+                     Descripcion = ofot.OrdenesFabricacionOperaciones.Descripcion,
+                     DESCRIPCIONARTICULO = campos==null?"SIN DESC":campos.DESCRIPCIONARTICULO,
+                     NOMBRECLI=campos==null?"ARNEPLANT S.L.":campos.NOMBRECLI,
+                     IdOperacion = ofot.IdOrdenFabricacionOperacion,
+                     IdOrden = ofot.OrdenesFabricacionOperaciones.IdOrdenFabricacion,
+                     IdTarea = ofotc.ID,
+                     IdUtillajeTalla = ofot.IdUtillajeTalla,
+                     PedidoLinea = (campos==null?"0":campos.PEDIDO.ToString())+  "/"+(campos==null?"0":campos.LINEAPEDIDO.ToString()),
+                     Talla = ofot.Tallas,
+                     Tallas = ofot.Tallas,
+                     Productividad = 1,
+                }
+                };
             }
         }
 
@@ -98,16 +155,16 @@ namespace BDSQL
                     DESCRIPCIONARTICULO = orden.Campos_ERP.DESCRIPCIONARTICULO,
                     NOMBRECLI = orden.Campos_ERP.NOMBRECLI,
                     CodigoAgrupacion = orden.Agrupacion,
-                    CodigoEtiqueta = tarea.OrdenesFabricacionOperacionesTallas.OrdenesFabricacionOperaciones.ID.ToString().PadLeft(13,'0'),
+                    CodigoEtiqueta = tarea.OrdenesFabricacionOperacionesTallas.OrdenesFabricacionOperaciones.ID.ToString().PadLeft(13, '0'),
                     Talla = tarea.OrdenesFabricacionOperacionesTallas.Tallas,
-                    Cantidad = tarea.CantidadFabricar.Value+tarea.CantidadSaldos.Value,
+                    Cantidad = tarea.CantidadFabricar.Value + tarea.CantidadSaldos.Value,
                     CodUtillaje = tarea.OrdenesFabricacionOperacionesTallas.OrdenesFabricacionOperaciones.CodUtillaje,
                     Descripcion = tarea.OrdenesFabricacionOperacionesTallas.OrdenesFabricacionOperaciones.Descripcion,
                     IdUtillajeTalla = tarea.OrdenesFabricacionOperacionesTallas.IdUtillajeTalla,
                     Tallas = tarea.OrdenesFabricacionOperacionesTallas.Tallas,
-                    CantidadFabricar = tarea.CantidadFabricar.Value+tarea.CantidadSaldos.Value,
-                    CantidadFabricada =  tarea.OrdenesFabricacionProductos.Sum(x=>x.Cantidad),
-                    PedidoLinea = orden.Campos_ERP.PEDIDO+"/"+orden.Campos_ERP.LINEAPEDIDO,
+                    CantidadFabricar = tarea.CantidadFabricar.Value + tarea.CantidadSaldos.Value,
+                    CantidadFabricada = tarea.OrdenesFabricacionProductos.Sum(x => x.Cantidad),
+                    PedidoLinea = orden.Campos_ERP.PEDIDO + "/" + orden.Campos_ERP.LINEAPEDIDO,
                     IdOperacion = tarea.OrdenesFabricacionOperacionesTallas.OrdenesFabricacionOperaciones.ID,
                     IdTarea = tarea.ID,
                     Productividad = 1,

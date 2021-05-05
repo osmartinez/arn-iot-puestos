@@ -40,7 +40,9 @@ namespace ArnGestionPuestoFrontendWPF.Controles
             {
                 if (Store.HayAlgunaTarea)
                 {
-                    return Store.MaquinaPrincipal.Pulsos.Where(x=>x.IdTarea == Store.MaquinaPrincipal.IdTarea).Sum(x=>x.Pares);
+                    return Store.MaquinaPrincipal.Pulsos.Where(x=>x.IdTarea == Store.MaquinaPrincipal.IdTarea && x.IdOperario == Store.OperarioEjecucion.Id).Sum(x=>x.Pares)
+                        - Store.Saldos.Sum(x=>x.Pares)
+                        + Store.Correcciones.Sum(x=>x.Pares);
                 }
                 else
                 {
@@ -78,7 +80,7 @@ namespace ArnGestionPuestoFrontendWPF.Controles
         {
             try
             {
-                if (this.CantidadFabricada >= this.CantidadFabricar)
+                if (this.CantidadFabricada >= this.CantidadFabricar && Store.HayAlgunaTarea)
                 {
                     if(Store.Bancada.BancadasConfiguracionesPins.AvisarFinPaquete && !estaAvisado)
                     {

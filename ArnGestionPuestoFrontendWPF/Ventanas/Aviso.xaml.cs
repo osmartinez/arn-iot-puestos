@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Speech.Synthesis;
 using System.Text;
@@ -24,7 +25,7 @@ namespace ArnGestionPuestoFrontendWPF.Ventanas
     {
         public string Texto { get; private set; }
         private DispatcherTimer timer;
-        public Aviso(string texto,int ms = 800, bool hablar=false)
+        public Aviso(string texto, int ms = 800, bool hablar = false)
         {
             InitializeComponent();
 
@@ -35,16 +36,24 @@ namespace ArnGestionPuestoFrontendWPF.Ventanas
             }
             else
             {
-                BackgroundWorker worker = new BackgroundWorker();
-                worker.DoWork += (s, e) => {
-                    var synthesizer = new SpeechSynthesizer();
-                    synthesizer.SetOutputToDefaultAudioDevice();
-                    synthesizer.Speak(texto);
-                };
-                worker.RunWorkerAsync();
+
+                var synthesizer = new SpeechSynthesizer();
+                var pbuilder = new PromptBuilder();
+                string codIdioma = "es-ES";
+                string idioma = "Spanish";
+                var culture = CultureInfo.GetCultureInfo(codIdioma);
+                var voices = synthesizer.GetInstalledVoices(culture).Where(x=>x.VoiceInfo.Description.Contains(idioma));
+                if (voices.Count() > 0)
+                {
+                    synthesizer.SelectVoice(voices.ElementAt(0).VoiceInfo.Name); //you need to call this API
+                    pbuilder.AppendText(texto);
+                    synthesizer.SpeakAsync(pbuilder);
+                }
+
+
 
             }
-           
+
             this.DataContext = this;
             this.Texto = texto;
             timer = new DispatcherTimer();

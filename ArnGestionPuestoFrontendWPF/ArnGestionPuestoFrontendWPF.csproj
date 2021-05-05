@@ -32,7 +32,7 @@
     <ProductName>GestionPuesto</ProductName>
     <PublisherName>Arneplant</PublisherName>
     <SuiteName>IOT</SuiteName>
-    <ApplicationRevision>36</ApplicationRevision>
+    <ApplicationRevision>42</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -314,6 +314,10 @@
     <ProjectReference Include="..\MQTT\MQTT.csproj">
       <Project>{CC3E4EDA-5A88-4FD3-A812-1DE15A5D3C77}</Project>
       <Name>MQTT</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Turnos\Turnos.csproj">
+      <Project>{A90BEA8B-E4FA-4AB9-B973-CB402F831282}</Project>
+      <Name>Turnos</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
