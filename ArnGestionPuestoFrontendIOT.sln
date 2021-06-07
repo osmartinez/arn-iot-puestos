@@ -35,6 +35,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MQTT", "MQTT\MQTT.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turnos", "Turnos\Turnos.csproj", "{A90BEA8B-E4FA-4AB9-B973-CB402F831282}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonResolvers", "05-UTIL\JsonResolvers\JsonResolvers.csproj", "{53CE6DC5-8FCF-442E-80B9-54DBD8DBCBA5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +83,10 @@ Global
 		{A90BEA8B-E4FA-4AB9-B973-CB402F831282}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A90BEA8B-E4FA-4AB9-B973-CB402F831282}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A90BEA8B-E4FA-4AB9-B973-CB402F831282}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53CE6DC5-8FCF-442E-80B9-54DBD8DBCBA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53CE6DC5-8FCF-442E-80B9-54DBD8DBCBA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53CE6DC5-8FCF-442E-80B9-54DBD8DBCBA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53CE6DC5-8FCF-442E-80B9-54DBD8DBCBA5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -96,6 +102,7 @@ Global
 		{F5BFE436-EE92-4D31-BD82-9E342AF2B139} = {BC1A2FA3-529C-49B6-8FF6-BBC47ACDEDB4}
 		{CC3E4EDA-5A88-4FD3-A812-1DE15A5D3C77} = {5F26258A-DA51-4847-A3D2-DEFC866A12AB}
 		{A90BEA8B-E4FA-4AB9-B973-CB402F831282} = {F526B3C6-5E30-481F-A1AC-2185AC9EC513}
+		{53CE6DC5-8FCF-442E-80B9-54DBD8DBCBA5} = {F526B3C6-5E30-481F-A1AC-2185AC9EC513}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CE0E22F2-E42E-4F99-A06B-9756FC93F165}

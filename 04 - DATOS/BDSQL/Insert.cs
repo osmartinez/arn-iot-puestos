@@ -63,7 +63,7 @@ namespace BDSQL
             };
         }
 
-        public static List<MaquinasColasTrabajo> ActualizarColaTrabajo(string codigoBarquilla, List<int> idsTareas, int? agrupacion, int idMaquina, int idOperario, double cantidad)
+        public static List<MaquinasColasTrabajo> ActualizarColaTrabajo(string codigoBarquilla, List<int> idsTareas, int? agrupacion, int idMaquina, int idOperario, double cantidad,string talla)
         {
             List<MaquinasColasTrabajo> trabajosInsertar = new List<MaquinasColasTrabajo>();
 
@@ -130,6 +130,7 @@ namespace BDSQL
                     {
                         trabajosInsertar.Add(new MaquinasColasTrabajo
                         {
+                            TallaEtiquetaFichada = trabajo.TallaEtiquetaFichada,
                             CantidadEtiquetaFichada = trabajo.CantidadEtiquetaFichada,
                             Ejecucion = false,
                             Posicion = trabajo.Posicion + 1,
@@ -154,6 +155,7 @@ namespace BDSQL
                             .FirstOrDefault(x => x.ID == id);
                         trabajosInsertar.Add(new MaquinasColasTrabajo
                         {
+                            TallaEtiquetaFichada = talla,
                             CantidadEtiquetaFichada = cantidad,
                             IdMaquina = idMaquina,
                             IdOperarioEjecuta = idOperario,
@@ -292,6 +294,61 @@ namespace BDSQL
                 db.MaquinasRegistrosDatos.Add(TranformarTareaAMaquinaRegistroDato(tarea, idOperario, idPuesto, pares, false, 1));
                 db.SaveChangesAsync();
 
+            }
+        }
+
+        public static void InsertarStocks(List<StockArticulos> stocks)
+        {
+            using (SistemaGlobalPREEntities db = new SistemaGlobalPREEntities())
+            {
+                db.StockArticulos.AddRange(stocks);
+                db.SaveChanges();
+            }
+        }
+
+        public static void ConsumirOperacionEnvasado(List<StockArticulos> stocks)
+        {
+            DateTime ahora = DateTime.Now;
+            using (SistemaGlobalPREEntities db = new SistemaGlobalPREEntities())
+            {
+                var agrupadosPorOrden = stocks.GroupBy(x => x.IdOrdenFabricacion);
+                foreach (var grupo in agrupadosPorOrden)
+                {
+                    foreach (var stock in grupo)
+                    {
+                        var orden = db.OrdenesFabricacion.FirstOrDefault(x => x.ID == stock.IdOrdenFabricacion);
+                        if (orden != null)
+                        {
+                            var operacion = orden.OrdenesFabricacionOperaciones.FirstOrDefault(x => x.CodSeccion == "300");
+                            if (operacion != null)
+                            {
+                                foreach (var sat in stock.StockArticulosTallas.Where(x => x.Cantidad > 0))
+                                {
+                                    var ofot = operacion.OrdenesFabricacionOperacionesTallas.FirstOrDefault(x => x.Tallas.Split(',').Contains(sat.Talla));
+                                    if (ofot != null)
+                                    {
+                                        var tarea = ofot.OrdenesFabricacionOperacionesTallasCantidad.First();
+                                        tarea.OrdenesFabricacionProductos.Add(new OrdenesFabricacionProductos
+                                        {
+                                            FechaCreacion = ahora,
+                                            Cantidad = sat.Cantidad ?? 0,
+                                            IdOperario = stock.IdOperarioCreacion,
+                                            IdOrdenFabricacionOperacionTallaCantidad = tarea.ID,
+                                        });
+                                        if (tarea.CantidadFabricar <= tarea.OrdenesFabricacionProductos.Sum(x => x.Cantidad))
+                                        {
+                                            // finalizar
+                                            tarea.Finalizado = true;
+                                            tarea.IdEstadoAnterior = tarea.IdEstado;
+                                            tarea.IdEstado = 5;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                db.SaveChanges();
             }
         }
     }

@@ -7,6 +7,14 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Button Style="{StaticResource BotonIncidencia}" Margin="1">
-        <TextBlock Text="INCIDENCIA"></TextBlock>
+        <Image Grid.Row="1"
+      
+       RenderOptions.BitmapScalingMode="Fant"
+       Stretch="Fill"
+       Width="100"
+       Height="100"
+       VerticalAlignment="Top"
+       Margin="0,0,0,0"
+       HorizontalAlignment="Center" Source="/ArnGestionPuestoFrontendWPF;component/Assets/incidencia.png" />
     </Button>
 </UserControl>

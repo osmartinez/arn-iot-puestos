@@ -15,6 +15,7 @@ namespace ArnGestionPuestoFrontendWPF
         private static MenuPrincipal menuPrincipal;
         private static TareaPagina paginaTarea;
         private static ConfiguracionOperarioPagina configOperariosPagina;
+        
 
         public static TareaPagina PaginaTarea
         {

@@ -51,10 +51,51 @@ namespace ArnGestionPuestoFrontendWPF
         public static List<Operarios> Operarios { get; set; } = new List<Operarios>();
         public static List<OperacionesControles> Controles { get; set; } = new List<OperacionesControles>();
 
+        public static List<StockArticulos> Stocks = new List<StockArticulos>();
+
         // variables globales interfaz pero que van asociadas a las tareas que se 
         // están ejecutando actualmente
         public static List<PulsoMaquina> Correcciones { get; set; } = new List<PulsoMaquina>();
         public static List<PulsoMaquina> Saldos { get; set; } = new List<PulsoMaquina>();
         public static int Monton { get; set; } = 0;
+
+        public static void InsertarPulsoStock(Maquinas maq, double pares)
+        {
+            StockArticulos stockExistente = Stocks.FirstOrDefault(x => x.CodigoArticulo == maq.CodigoArticulo && x.IdOrdenFabricacion == maq.IdOrden);
+            if (stockExistente == null)
+            {
+                stockExistente = new StockArticulos
+                {
+                    CodigoArticulo = maq.CodigoArticulo,
+                    FechaCreacion = DateTime.Now,
+                    IdArticulo = maq.IdArticulo,
+                    IdOrdenFabricacion = maq.IdOrden,
+                    IdTipoStock = 5,
+                    Disponible = true,
+                    IdOperarioCreacion = OperarioEjecucion.Id,
+                    UsuarioCreacion = Bancada.Nombre,
+                    StockArticulosTallas = new List<StockArticulosTallas>(),
+                };
+                Stocks.Add(stockExistente);
+            }
+
+            StockArticulosTallas stockTallaExistente = stockExistente.StockArticulosTallas.FirstOrDefault(x => x.Talla == maq.TrabajoEjecucion.TallaEtiquetaFichada);
+
+            if (stockTallaExistente == null)
+            {
+                stockTallaExistente = new StockArticulosTallas
+                {
+                    Talla = maq.TrabajoEjecucion.TallaEtiquetaFichada,
+                    FechaUltimoMovimiento = DateTime.Now,
+                    Cantidad = pares,
+
+                };
+                stockExistente.StockArticulosTallas.Add(stockTallaExistente);
+            }
+            else
+            {
+                stockTallaExistente.Cantidad += pares;
+            }
+        }
     }
 }

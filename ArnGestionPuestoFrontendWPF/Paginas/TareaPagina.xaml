@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:ArnGestionPuestoFrontendWPF.Paginas"
       mc:Ignorable="d" 
       xmlns:ctrl="clr-namespace:ArnGestionPuestoFrontendWPF.Controles"
-      d:DesignHeight="650" d:DesignWidth="800"
+      d:DesignHeight="650" d:DesignWidth="1000"
       Title="TareaPagina">
 
     <Grid Background="LightGray">
@@ -19,11 +19,28 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <ctrl:ContadorTarea Grid.Row="0" Grid.Column="0"></ctrl:ContadorTarea>
+        <ctrl:Loader Visibility="Hidden" x:Name="Loader1" Grid.Row="1" Grid.Column="0"></ctrl:Loader>
+        <ctrl:ContadorTarea x:Name="ContadorTarea" Grid.Row="1" Grid.Column="0"></ctrl:ContadorTarea>
         <ctrl:ContadorCorrector Grid.Row="0" Grid.Column="1"></ctrl:ContadorCorrector>
         <ctrl:ContadorSaldos Grid.Row="0" Grid.Column="2"></ctrl:ContadorSaldos>
-        <ctrl:BotonTerminar Grid.Row="1" Grid.Column="0"></ctrl:BotonTerminar>
-        <ctrl:BotonIncidencia Grid.Row="1" Grid.Column="1"></ctrl:BotonIncidencia>
+
+        <ctrl:Loader Visibility="Hidden" x:Name="Loader2" Grid.Row="0" Grid.Column="0"></ctrl:Loader>
+        <ctrl:InformacionControl x:Name="Informacion" Grid.Row="0" Grid.Column="0"></ctrl:InformacionControl>
+        
+        <Grid Grid.Row="1" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <ctrl:BotonIncidencia Grid.Row="0" Grid.Column="0"></ctrl:BotonIncidencia>
+            <ctrl:BotonEstadisticas Grid.Row="0" Grid.Column="1"></ctrl:BotonEstadisticas>
+            <ctrl:Reloj Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center"></ctrl:Reloj>
+
+        </Grid>
         <ctrl:ContadorPaquete Grid.Row="1" Grid.Column="2"></ctrl:ContadorPaquete>
     </Grid>
 </Page>

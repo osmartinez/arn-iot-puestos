@@ -26,7 +26,7 @@ namespace MQTT
         {
             ClienteMQTT.codigoOperario = codigoOperario;
             client = new MqttClient("192.168.0.104");
-            string clientId = string.Format("{0}_{1}", "arn-iot-puesto", codigoOperario);
+            string clientId = string.Format("{0}-{1}", "arn-iot-puesto",Guid.NewGuid());
             client.Connect(clientId, "", "", true, 10);
             client.MqttMsgPublishReceived += Client_MqttMsgPublishReceived;
             Conectado = true;

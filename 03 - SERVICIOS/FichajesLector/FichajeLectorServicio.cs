@@ -15,13 +15,12 @@ namespace FichajesLector
 
         public event EventHandler<BarquillaFichadaEventArgs> OnBarquillaFichada;
         public event EventHandler<BarquillaFichadaEventArgs> OnOperacionFichada;
+        public event EventHandler<BarquillaFichadaEventArgs> OnContenedorFichado;
 
-        private Timer timer = new Timer();
 
         public FichajeLectorServicio()
         {
-            this.timer.Interval = 10 * 1000;
-            this.timer.Elapsed += Timer_Tick;
+          
         }
 
         private void Timer_Tick(object sender, EventArgs e)
@@ -53,22 +52,38 @@ namespace FichajesLector
             this.Limpiar();
         }
 
+        private void ContenedorFichado(string codigo)
+        {
+            if (OnContenedorFichado != null)
+            {
+                OnContenedorFichado(this, new BarquillaFichadaEventArgs(codigo));
+            }
+            this.Limpiar();
+        }
+
         public void EtiquetaFichada(string cod)
         {
-            if (cod[0] == '5')
+            if(cod.Length > 0)
             {
-                // barquilla
-                BarquillaFichada("0" + cod);
+                if (cod[0] == '5')
+                {
+                    // barquilla
+                    BarquillaFichada("0" + cod);
+                }
+                else if (cod[0] == '0')
+                {
+                    OperacionFichada("0" + cod);
+                }
+                else if (cod[0] == '1')
+                {
+                    ContenedorFichado("0" + cod);
+                }
+                else if (cod[0] == '2')
+                {
+                    // maquina
+                }
             }
-            if(cod[0] == '0')
-            {
-                OperacionFichada("0" + cod);
-            }
-            else if (cod[0] == '2')
-            {
-                // maquina
-
-            }
+           
         }
 
        

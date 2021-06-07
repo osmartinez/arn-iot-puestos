@@ -12,6 +12,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition/>
+            <RowDefinition  Height="auto"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" >
             <Grid.ColumnDefinitions>
@@ -19,6 +20,9 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Name="BtAtras" Click="BtAtras_Click" Style="{StaticResource BotonTituloPuesto}">
+                <TextBlock Text="&lt;"></TextBlock>
+            </Button>
             <Button Grid.Column="1" Name="BtTitulo" Click="BtTitulo_Click" Style="{StaticResource BotonTituloPuesto}">
                 <TextBlock Text="{Binding NombrePuesto,Mode=OneWay}"></TextBlock>
             </Button>
@@ -27,5 +31,6 @@
         <Frame Grid.Row="1" Name="Frame" NavigationUIVisibility="Hidden">
 
         </Frame>
+        <TextBox Name="TbCodigo" PreviewKeyUp="TbCodigo_PreviewKeyUp" TextChanged="TbCodigo_TextChanged" Grid.Row="2" FontSize="3"></TextBox>
     </Grid>
 </Window>

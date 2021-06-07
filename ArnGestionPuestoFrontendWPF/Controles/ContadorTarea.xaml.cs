@@ -40,9 +40,10 @@ namespace ArnGestionPuestoFrontendWPF.Controles
             {
                 if (Store.HayAlgunaTarea)
                 {
-                    return Store.MaquinaPrincipal.Pulsos.Where(x=>x.IdTarea == Store.MaquinaPrincipal.IdTarea && x.IdOperario == Store.OperarioEjecucion.Id).Sum(x=>x.Pares)
-                        - Store.Saldos.Sum(x=>x.Pares)
-                        + Store.Correcciones.Sum(x=>x.Pares);
+                    return (int)Store.MaquinaPrincipal.CantidadCajaRealizada;
+                    //return Store.MaquinaPrincipal.Pulsos.Where(x=>x.IdTarea == Store.MaquinaPrincipal.IdTarea && x.IdOperario == Store.OperarioEjecucion.Id).Sum(x=>x.Pares)
+                    //    - Store.Saldos.Sum(x=>x.Pares)
+                    //    + Store.Correcciones.Sum(x=>x.Pares);
                 }
                 else
                 {
@@ -54,7 +55,7 @@ namespace ArnGestionPuestoFrontendWPF.Controles
         {
             get
             {
-                return Store.MaquinaPrincipal.ParesFabricando;
+                return (int)Store.MaquinaPrincipal.CantidadCaja;
             }
         }
         public string Talla
@@ -64,16 +65,29 @@ namespace ArnGestionPuestoFrontendWPF.Controles
                 return Store.MaquinaPrincipal.TallaArticulo;
             }
         }
+        public int CantidadStock
+        {
+            get
+            {
+                return (int)Store.Stocks.Sum(x => x.StockArticulosTallas.Sum(y => y.Cantidad));
+            }
+        }
         public ContadorTarea()
         {
             InitializeComponent();
             this.DataContext = this;
             BusEventos.OnTareasCargadas += BusEventos_OnTareasCargadas;
+            BusEventos.OnTareasCargando += BusEventos_OnTareasCargando;
             BusEventos.OnParesActualizados += BusEventos_OnParesActualizados;
             this.timerExceso = new DispatcherTimer();
             this.timerExceso.Interval = new TimeSpan(0, 0, 0, 0, 400);
             this.timerExceso.Tick += TimerExceso_Tick;
             this.timerExceso.Start();
+        }
+
+        private void BusEventos_OnTareasCargando(object sender, EventosTareas.NuevasTareasCargandoEventArgs e)
+        {
+            this.Visibility = Visibility.Hidden;
         }
 
         private void TimerExceso_Tick(object sender, EventArgs e)
@@ -148,17 +162,30 @@ namespace ArnGestionPuestoFrontendWPF.Controles
         private void BusEventos_OnParesActualizados(object sender, EventosTareas.ParesActualizadosEventArgs e)
         {
             Notifica("CantidadFabricada");
+            Notifica("CantidadStock");
+
         }
 
         private void BusEventos_OnTareasCargadas(object sender, EventosTareas.NuevasTareasCargadasEventArgs e)
         {
             PonerColorFrio();
+            this.Visibility = Visibility.Visible;
             Notifica();
         }
 
         private void Notifica(string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void BtStock_Click(object sender, RoutedEventArgs e)
+        {
+            new VerStockAlmacenado().ShowDialog();
         }
     }
 }

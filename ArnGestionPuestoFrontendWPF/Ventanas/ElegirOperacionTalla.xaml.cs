@@ -20,22 +20,24 @@ namespace ArnGestionPuestoFrontendWPF.Ventanas
     /// </summary>
     public class BotonOfot : Button
     {
+        public string TallaArticulo { get; set; }
         public OrdenesFabricacionOperacionesTallas Ofot { get; set; }
-        public BotonOfot(OrdenesFabricacionOperacionesTallas ofot)
+        public BotonOfot(string talla, OrdenesFabricacionOperacionesTallas ofot)
         {
             this.Ofot = ofot;
             this.Style = Application.Current.TryFindResource("BotonOperacionMatematica") as Style;
-            this.Content = new TextBlock { Text = ofot.IdUtillajeTalla };
+            this.Content = new TextBlock { Text = talla };
         }
 
     }
     public partial class ElegirOperacionTalla : Window
     {
+        public string TallaArticuloElegida { get; set; }
         public OrdenesFabricacionOperacionesTallas OfotElegida { get; set; }
         public ElegirOperacionTalla(List<OrdenesFabricacionOperacionesTallas> ofots)
         {
             InitializeComponent();
-            double max_filas = 3;
+            double max_filas = 4;
             double max_columnas = 4;
             for (int i = 0; i < max_filas; i++)
             {
@@ -50,24 +52,29 @@ namespace ArnGestionPuestoFrontendWPF.Ventanas
             int columna = 0;
             foreach (var ofot in ofots)
             {
-                BotonOfot boton = new BotonOfot(ofot);
-                boton.Click += (s, e) =>
+                foreach(string talla in ofot.Tallas.Split(','))
                 {
-                    OfotElegida = ofot;
-                    this.Close();
-                };
-                Grid.SetRow(boton, fila);
-                Grid.SetColumn(boton, columna);
-                if (columna == max_columnas - 1)
-                {
-                    fila++;
-                    columna = 0;
+                    BotonOfot boton = new BotonOfot(talla,ofot);
+                    boton.Click += (s, e) =>
+                    {
+                        TallaArticuloElegida = talla;
+                        OfotElegida = ofot;
+                        this.Close();
+                    };
+                    Grid.SetRow(boton, fila);
+                    Grid.SetColumn(boton, columna);
+                    if (columna == max_columnas - 1)
+                    {
+                        fila++;
+                        columna = 0;
+                    }
+                    else
+                    {
+                        columna++;
+                    }
+                    this.Grid.Children.Add(boton);
                 }
-                else
-                {
-                    columna++;
-                }
-                this.Grid.Children.Add(boton);
+                
             }
 
         }

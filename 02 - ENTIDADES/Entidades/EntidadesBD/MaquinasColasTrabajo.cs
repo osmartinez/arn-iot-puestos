@@ -26,6 +26,7 @@ namespace Entidades.EntidadesBD
         public Nullable<int> IdOperarioPrograma { get; set; }
         public string CodigoEtiquetaFichada { get; set; }
         public double CantidadEtiquetaFichada { get; set; }
+        public string TallaEtiquetaFichada { get; set; }
     
         public virtual Maquinas Maquinas { get; set; }
         public virtual Operarios Operarios { get; set; }

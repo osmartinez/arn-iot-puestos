@@ -67,6 +67,8 @@ namespace ArnGestionPuestoFrontendWPF.Controles
                         Pares = CorreccionEditar,
                     });
                     BusEventos.ParesActualizados();
+                    BusEventos.CorreccionActualizada(CorreccionEditar);
+
                 }
                 else
                 {

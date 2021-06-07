@@ -32,7 +32,7 @@
     <ProductName>GestionPuesto</ProductName>
     <PublisherName>Arneplant</PublisherName>
     <SuiteName>IOT</SuiteName>
-    <ApplicationRevision>42</ApplicationRevision>
+    <ApplicationRevision>61</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -76,6 +76,12 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
+    </Reference>
+    <Reference Include="LiveCharts.Wpf, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiveCharts.Wpf.0.9.7\lib\net45\LiveCharts.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -97,6 +103,9 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="XamlRadialProgressBar.DotNet, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\XamlRadialProgressBar.1.0.3\lib\net452\XamlRadialProgressBar.DotNet.dll</HintPath>
+    </Reference>
     <Reference Include="Xceed.Wpf.AvalonDock, Version=4.0.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
       <HintPath>..\packages\Extended.Wpf.Toolkit.4.0.2\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
     </Reference>
@@ -119,18 +128,43 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="BusEventos.cs" />
+    <Compile Include="Controles\BotonEstadisticas.xaml.cs">
+      <DependentUpon>BotonEstadisticas.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controles\BotonTituloOperarios.xaml.cs">
       <DependentUpon>BotonTituloOperarios.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controles\ContadorPaquete.xaml.cs">
       <DependentUpon>ContadorPaquete.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controles\GraficoInactividad.xaml.cs">
+      <DependentUpon>GraficoInactividad.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controles\GraficoRitmo.xaml.cs">
+      <DependentUpon>GraficoRitmo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controles\InformacionControl.xaml.cs">
+      <DependentUpon>InformacionControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controles\ListaResumenPares.xaml.cs">
+      <DependentUpon>ListaResumenPares.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controles\Loader.xaml.cs">
+      <DependentUpon>Loader.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controles\Reloj.xaml.cs">
+      <DependentUpon>Reloj.xaml</DependentUpon>
+    </Compile>
     <Compile Include="EventosTareas\NuevasTareasCargadasEventArgs.cs" />
+    <Compile Include="EventosTareas\NuevasTareasCargandoEventArgs.cs" />
     <Compile Include="EventosTareas\OperarioEntradaEventArgs.cs" />
     <Compile Include="EventosTareas\OperarioSalidaEventArgs.cs" />
     <Compile Include="EventosTareas\ParesActualizadosEventArgs.cs" />
     <Compile Include="Paginas\ConfiguracionOperarioPagina.xaml.cs">
       <DependentUpon>ConfiguracionOperarioPagina.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Paginas\EstadisticasPagina.xaml.cs">
+      <DependentUpon>EstadisticasPagina.xaml</DependentUpon>
     </Compile>
     <Compile Include="Store.cs" />
     <Compile Include="Ventanas\Aviso.xaml.cs">
@@ -151,6 +185,13 @@
     <Compile Include="Ventanas\FinalizarManual.xaml.cs">
       <DependentUpon>FinalizarManual.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Ventanas\VerStockAlmacenado.xaml.cs">
+      <DependentUpon>VerStockAlmacenado.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Controles\BotonEstadisticas.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controles\BotonIncidencia.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -176,6 +217,30 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controles\ContadorTarea.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controles\GraficoInactividad.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controles\GraficoRitmo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controles\InformacionControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controles\ListaResumenPares.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controles\Loader.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controles\Reloj.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -208,6 +273,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Paginas\ConfiguracionOperarioPagina.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Paginas\EstadisticasPagina.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -244,6 +313,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Ventanas\FinalizarManual.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Ventanas\VerStockAlmacenado.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -311,6 +384,10 @@
       <Project>{AFEC75E9-BC44-432F-85F0-2524471ED14B}</Project>
       <Name>DatosConfiguracion</Name>
     </ProjectReference>
+    <ProjectReference Include="..\05-UTIL\JsonResolvers\JsonResolvers.csproj">
+      <Project>{53CE6DC5-8FCF-442E-80B9-54DBD8DBCBA5}</Project>
+      <Name>JsonResolvers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MQTT\MQTT.csproj">
       <Project>{CC3E4EDA-5A88-4FD3-A812-1DE15A5D3C77}</Project>
       <Name>MQTT</Name>
@@ -336,6 +413,10 @@
     <Content Include="Assets\arneplant.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="icon.jpg" />
+    <Resource Include="Assets\incidencia.png" />
+    <Resource Include="Assets\stats.png" />
+    <Resource Include="Assets\barcode-icon.png" />
     <Content Include="Assets\beep_monton.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

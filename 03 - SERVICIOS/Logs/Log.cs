@@ -9,7 +9,8 @@ namespace Logs
 {
     public class Log
     {
-        private const string RUTA = "errores.log";
+        private static string RUTA = Path.Combine(Environment.GetFolderPath(
+    Environment.SpecialFolder.ApplicationData), "errores.log");
 
         public static void Write(Exception ex)
         {

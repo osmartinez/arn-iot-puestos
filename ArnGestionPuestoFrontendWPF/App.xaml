@@ -235,7 +235,7 @@
             <Setter Property="Margin" Value="1"/>
             <Setter Property="Background" Value="#FFFFD227" />
             <Setter Property="Foreground" Value="White" />
-            <Setter Property="FontSize" Value="40" />
+            <Setter Property="FontSize" Value="35" />
             <Setter Property="FontWeight" Value="Bold"></Setter>
             <Setter Property="SnapsToDevicePixels" Value="True" />
 
@@ -263,6 +263,39 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style TargetType="{x:Type Button}" x:Key="BotonEstadisticas">
+            <Setter Property="Margin" Value="1"/>
+            <Setter Property="Background" Value="#FF7FC743" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontSize" Value="35" />
+            <Setter Property="FontWeight" Value="Bold"></Setter>
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Padding="5" CornerRadius="4" Background="{TemplateBinding Background}">
+                            <Grid>
+                                <ContentPresenter x:Name="MyContentPresenter" Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" />
+                            </Grid>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="Gray" />
+                                <Setter Property="Foreground" Value="White" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#022f6e" />
+                                <Setter Property="Foreground" Value="White" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <Style TargetType="{x:Type Button}" x:Key="BotonNumeroLogin">
             <Setter Property="Margin" Value="1"/>
             <Setter Property="Background" Value="#428af5" />

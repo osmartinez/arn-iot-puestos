@@ -61,6 +61,7 @@ namespace ArnGestionPuestoFrontendWPF.Controles
                         IdPuesto = Store.Bancada.ID,
                     });
                     BusEventos.ParesActualizados();
+                    BusEventos.SaldosActualizados(SaldosEditar);
                 }
                 else
                 {

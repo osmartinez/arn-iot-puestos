@@ -32,6 +32,7 @@ namespace Entidades.EntidadesBD
         public string CabeceraReferencia { get; set; }
         public string Observacion { get; set; }
         public Nullable<System.DateTime> FechaVerificacion { get; set; }
+        public Nullable<int> IdOperarioCreacion { get; set; }
     
         public virtual Articulos Articulos { get; set; }
         public virtual Contenedores Contenedores { get; set; }
@@ -39,5 +40,6 @@ namespace Entidades.EntidadesBD
         public virtual StockArticulosTipos StockArticulosTipos { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<StockArticulosTallas> StockArticulosTallas { get; set; }
+        public virtual Operarios Operarios { get; set; }
     }
 }

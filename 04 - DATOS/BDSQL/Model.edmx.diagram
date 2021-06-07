@@ -287,6 +287,7 @@
         <AssociationConnector Association="SistemaGlobalPREModel.UsuariosADPowerBI" ManuallyRouted="false" />
         <AssociationConnector Association="SistemaGlobalPREModel.FK_Barquillas_Ubicaciones" />
         <AssociationConnector Association="SistemaGlobalPREModel.FK_Ubicaciones_Secciones" />
+        <AssociationConnector Association="SistemaGlobalPREModel.FK_StockArticulos_Operarios" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

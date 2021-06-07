@@ -1,6 +1,9 @@
 ﻿using ArnGestionPuestoFrontendWPF.Ventanas;
 using BDSQL;
 using Entidades.EntidadesBD;
+using JsonResolvers;
+using MQTT;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -41,7 +44,7 @@ namespace ArnGestionPuestoFrontendWPF.Paginas
                 return Store.OperarioEjecucion;
             }
         }
-     
+
         public OperariosPagina()
         {
             InitializeComponent();
@@ -91,14 +94,27 @@ namespace ArnGestionPuestoFrontendWPF.Paginas
                 Operarios o = Select.BuscarOperarioPorCodigo(this.CodigoOperario.Trim());
                 if (o != null)
                 {
-                    if (!Store.Operarios.Any(x=>x.Id == o.Id))
+                    if (!Store.Operarios.Any(x => x.Id == o.Id))
                     {
-                        new Aviso(string.Format("¡{0}!",Horario.CalcularSaludoActual()),hablar:true).Show();
+                        new Aviso(string.Format("¡{0}!", Horario.CalcularSaludoActual()), hablar: true).Show();
 
                         Store.Operarios.Clear();
                         Store.Operarios.Add(o);
                         BusEventos.OperarioEntra(o);
+                        if (Store.Bancada.IdHermano != null)
+                        {
+                            ClienteMQTT.Publicar(string.Format("/puesto/loginHermano/{0}", Store.Bancada.IdHermano), JsonConvert.SerializeObject(o, new JsonSerializerSettings
+                            {
+                                ContractResolver = new CustomResolver(),
+                                PreserveReferencesHandling = PreserveReferencesHandling.None,
+                                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                                Formatting = Formatting.Indented
+                            }), 2);
+                        }
+
                         NavegacionEventos.CargarNuevaPagina(NavegacionEventos.PaginaTarea);
+
+
                     }
 
                 }
@@ -114,6 +130,18 @@ namespace ArnGestionPuestoFrontendWPF.Paginas
                 Operarios o = Store.OperarioEjecucion;
                 new Aviso(string.Format("¡Hasta pronto!"), hablar: true).Show();
                 Store.Operarios.Clear();
+
+                if (Store.Bancada.IdHermano != null)
+                {
+                    ClienteMQTT.Publicar(string.Format("/puesto/logoutHermano/{0}", Store.Bancada.IdHermano), JsonConvert.SerializeObject(o, new JsonSerializerSettings
+                    {
+                        ContractResolver = new CustomResolver(),
+                        PreserveReferencesHandling = PreserveReferencesHandling.None,
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                        Formatting = Formatting.Indented
+                    }), 2);
+                }
+
                 BusEventos.OperarioSale(o);
 
             }

@@ -10,10 +10,11 @@ namespace ArnGestionPuestoFrontendWPF.EventosTareas
     public class ParesActualizadosEventArgs
     {
         public Tarea Tarea { get; private set; }
-
-        public ParesActualizadosEventArgs(Tarea tarea)
+        public double Pares { get; set; }
+        public ParesActualizadosEventArgs(Tarea tarea,double pares=0)
         {
-            Tarea = tarea;
+            this.Tarea = tarea;
+            this.Pares = pares;
         }
     }
 }

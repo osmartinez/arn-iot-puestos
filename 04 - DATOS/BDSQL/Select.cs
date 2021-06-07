@@ -72,7 +72,7 @@ namespace BDSQL
             }
         }
 
-        public static List<SP_BarquillaBuscarInformacionEnSeccion_Result> BuscarTareasPorOfot(int idOfot)
+        public static List<SP_BarquillaBuscarInformacionEnSeccion_Result> BuscarTareasPorOfot(int idOfot,string talla)
         {
             using (SistemaGlobalPREEntities db = new SistemaGlobalPREEntities())
             {
@@ -98,7 +98,7 @@ namespace BDSQL
                      IdTarea = ofotc.ID,
                      IdUtillajeTalla = ofot.IdUtillajeTalla,
                      PedidoLinea = (campos==null?"0":campos.PEDIDO.ToString())+  "/"+(campos==null?"0":campos.LINEAPEDIDO.ToString()),
-                     Talla = ofot.Tallas,
+                     Talla = talla,
                      Tallas = ofot.Tallas,
                      Productividad = 1,
                 }

@@ -56,7 +56,7 @@ namespace ArnGestionPuestoFrontendWPF
         public event PropertyChangedEventHandler PropertyChanged;
         private DispatcherTimer timerInactividad;
         private Random rnd = new Random();
-
+        private DispatcherTimer timerFocus = new DispatcherTimer { Interval = new TimeSpan(0,0,2)};
         public MainWindow()
         {
             InitializeComponent();
@@ -65,10 +65,14 @@ namespace ArnGestionPuestoFrontendWPF
             {
                 if (!System.Security.Principal.WindowsIdentity.GetCurrent().Name.Contains("omartinez"))
                 {
-                    KillExplorer();
+                    //KillExplorer();
                     this.WindowStyle = WindowStyle.None;
 
                 }
+
+                this.timerFocus.Tick += TimerFocus_Tick;
+                this.timerFocus.Start();
+
                 this.timerInactividad = new DispatcherTimer();
                 this.timerInactividad.Interval = new TimeSpan(0, 30, 0);
                 this.timerInactividad.Tick += TimerInactividad_Tick;
@@ -76,8 +80,12 @@ namespace ArnGestionPuestoFrontendWPF
                 this.PreviewKeyUp += MainWindow_PreviewKeyUp;
                 this.fichajes.OnBarquillaFichada += Fichajes_OnBarquillaFichada;
                 this.fichajes.OnOperacionFichada += Fichajes_OnOperacionFichada;
+                this.fichajes.OnContenedorFichado += Fichajes_OnContenedorFichado;
                 NavegacionEventos.OnNuevaPagina += NavegacionEventos_OnNuevaPagina;
+                BusEventos.OnSaldosActualizados += BusEventos_OnSaldosOCorreccionActualizados;
+                BusEventos.OnCorreccionActualizada += BusEventos_OnSaldosOCorreccionActualizados;
                 NavegacionEventos.CargarNuevaPagina(NavegacionEventos.PaginaOperarios);
+                
                 CargarConfiguracion();
             }
             catch (Exception ex)
@@ -85,6 +93,46 @@ namespace ArnGestionPuestoFrontendWPF
                 Log.Write(ex);
             }
 
+        }
+
+        private void TimerFocus_Tick(object sender, EventArgs e)
+        {
+            TbCodigo.Focus();
+            TbCodigo.CaretIndex = TbCodigo.Text.Length;
+        }
+
+        private void BusEventos_OnSaldosOCorreccionActualizados(object sender, EventosTareas.ParesActualizadosEventArgs e)
+        {
+            var maquina = Store.Bancada.Maquinas.FirstOrDefault(x => x.TrabajoEjecucion != null);
+            if (maquina != null)
+            {
+                Store.InsertarPulsoStock(maquina, e.Pares);
+            }
+        }
+
+        private void Fichajes_OnContenedorFichado(object sender, BarquillaFichadaEventArgs e)
+        {
+            try
+            {
+                foreach (var stock in Store.Stocks)
+                {
+                    stock.IdContenedor = e.CodigoEtiqueta;
+                }
+
+                // insertar
+                BackgroundWorker bw = new BackgroundWorker();
+                bw.DoWork += (se, ev) =>  
+                {
+                    Insert.ConsumirOperacionEnvasado(Store.Stocks);
+                    Insert.InsertarStocks(Store.Stocks);
+                };
+                bw.RunWorkerCompleted += (se, ev) => { Store.Stocks.Clear(); BusEventos.ParesActualizados(); };
+                //
+            }
+            catch (Exception ex)
+            {
+                Log.Write(ex);
+            }
         }
 
         private void TimerInactividad_Tick(object sender, EventArgs e)
@@ -122,10 +170,9 @@ namespace ArnGestionPuestoFrontendWPF
                     Horario.CalcularHorarioTurno(turno, ahora, out fechaInicio, out fechaFin);
 
                     var paquetes = new List<MaquinasRegistrosDatos>();
-                    foreach(var maquina in Store.Bancada.Maquinas)
+                    foreach (var maquina in Store.Bancada.Maquinas)
                     {
-                        paquetes.AddRange(Select.HistoricoPaquetesOperario(maquina.IpAutomata,maquina.Posicion,fechaInicio, fechaFin));
-
+                        paquetes.AddRange(Select.HistoricoPaquetesOperario(maquina.IpAutomata, maquina.Posicion, fechaInicio, fechaFin));
                     }
 
                     foreach (var paquete in paquetes.Where(x => x.PiezaIntroducida))
@@ -141,7 +188,9 @@ namespace ArnGestionPuestoFrontendWPF
                                 Fecha = paquete.FechaCreacion,
                                 Pares = paquete.Pares,
                                 IdOperario = paquete.IdOperario,
-                            }); ;
+                                CodigoOrden = paquete.CodigoOrden,
+                                Talla = paquete.Talla,
+                            });
                         }
                     }
                 }
@@ -189,28 +238,96 @@ namespace ArnGestionPuestoFrontendWPF
 
         private void IniciarMQTT()
         {
-            ClienteMQTT.Topics.Add(new Topic(1, "/puesto/+/asociarTarea"
-                , new Regex(@"^\/puesto\/\s?[0-9]+\/asociarTarea$"), 3, 1, qos: 1));
-            ClienteMQTT.Topics.Add(new Topic(2, "/puesto/+/normal"
-                , new Regex(@"^\/puesto\/\s?[0-9]+\/normal$"), 3, 1, qos: 2));
-            ClienteMQTT.Topics.Add(new Topic(3, "/puesto/+/preparar"
-                , new Regex(@"^\/puesto\/\s?[0-9]+\/preparar"), 3, 1, qos: 1));
-            // si no es master me tengo que suscribir al pulso interno de mi master /puesto/mi_id/pulsoInterno
-            if (!Store.Bancada.EsMaster)
+            try
             {
-                ClienteMQTT.Topics.Add(new Topic(4, string.Format("/puesto/{0}/pulsoInterno"
-                    , Store.Bancada.ID), new Regex(@"^\/puesto\/\s?[0-9]+\/pulsoInterno"), 3, 1, qos: 2));
-                ClienteMQTT.Topics[3].Callbacks.Add(PulsoInterno);
-            }
-            ClienteMQTT.Topics[1].Callbacks.Add(Normal);
+                ClienteMQTT.Topics.Add(new Topic(1, "/puesto/+/asociarTarea"
+                    , new Regex(@"^\/puesto\/\s?[0-9]+\/asociarTarea$"), 3, 1, qos: 1));
+                ClienteMQTT.Topics.Add(new Topic(2, "/puesto/+/normal"
+                    , new Regex(@"^\/puesto\/\s?[0-9]+\/normal$"), 3, 1, qos: 2));
+                ClienteMQTT.Topics.Add(new Topic(3, "/puesto/+/preparar"
+                    , new Regex(@"^\/puesto\/\s?[0-9]+\/preparar"), 3, 1, qos: 1));
 
-            ClienteMQTT.Iniciar(Store.Bancada.Nombre);
+                // si no es master me tengo que suscribir al pulso interno de mi master /puesto/mi_id/pulsoInterno
+                if (!Store.Bancada.EsMaster)
+                {
+                    ClienteMQTT.Topics.Add(new Topic(4, string.Format("/puesto/{0}/pulsoInterno"
+                        , Store.Bancada.ID), new Regex(@"^\/puesto\/\s?[0-9]+\/pulsoInterno"), 3, 1, qos: 2));
+                    ClienteMQTT.Topics.FirstOrDefault(x=>x.Id == 4).Callbacks.Add(PulsoInterno);
+                }
+                ClienteMQTT.Topics.FirstOrDefault(x => x.Id == 2).Callbacks.Add(Normal);
+
+                if (Store.Bancada.IdHermano != null)
+                {
+                    ClienteMQTT.Topics.Add(new Topic(5, string.Format("/puesto/loginHermano/{0}", Store.Bancada.ID), new Regex(@"^\/puesto\/loginHermano\/\s?[0-9]+$"), 3, 1, qos: 2));
+                    ClienteMQTT.Topics.FirstOrDefault(x => x.Id == 5).Callbacks.Add(LoginExterno);
+
+                    ClienteMQTT.Topics.Add(new Topic(6, string.Format("/puesto/logoutHermano/{0}", Store.Bancada.ID), new Regex(@"^\/puesto\/logoutHermano\/\s?[0-9]+$"), 3, 1, qos: 2));
+                    ClienteMQTT.Topics.FirstOrDefault(x => x.Id == 6).Callbacks.Add(LogoutExterno);
+                }
+
+                ClienteMQTT.Iniciar(Store.Bancada.Nombre);
+            }
+            catch (Exception ex)
+            {
+                Log.Write(ex);
+            }
         }
 
         private void PulsoInterno(string msg, string topicRecibido, Topic topic)
         {
             PulsoGenerado(new PulsoGeneradoEventArgs(Store.Bancada.ID));
         }
+
+        private void LoginExterno(string msg, string topicRecibido, Topic topic)
+        {
+            try
+            {
+                Operarios o = JsonConvert.DeserializeObject<Operarios>(msg);
+                if (o == null)
+                {
+                    Log.Write(new Exception("Operario recibido nulo " + msg));
+                }
+                else
+                {
+                    Store.Operarios.Clear();
+                    Store.Operarios.Add(o);
+                    BusEventos.OperarioEntra(o);
+
+                    Application.Current.Dispatcher.Invoke((Action)delegate {
+                        new Aviso(string.Format("¡{0}!", Horario.CalcularSaludoActual()), hablar: true).Show();
+                        NavegacionEventos.CargarNuevaPagina(NavegacionEventos.PaginaTarea);
+
+                    });
+                }
+
+               
+            }
+            catch (Exception ex)
+            {
+                Log.Write(ex);
+            }
+        }
+
+        private void LogoutExterno(string msg, string topicRecibido, Topic topic)
+        {
+            try
+            {
+                Operarios o = Store.OperarioEjecucion;
+
+                Store.Operarios.Clear();
+                BusEventos.OperarioSale(o);
+
+                Application.Current.Dispatcher.Invoke((Action)delegate {
+                    NavegacionEventos.CargarNuevaPagina(NavegacionEventos.PaginaOperarios);
+                    new Aviso(string.Format("¡Hasta pronto!"), hablar: true).Show();
+                });
+            }
+            catch (Exception ex)
+            {
+                Log.Write(ex);
+            }
+        }
+
 
         /// <summary>
         /// Callback que se debe ejecutar cuando otro puesto genera un pulso de una tarea que 
@@ -245,15 +362,17 @@ namespace ArnGestionPuestoFrontendWPF
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private void AsignarTareaEjecucion(List<SP_BarquillaBuscarInformacionEnSeccion_Result> infoBarquillaSeccion, Maquinas maquina,string codigoEtiqueta)
+        private void AsignarTareaEjecucion(List<SP_BarquillaBuscarInformacionEnSeccion_Result> infoBarquillaSeccion, Maquinas maquina, string codigoEtiqueta)
         {
             if (infoBarquillaSeccion.Any())
             {
+                BusEventos.TareasCargando();
                 var idsOrden = infoBarquillaSeccion.Select(x => x.IdOrden);
                 var idsOrdenDistinto = idsOrden.Distinct();
                 if (idsOrden.Count() != idsOrdenDistinto.Count())
                 {
                     // multiOperacion
+                    BusEventos.TareasCargadas();
                 }
                 else
                 {
@@ -266,7 +385,7 @@ namespace ArnGestionPuestoFrontendWPF
                     List<MaquinasColasTrabajo> cola = new List<MaquinasColasTrabajo>();
                     bwActualizarCola.DoWork += (se, ev) =>
                     {
-                        cola = Insert.ActualizarColaTrabajo(codigoEtiqueta, idsTareas, infoBarquillaSeccion.First().Agrupacion ?? 0, maquina.ID, Store.OperarioEjecucion.Id, infoBarquillaSeccion.Sum(x => x.Cantidad));
+                        cola = Insert.ActualizarColaTrabajo(codigoEtiqueta, idsTareas, infoBarquillaSeccion.First().Agrupacion ?? 0, maquina.ID, Store.OperarioEjecucion.Id, infoBarquillaSeccion.Sum(x => x.Cantidad),infoBarquillaSeccion.First().Talla);
                     };
                     bwActualizarCola.RunWorkerCompleted += (se, ev) =>
                     {
@@ -296,6 +415,7 @@ namespace ArnGestionPuestoFrontendWPF
             catch (Exception ex)
             {
                 Log.Write(ex);
+                BusEventos.TareasCargadas();
             }
         }
         private void MqttAsociarBarquilla(List<SP_BarquillaBuscarInformacionEnSeccion_Result> prepaquete, Maquinas maquina, bool asociacion = true)
@@ -325,10 +445,7 @@ namespace ArnGestionPuestoFrontendWPF
                     , prepaquete.First().Productividad.ToString().PadLeft(3)
                     , Store.OperarioEjecucion.Id.ToString().PadLeft(5));
 
-                ClienteMQTT.Publicar(string.Format("/moldeado/plc/{0}/asociarTarea", maquina.IpAutomata.PadLeft(3)), mensaje, 1);
-                ClienteMQTT.Publicar(string.Format("/moldeado/plc/{0}/asociarTarea", maquina.IpAutomata.PadLeft(3)), mensaje, 1);
-                ClienteMQTT.Publicar(string.Format("/moldeado/plc/{0}/asociarTarea", maquina.IpAutomata.PadLeft(3)), mensaje, 1);
-                ClienteMQTT.Publicar(string.Format("/moldeado/plc/{0}/asociarTarea", maquina.IpAutomata.PadLeft(3)), mensaje, 1);
+                //ClienteMQTT.Publicar(string.Format("/moldeado/plc/{0}/asociarTarea", maquina.IpAutomata.PadLeft(3)), mensaje, 1);
 
             }
             catch (Exception ex)
@@ -361,11 +478,11 @@ namespace ArnGestionPuestoFrontendWPF
 
                         foreach (var maquina in Store.Bancada.Maquinas)
                         {
-                            var infoBarquillaSeccion = Select.BuscarTareasPorOfot(eot.OfotElegida.ID);
+                            var infoBarquillaSeccion = Select.BuscarTareasPorOfot(eot.OfotElegida.ID,eot.TallaArticuloElegida);
 
                             this.AsignarTareaEjecucion(infoBarquillaSeccion, maquina, e.CodigoEtiqueta);
                         }
-                        
+
                     }
                 }
                 else
@@ -384,19 +501,7 @@ namespace ArnGestionPuestoFrontendWPF
         {
             try
             {
-                if (e.Key != Key.Return)
-                {
-                    etiqueta += e.Key.ToString().Replace("D", "").Replace("NumPad", "");
-                }
-                else
-                {
-                    if (etiqueta.Length >= 12)
-                    {
-                        this.fichajes.EtiquetaFichada(this.etiqueta);
-                    }
-                    etiqueta = "";
-                }
-
+               
                 if (e.Key == Key.F1)
                 {
                     Configurar c = new Configurar();
@@ -416,11 +521,12 @@ namespace ArnGestionPuestoFrontendWPF
 
         private void ConsumirTareaNormal(PulsoGeneradoEventArgs e)
         {
+            bool stockInsertado = false;
             foreach (var maquina in Store.Bancada.Maquinas)
             {
                 if (maquina.TrabajoEjecucion != null)
                 {
-                    var ahora = DateTime.Now;
+                    var ahora = DateTime.Now.ToUniversalTime();
 
                     if (maquina.MaquinasConfiguracionesPins.DescontarAutomaticamente)
                     {
@@ -457,6 +563,12 @@ namespace ArnGestionPuestoFrontendWPF
 
                     }
 
+                    if (!stockInsertado)
+                    {
+                        Store.InsertarPulsoStock(maquina, 1);
+                        stockInsertado = true;
+                    }
+
                     maquina.Pulsos.Add(new PulsoMaquina
                     {
                         IdTarea = maquina.IdTarea,
@@ -465,6 +577,8 @@ namespace ArnGestionPuestoFrontendWPF
                         IdOperario = Store.OperarioEjecucion.Id,
                         Pares = 1,
                         IdPuesto = Store.Bancada.ID,
+                        CodigoOrden = maquina.CodigoOrden,
+                        Talla = maquina.TallaArticulo,
                     });
 
                     ClienteMQTT.Publicar(string.Format("/ordenFabricacion/{0}/{1}/consumo", maquina.IdOrden, maquina.CodSeccion),
@@ -491,16 +605,16 @@ namespace ArnGestionPuestoFrontendWPF
             }
         }
 
-        [DllImport("User32.dll")]
-        private static extern bool SetCursorPos(int x, int y);
-        private void ResetearInactividad()
-        {
-            if (!this.timerInactividad.IsEnabled)
-            {
-                SetCursorPos(rnd.Next(0, 200), rnd.Next(0, 200));
-                this.timerInactividad.Start();
-            }
-        }
+        //[DllImport("User32.dll")]
+        //private static extern bool SetCursorPos(int x, int y);
+        //private void ResetearInactividad()
+        //{
+        //    if (!this.timerInactividad.IsEnabled)
+        //    {
+        //        SetCursorPos(rnd.Next(0, 200), rnd.Next(0, 200));
+        //        this.timerInactividad.Start();
+        //    }
+        //}
 
         /// <summary>
         /// Este evento se desencadena al estar ejecutandose desde la pantalla maestra.
@@ -512,7 +626,7 @@ namespace ArnGestionPuestoFrontendWPF
         {
             try
             {
-                ResetearInactividad();
+                //ResetearInactividad();
                 //si la maquina que produce el pulso es del esclavo
                 if (Store.BancadaEsclavo != null && e.IdBancada == Store.BancadaEsclavo.ID)
                 {
@@ -624,6 +738,30 @@ namespace ArnGestionPuestoFrontendWPF
             if (uart != null)
             {
                 uart.Cerrar();
+            }
+        }
+
+        private void TbCodigo_PreviewKeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                string codigo = TbCodigo.Text;
+                TbCodigo.Clear();
+                this.fichajes.EtiquetaFichada(codigo);
+            }
+        }
+
+        private void TbCodigo_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            timerFocus.Stop();
+            timerFocus.Start();
+        }
+
+        private void BtAtras_Click(object sender, RoutedEventArgs e)
+        {
+            if (Frame.CanGoBack)
+            {
+                Frame.GoBack();
             }
         }
     }

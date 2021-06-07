@@ -173,6 +173,20 @@ namespace Entidades.EntidadesBD
                 }
             }
         }
+        public int IdArticulo
+        {
+            get
+            {
+                if (TrabajoEjecucion != null)
+                {
+                    return TrabajoEjecucion.OrdenesFabricacionOperacionesTallasCantidad.OrdenesFabricacionOperacionesTallas.OrdenesFabricacionOperaciones.OrdenesFabricacion.IdArticulo??0;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        }
 
         public string TallaArticulo
         {

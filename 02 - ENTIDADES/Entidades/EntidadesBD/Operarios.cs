@@ -22,6 +22,7 @@ namespace Entidades.EntidadesBD
             this.OrdenesFabricacionPaquetes = new HashSet<OrdenesFabricacionPaquetes>();
             this.OrdenesFabricacionProductos = new HashSet<OrdenesFabricacionProductos>();
             this.PrepaquetesConsumidos = new HashSet<PrepaquetesConsumidos>();
+            this.StockArticulos = new HashSet<StockArticulos>();
         }
     
         public int Id { get; set; }
@@ -42,5 +43,7 @@ namespace Entidades.EntidadesBD
         public virtual ICollection<OrdenesFabricacionProductos> OrdenesFabricacionProductos { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PrepaquetesConsumidos> PrepaquetesConsumidos { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<StockArticulos> StockArticulos { get; set; }
     }
 }

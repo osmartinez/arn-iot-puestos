@@ -736,6 +736,7 @@
           <Property Name="IdOperarioPrograma" Type="int" />
           <Property Name="CodigoEtiquetaFichada" Type="nvarchar" MaxLength="13" Nullable="false" />
           <Property Name="CantidadEtiquetaFichada" Type="float" Nullable="false" />
+          <Property Name="TallaEtiquetaFichada" Type="nvarchar" MaxLength="15" />
         </EntityType>
         <EntityType Name="MaquinasConfiguracionesPins">
           <Key>
@@ -1453,6 +1454,7 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <Property Name="CabeceraReferencia" Type="nvarchar" MaxLength="100" />
           <Property Name="Observacion" Type="nvarchar" MaxLength="100" />
           <Property Name="FechaVerificacion" Type="datetime" />
+          <Property Name="IdOperarioCreacion" Type="int" />
         </EntityType>
         <EntityType Name="StockArticulosTallas">
           <Key>
@@ -1847,7 +1849,9 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_BarquillasConsumos_BarquillasContenidos">
-          <End Role="BarquillasContenidos" Type="Self.BarquillasContenidos" Multiplicity="1" />
+          <End Role="BarquillasContenidos" Type="Self.BarquillasContenidos" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="BarquillasConsumos" Type="Self.BarquillasConsumos" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="BarquillasContenidos">
@@ -1859,7 +1863,9 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_BarquillasConsumos_OrdenesFabricacionOperaciones">
-          <End Role="OrdenesFabricacionOperaciones" Type="Self.OrdenesFabricacionOperaciones" Multiplicity="1" />
+          <End Role="OrdenesFabricacionOperaciones" Type="Self.OrdenesFabricacionOperaciones" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="BarquillasConsumos" Type="Self.BarquillasConsumos" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="OrdenesFabricacionOperaciones">
@@ -3083,6 +3089,18 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
             </Principal>
             <Dependent Role="StockArticulos">
               <PropertyRef Name="IdContenedor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StockArticulos_Operarios">
+          <End Role="Operarios" Type="Self.Operarios" Multiplicity="0..1" />
+          <End Role="StockArticulos" Type="Self.StockArticulos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Operarios">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StockArticulos">
+              <PropertyRef Name="IdOperarioCreacion" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -5300,6 +5318,10 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
             <End Role="Contenedores" EntitySet="Contenedores" />
             <End Role="StockArticulos" EntitySet="StockArticulos" />
           </AssociationSet>
+          <AssociationSet Name="FK_StockArticulos_Operarios" Association="Self.FK_StockArticulos_Operarios">
+            <End Role="Operarios" EntitySet="Operarios" />
+            <End Role="StockArticulos" EntitySet="StockArticulos" />
+          </AssociationSet>
           <AssociationSet Name="FK_StockArticulos_OrdenesFabricacion" Association="Self.FK_StockArticulos_OrdenesFabricacion">
             <End Role="OrdenesFabricacion" EntitySet="OrdenesFabricacion" />
             <End Role="StockArticulos" EntitySet="StockArticulos" />
@@ -6287,6 +6309,7 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <NavigationProperty Name="OrdenesFabricacionOperacionesTallasCantidad" Relationship="Self.FK_MaquinasColasTrabajo_OrdenesFabricacionOperacionesTallasCantidad" FromRole="MaquinasColasTrabajo" ToRole="OrdenesFabricacionOperacionesTallasCantidad" />
           <Property Name="CodigoEtiquetaFichada" Type="String" Nullable="false" MaxLength="13" FixedLength="false" Unicode="true" />
           <Property Name="CantidadEtiquetaFichada" Type="Double" Nullable="false" />
+          <Property Name="TallaEtiquetaFichada" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="MaquinasConfiguracionesPins">
           <Key>
@@ -6456,6 +6479,7 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <NavigationProperty Name="OrdenesFabricacionPaquetes" Relationship="Self.FK_OrdenesFabricacionPaquetes_Operarios" FromRole="Operarios" ToRole="OrdenesFabricacionPaquetes" />
           <NavigationProperty Name="OrdenesFabricacionProductos" Relationship="Self.FK_OrdenesFabricacionProductos_Operarios" FromRole="Operarios" ToRole="OrdenesFabricacionProductos" />
           <NavigationProperty Name="PrepaquetesConsumidos" Relationship="Self.FK_PrepaquetesConsumidos_Operarios" FromRole="Operarios" ToRole="PrepaquetesConsumidos" />
+          <NavigationProperty Name="StockArticulos" Relationship="SistemaGlobalPREModel.FK_StockArticulos_Operarios" FromRole="Operarios" ToRole="StockArticulos" />
         </EntityType>
         <EntityType Name="OperariosSinSalidas">
           <Key>
@@ -7090,6 +7114,8 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <NavigationProperty Name="OrdenesFabricacion" Relationship="Self.FK_StockArticulos_OrdenesFabricacion" FromRole="StockArticulos" ToRole="OrdenesFabricacion" />
           <NavigationProperty Name="StockArticulosTipos" Relationship="Self.FK_StockArticulos_StockArticulosTipos" FromRole="StockArticulos" ToRole="StockArticulosTipos" />
           <NavigationProperty Name="StockArticulosTallas" Relationship="Self.FK_StockArticulosTallas_StockArticulos" FromRole="StockArticulos" ToRole="StockArticulosTallas" />
+          <Property Name="IdOperarioCreacion" Type="Int32" />
+          <NavigationProperty Name="Operarios" Relationship="SistemaGlobalPREModel.FK_StockArticulos_Operarios" FromRole="StockArticulos" ToRole="Operarios" />
         </EntityType>
         <EntityType Name="StockArticulosTallas">
           <Key>
@@ -11068,6 +11094,10 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
             <End Role="Secciones" EntitySet="Secciones" />
             <End Role="Ubicaciones" EntitySet="Ubicaciones" />
           </AssociationSet>
+          <AssociationSet Name="FK_StockArticulos_Operarios" Association="SistemaGlobalPREModel.FK_StockArticulos_Operarios">
+            <End Role="Operarios" EntitySet="Operarios" />
+            <End Role="StockArticulos" EntitySet="StockArticulos" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="SP_AgruparContenedor_Result">
           <Property Type="String" Name="CodigoEtiqueta" Nullable="false" MaxLength="13" />
@@ -13804,6 +13834,18 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_StockArticulos_Operarios">
+          <End Type="SistemaGlobalPREModel.Operarios" Role="Operarios" Multiplicity="0..1" />
+          <End Type="SistemaGlobalPREModel.StockArticulos" Role="StockArticulos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Operarios">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StockArticulos">
+              <PropertyRef Name="IdOperarioCreacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -14585,6 +14627,7 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <EntitySetMapping Name="MaquinasColasTrabajo">
             <EntityTypeMapping TypeName="SistemaGlobalPREModel.MaquinasColasTrabajo">
               <MappingFragment StoreEntitySet="MaquinasColasTrabajo">
+                <ScalarProperty Name="TallaEtiquetaFichada" ColumnName="TallaEtiquetaFichada" />
                 <ScalarProperty Name="CantidadEtiquetaFichada" ColumnName="CantidadEtiquetaFichada" />
                 <ScalarProperty Name="CodigoEtiquetaFichada" ColumnName="CodigoEtiquetaFichada" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -15293,6 +15336,7 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasTiposIncidencia
           <EntitySetMapping Name="StockArticulos">
             <EntityTypeMapping TypeName="SistemaGlobalPREModel.StockArticulos">
               <MappingFragment StoreEntitySet="StockArticulos">
+                <ScalarProperty Name="IdOperarioCreacion" ColumnName="IdOperarioCreacion" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="IdArticulo" ColumnName="IdArticulo" />
                 <ScalarProperty Name="CodigoArticulo" ColumnName="CodigoArticulo" />
