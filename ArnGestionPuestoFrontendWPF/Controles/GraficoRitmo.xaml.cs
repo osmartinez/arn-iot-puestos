@@ -21,30 +21,35 @@ namespace ArnGestionPuestoFrontendWPF.Controles
     /// </summary>
     public partial class GraficoRitmo : UserControl
     {
-        public ChartValues<double> Values { get; set; }
+        public ChartValues<double> Values { get; set; } = new ChartValues<double>();
 
         public GraficoRitmo()
         {
             InitializeComponent();
-            Values = new ChartValues<double> ();
 
-            var pulsos = Store.MaquinaPrincipal.Pulsos.ToList();
-            if (pulsos.Any())
+            try
             {
-                DateTime ahora = DateTime.Now;
-                pulsos = pulsos.OrderBy(x => x.Fecha).ToList() ;
-                DateTime aux = pulsos.First().Fecha;
-
-                while (aux < ahora)
+                var pulsos = Store.MaquinaPrincipal.Pulsos.Where(x => x.IdOperario == Store.OperarioEjecucion.Id).ToList();
+                if (pulsos.Any())
                 {
-                    DateTime copia = aux;
-                    aux = aux.AddHours(1);
-                    var pulsosRango = pulsos.Where(x => copia<=x.Fecha && x.Fecha <= aux);
-                    Values.Add(pulsosRango.Sum(x => x.Pares));
+                    DateTime ahora = DateTime.Now;
+                    pulsos = pulsos.OrderBy(x => x.Fecha).ToList();
+                    DateTime aux = pulsos.First().Fecha;
+
+                    while (aux < ahora)
+                    {
+                        DateTime copia = aux;
+                        aux = aux.AddHours(1);
+                        var pulsosRango = pulsos.Where(x => copia <= x.Fecha && x.Fecha <= aux);
+                        Values.Add(pulsosRango.Sum(x => x.Pares));
+                    }
                 }
-
-
             }
+            catch(Exception ex)
+            {
+                Logs.Log.Write(ex);
+            }
+           
 
             DataContext = this;
         }

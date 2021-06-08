@@ -38,20 +38,28 @@ namespace ArnGestionPuestoFrontendWPF.Controles
 
         private void CargarInforme()
         {
-            Informe.Clear();
-            if (Store.HayAlgunaTarea)
+            try
             {
-                var agrupados = Store.MaquinaPrincipal.Pulsos.GroupBy(x => new { x.CodigoOrden, x.Talla });
-                foreach (var grupo in agrupados)
+                Informe.Clear();
+                if (Store.HayAlgunaTarea)
                 {
-                    Informe.Add(new ResumenParesOrden
+                    var agrupados = Store.MaquinaPrincipal.Pulsos.Where(x => x.IdOperario == Store.OperarioEjecucion.Id).GroupBy(x => new { x.CodigoOrden, x.Talla });
+                    foreach (var grupo in agrupados)
                     {
-                        CodigoOrden = grupo.Key.CodigoOrden,
-                        Talla = grupo.Key.Talla,
-                        Pares = grupo.Sum(x=>x.Pares),
-                    });;
+                        Informe.Add(new ResumenParesOrden
+                        {
+                            CodigoOrden = grupo.Key.CodigoOrden,
+                            Talla = grupo.Key.Talla,
+                            Pares = grupo.Sum(x => x.Pares),
+                        }); ;
+                    }
                 }
             }
+            catch(Exception ex)
+            {
+                Logs.Log.Write(ex);
+            }
+           
         }
     }
 }

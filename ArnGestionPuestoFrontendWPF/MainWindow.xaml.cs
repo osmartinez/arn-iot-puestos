@@ -65,7 +65,7 @@ namespace ArnGestionPuestoFrontendWPF
             {
                 if (!System.Security.Principal.WindowsIdentity.GetCurrent().Name.Contains("omartinez"))
                 {
-                    //KillExplorer();
+                    KillExplorer();
                     this.WindowStyle = WindowStyle.None;
 
                 }

@@ -228,7 +228,7 @@ namespace Entidades.EntidadesBD
 
                 if (this.TrabajoEjecucion != null)
                 {
-                    var pulsos = this.Pulsos.Where(x => x.CodigoEtiqueta == this.TrabajoEjecucion.CodigoEtiquetaFichada);
+                    var pulsos = this.Pulsos.ToList().Where(x => x.CodigoEtiqueta == this.TrabajoEjecucion.CodigoEtiquetaFichada);
                     if (pulsos.Count() > 0)
                     {
                         return pulsos.Sum(x => x.Pares);
